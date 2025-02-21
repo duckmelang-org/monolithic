@@ -169,7 +169,7 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
                             .orElse(defaultImage);
 
                     //post eventdate 지났는지 확인하고 chatroom status 변경
-//                    chatRoom.hasTerminated();
+                    chatRoom.hasTerminated();
 
                     // Map에서 해당 채팅방의 최신 메시지 조회
                     ChatMessageResponseDto.LatestChatMessageDto latestMessage = latestMessagesMap.get(chatRoom.getId());
