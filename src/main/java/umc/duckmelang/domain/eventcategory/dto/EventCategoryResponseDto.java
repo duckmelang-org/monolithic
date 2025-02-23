@@ -18,4 +18,22 @@ public class EventCategoryResponseDto {
         private String kind;
         private List<String> eventCategories;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EventCategoryForListDto{
+        private Long eventId;
+        private String eventName;
+        private String eventKind;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EventCategoryListDto{
+        List<EventCategoryForListDto> eventCategoryList;
+    }
 }

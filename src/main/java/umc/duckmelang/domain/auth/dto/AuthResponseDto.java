@@ -11,6 +11,7 @@ public class AuthResponseDto {
     public static class TokenResponse {
         private String accessToken;
         private String refreshToken;
+        private Long memberId;
     }
 
     @Builder

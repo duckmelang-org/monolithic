@@ -3,23 +3,22 @@ package umc.duckmelang.domain.notificationsetting.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
 import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingRequestDto;
 import umc.duckmelang.domain.notificationsetting.repository.NotificationSettingRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.NotificationSettingException;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class NotificationSettingCommandServiceImpl implements NotificationSettingCommandService {
-    public final NotificationSettingRepository notificationSettingRepository;
+    public final MemberRepository memberRepository;
 
     @Override
     public void updateNotificationSetting(Long memberId, NotificationSettingRequestDto.UpdateNotificationSettingRequestDto request) {
-        NotificationSetting setting = notificationSettingRepository.findByMemberId(memberId)
+        NotificationSetting setting = memberRepository.findNotificationSettingByMemberId(memberId)
                 .orElseThrow(() -> new NotificationSettingException(ErrorStatus.NOTIFICATION_SETTING_NOT_FOUND));
 
         if (request.getChatNotificationEnabled() != null) {

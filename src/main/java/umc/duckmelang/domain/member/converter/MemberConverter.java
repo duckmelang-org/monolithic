@@ -25,7 +25,7 @@ public class MemberConverter {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .memberStatus(MemberStatus.ACTIVE)
-                .isProfileComplete(true) // 일반 회원가입 사용자는 true
+                .isProfileComplete(false)
                 .build();
     }
 
@@ -33,6 +33,7 @@ public class MemberConverter {
         return MemberSignUpDto.SignupResultDto.builder()
                 .memberId(member.getId())
                 .createdAt(member.getCreatedAt())
+                .profileComplete(member.isProfileComplete())
                 .build();
     }
 

@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import umc.duckmelang.domain.eventcategory.converter.EventCategoryConverter;
+import umc.duckmelang.domain.eventcategory.domain.EventCategory;
+import umc.duckmelang.domain.eventcategory.dto.EventCategoryResponseDto;
+import umc.duckmelang.domain.eventcategory.service.EventCategoryQueryService;
 import umc.duckmelang.domain.landmine.domain.Landmine;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +34,7 @@ import java.util.List;
 public class MemberRestController {
     private final MemberCommandService memberCommandService;
     private final MemberProfileImageCommandService memberProfileImageCommandService;
+    private final EventCategoryQueryService eventCategoryQueryService;
 
     @Operation(summary = "회원가입 API", description = "사용자 정보를 받아 회원가입을 처리하는 API입니다.")
     @PostMapping("/signup")
@@ -53,6 +58,15 @@ public class MemberRestController {
             throw new IllegalArgumentException("선택된 아이돌 카테고리가 없습니다.");}
         return ApiResponse.onSuccess(MemberConverter.toSelectIdolResponseDto(updatedMemberIdolList));
     }
+
+    @Operation(summary = "행사 종류 조회 API", description = "행사의 종류를 모두 조회해옵니다.")
+    @GetMapping("/events")
+    public ApiResponse<EventCategoryResponseDto.EventCategoryListDto> getAllEventCategoryList() {
+        List<EventCategory> idolCategoryList = eventCategoryQueryService.getAllEventCategoryList();
+        return ApiResponse.onSuccess(EventCategoryConverter.toEventCategoryListDto(idolCategoryList));
+    }
+
+
 
     @Operation(summary = "관심있는 행사 종류 선택 API", description = "회원이 관심있는 행사(들)를 선택하는 API입니다. 하나도 선택하지 않을 수 있습니다.(이 경우 빈 리스트를 반환합니다)")
     @PostMapping("/{memberId}/events")

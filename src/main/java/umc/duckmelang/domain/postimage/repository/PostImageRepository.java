@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import umc.duckmelang.domain.postimage.domain.PostImage;
 import umc.duckmelang.domain.postimage.dto.PostThumbnailResponseDto;
-import java.util.Optional;
+import java.util.*;
 
 public interface PostImageRepository extends JpaRepository<PostImage, Long> {
     @Query("SELECT new umc.duckmelang.domain.postimage.dto.PostThumbnailResponseDto(p.id, pi.postImageUrl, pi.createdAt) " +
@@ -18,6 +18,10 @@ public interface PostImageRepository extends JpaRepository<PostImage, Long> {
     Page<PostThumbnailResponseDto> findLatestPostImagesForMemberPosts(@Param("memberId") Long memberId, Pageable pageable);
 
     Optional<PostImage> findFirstByPostIdOrderByCreatedAtAsc(Long postId);
+
+    @Query("SELECT pi FROM PostImage pi WHERE (pi.post.id, pi.createdAt) IN " +
+            "(SELECT p.post.id, MIN(p.createdAt) FROM PostImage p WHERE p.post.id IN :postIds GROUP BY p.post.id)")
+    List<PostImage> findFirstImagesForPosts(@Param("postIds") List<Long> postIds);
 }
 
 

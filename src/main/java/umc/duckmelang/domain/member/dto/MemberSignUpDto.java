@@ -31,5 +31,6 @@ public class MemberSignUpDto {
     public static class SignupResultDto {
         Long memberId;
         LocalDateTime createdAt;
+        boolean profileComplete;
     }
 }

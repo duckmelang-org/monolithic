@@ -17,10 +17,6 @@ public class NotificationSetting extends BaseEntity {
     @Column(name = "notification_setting_id", nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)  // PERSIST 추가
-    @JoinColumn(name = "member_id", unique = true, nullable = false)
-    private Member member;
-
     @Setter
     @Column(nullable = false)
     private Boolean chatNotificationEnabled = true;  // 채팅 알림 수신 여부

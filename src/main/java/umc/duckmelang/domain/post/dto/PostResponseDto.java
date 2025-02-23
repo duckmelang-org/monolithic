@@ -46,6 +46,7 @@ public class PostResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PostDetailDto{
+        private Long memberId;
         private String nickname;
         private Integer age;
         private Gender gender;

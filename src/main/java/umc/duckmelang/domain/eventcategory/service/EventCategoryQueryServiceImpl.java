@@ -20,4 +20,10 @@ public class EventCategoryQueryServiceImpl implements EventCategoryQueryService{
         List<EventCategory> eventCategories = eventCategoryRepository.findAll();
         return eventCategoryConverter.groupCategoriesByKind(eventCategories);
     }
+
+    @Override
+    public List<EventCategory> getAllEventCategoryList() {
+        return eventCategoryRepository.findAll();
+    }
+
 }

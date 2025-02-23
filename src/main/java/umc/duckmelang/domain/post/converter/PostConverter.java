@@ -67,6 +67,7 @@ public class PostConverter {
                 .orElse(null); // 없으면 null
 
         return PostResponseDto.PostDetailDto.builder()
+                .memberId(post.getMember().getId())
                 .nickname(post.getMember().getNickname())
                 .age(post.getMember().calculateAge())
                 .gender(post.getMember().getGender())

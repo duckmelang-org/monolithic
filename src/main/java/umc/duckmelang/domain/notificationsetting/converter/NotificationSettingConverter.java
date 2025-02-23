@@ -9,10 +9,10 @@ import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingResponse
 @Component
 @RequiredArgsConstructor
 public class NotificationSettingConverter {
-    public static NotificationSettingResponseDto.NotificationSettingDto notificationSettingDto(NotificationSetting notificationSetting) {
+    public static NotificationSettingResponseDto.NotificationSettingDto notificationSettingDto(NotificationSetting notificationSetting, Long memberId) {
         return NotificationSettingResponseDto.NotificationSettingDto.builder()
                 .notificationSettingId(notificationSetting.getId())
-                .memberId(notificationSetting.getMember().getId())
+                .memberId(memberId)
                 .chatNotificationEnabled(notificationSetting.getChatNotificationEnabled())
                 .requestNotificationEnabled(notificationSetting.getRequestNotificationEnabled())
                 .reviewNotificationEnabled(notificationSetting.getReviewNotificationEnabled())

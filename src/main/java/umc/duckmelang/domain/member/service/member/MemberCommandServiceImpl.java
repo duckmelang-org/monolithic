@@ -57,7 +57,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         // 알림 설정 자동 추가
         NotificationSetting notificationSetting = NotificationSetting.builder()
-                .member(newMember)
                 .chatNotificationEnabled(true)  // 기본값을 true로 설정
                 .requestNotificationEnabled(true)
                 .reviewNotificationEnabled(true)

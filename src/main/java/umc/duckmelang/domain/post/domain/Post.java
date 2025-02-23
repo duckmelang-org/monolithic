@@ -116,6 +116,14 @@ public class Post extends BaseEntity {
         }
     }
 
+    public void setWanted(Short wanted) {
+        if (wanted == 0 || wanted == 1) {
+            this.wanted = wanted;
+        } else {
+            throw new PostException(ErrorStatus.INVALID_WANTED);  // 유효하지 않은 wanted 값에 대한 예외 처리
+        }
+    }
+
     public void setPostImageList(List<PostImage> postImageList){
         if(this.postImageList !=null){
             this.postImageList.forEach(postImage-> postImage.setPost(null));

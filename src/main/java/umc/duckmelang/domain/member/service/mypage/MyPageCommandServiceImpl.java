@@ -22,7 +22,6 @@ import umc.duckmelang.global.security.user.CustomUserDetails;
 public class MyPageCommandServiceImpl implements MyPageCommandService{
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
-    private final AuthRepository authRepository;
     private final BlacklistService blacklistService;
 
     @Override

@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.validation.annotation.ExistsMember;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 import umc.duckmelang.domain.memberprofileimage.repository.MemberProfileImageRepository;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,4 +44,29 @@ public class MemberProfileImageQueryServiceImpl implements MemberProfileImageQue
     public Page<MemberProfileImage> getPublicMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
         return memberProfileImageRepository.findAllByIsPublicIsTrueAndMemberIdAndMemberImageNot(memberId, defaultProfileImage, PageRequest.of(page,10));
     }
+
+    @Override
+    public Map<Long, String> getFirstProfileImageUrlsForMembers(List<Long> memberIds) {
+        if (memberIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        // 조회된 이미지들을 Map으로 변환
+        Map<Long, String> imageMap = memberProfileImageRepository.findFirstProfileImagesForMembers(memberIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        image -> image.getMember().getId(),
+                        MemberProfileImage::getMemberImage,
+                        (a,b) -> a
+                ));
+
+        // 최종 결과 생성
+        return memberIds.stream()
+                .distinct()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        memberId -> imageMap.getOrDefault(memberId, defaultProfileImage)
+                ));
+    }
+
 }

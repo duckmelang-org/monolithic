@@ -2,7 +2,6 @@ package umc.duckmelang.domain.chatroom.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -10,19 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.repository.ApplicationRepository;
-import umc.duckmelang.domain.chatroom.converter.ChatRoomConverter;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
-import umc.duckmelang.domain.chatroom.domain.enums.ChatRoomStatus;
 import umc.duckmelang.domain.chatroom.dto.ChatRoomResponseDto;
 import umc.duckmelang.domain.chatroom.repository.ChatRoomRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 import umc.duckmelang.domain.memberprofileimage.repository.MemberProfileImageRepository;
-import umc.duckmelang.domain.post.domain.Post;
-import umc.duckmelang.domain.post.repository.PostRepository;
+import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;
 import umc.duckmelang.domain.postimage.domain.PostImage;
-import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.postimage.repository.PostImageRepository;
+import umc.duckmelang.domain.postimage.service.PostImageQueryService;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
@@ -32,7 +28,6 @@ import umc.duckmelang.mongo.chatmessage.dto.ChatMessageResponseDto;
 import umc.duckmelang.mongo.chatmessage.service.ChatMessageQueryService;
 
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,15 +40,12 @@ import java.util.stream.Collectors;
 public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
     private final ChatRoomRepository chatRoomRepository;
     private final PostImageRepository postImageRepository;
-    private final MemberRepository memberRepository;
     private final MemberProfileImageRepository memberProfileImageRepository;
     private final ChatMessageQueryService chatMessageService;
-    private final PostRepository postRepository;
+    private final PostImageQueryService postImageQueryService;
+    private final MemberProfileImageQueryService memberProfileImageQueryService;
     private final ApplicationRepository applicationRepository;
     private final ReviewRepository reviewRepository;
-
-    @Value("${spring.custom.default.profile-image}")
-    private String defaultImage;
 
     @Override
     public Page<ChatRoomResponseDto.ChatRoomItemDto> findAllChatRooms(Long memberId, int page) {
@@ -134,10 +126,29 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
                 .map(ChatRoom::getId)
                 .collect(Collectors.toList());
 
+        List<Long> postIds = chatRooms.stream()
+                .map(chatRoom -> chatRoom.getPost().getId())
+                .collect(Collectors.toList());
+
+        List<Long> memberIds = chatRooms.stream()
+                .map(chatRoom -> {
+                    // 현재 회원이 게시글 작성자인지 확인
+                    boolean isPostWriter = chatRoom.getPost().getMember().getId().equals(memberId);
+
+                    // 상대방 정보 설정
+                    Member otherMember = isPostWriter ? chatRoom.getOtherMember() : chatRoom.getPost().getMember();
+                    return otherMember.getId();})
+                .collect(Collectors.toList());
+
         // 한 번의 쿼리로 모든 채팅방의 최신 메시지 조회
         Map<Long, ChatMessageResponseDto.LatestChatMessageDto> latestMessagesMap =
                 chatMessageService.getLatestMessagesByChatRoomIds(chatRoomIds);
 
+        //한 번의 쿼리로 모든 post의 postImage 조회
+        Map<Long, String> postImages = postImageQueryService.getFirstImageUrlsForPosts(postIds);
+
+        //한 번의 쿼리로 모든 member의 memberProfileImage 조회
+        Map<Long, String> memberProfileImages = memberProfileImageQueryService.getFirstProfileImageUrlsForMembers(memberIds);
 
         return chatRooms
                 .stream().sorted((chatRoom1, chatRoom2) -> {
@@ -157,16 +168,10 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
                     Member otherMember = isPostWriter ? chatRoom.getOtherMember() : chatRoom.getPost().getMember();
 
                     // 게시글의 최신 이미지 조회
-                    String latestPostImageUrl = postImageRepository
-                            .findFirstByPostIdOrderByCreatedAtAsc(chatRoom.getPost().getId())
-                            .map(PostImage::getPostImageUrl)
-                            .orElse(defaultImage);
+                    String latestPostImageUrl = postImages.get(chatRoom.getPost().getId());
 
                     // 상대방의 최신 프로필 이미지 조회
-                    String latestProfileImageUrl = memberProfileImageRepository
-                            .findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtAsc(otherMember.getId())
-                            .map(MemberProfileImage::getMemberImage)
-                            .orElse(defaultImage);
+                    String latestProfileImageUrl = memberProfileImages.get(otherMember.getId());
 
                     //post eventdate 지났는지 확인하고 chatroom status 변경
                     chatRoom.hasTerminated();

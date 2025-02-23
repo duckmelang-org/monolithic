@@ -38,7 +38,7 @@ public class AuthService {
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
             refreshTokenService.saveRefreshToken(refreshToken, memberId);
-            return new AuthResponseDto.TokenResponse(accessToken, refreshToken);
+            return new AuthResponseDto.TokenResponse(accessToken, refreshToken, memberId);
         } catch (UsernameNotFoundException e) {
             throw new AuthException(ErrorStatus.AUTH_USER_NOT_FOUND);
         } catch (BadCredentialsException e) {
@@ -58,7 +58,7 @@ public class AuthService {
         String newAccessToken = jwtTokenProvider.generateAccessToken(memberId);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
         refreshTokenService.saveRefreshToken(newRefreshToken, memberId);
-        return new AuthResponseDto.TokenResponse(newAccessToken, newRefreshToken);
+        return new AuthResponseDto.TokenResponse(newAccessToken, newRefreshToken, memberId);
     }
 
     // 사용자 로그아웃

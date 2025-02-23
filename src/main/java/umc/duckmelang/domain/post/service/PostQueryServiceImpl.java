@@ -60,7 +60,8 @@ public class PostQueryServiceImpl implements PostQueryService{
 
     @Override
     public Page<Post> getFilteredPostListByTitle(String keyword, Gender gender, Integer minAge, Integer maxAge, Integer page, Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         return postRepository.findFilteredPostsByTitle(keyword, gender, minAge, maxAge, member, PageRequest.of(page, 10));
     }
 

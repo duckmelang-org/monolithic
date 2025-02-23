@@ -14,6 +14,7 @@ import umc.duckmelang.domain.memberprofileimage.converter.MemberProfileImageConv
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
+import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.postimage.converter.PostImageConverter;
 import umc.duckmelang.domain.postimage.repository.PostImageRepository;
@@ -33,7 +34,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 public class PostCommandServiceImpl implements PostCommandService {
-
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final EventCategoryRepository eventCategoryRepository;
@@ -78,10 +78,10 @@ public class PostCommandServiceImpl implements PostCommandService {
     }
 
     @Override
-    public Post patchPostStatus(Long postId) {
+    public Post patchPostStatus(Long postId, Short wanted) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
-        post.toggleWanted();
+        post.setWanted(wanted);
 
         return postRepository.save(post);
     }

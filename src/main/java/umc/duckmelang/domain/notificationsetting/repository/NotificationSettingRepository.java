@@ -10,6 +10,4 @@ import java.util.Optional;
 @Repository
 public interface NotificationSettingRepository extends JpaRepository<NotificationSetting, Long> {
 
-    @Query("SELECT n from NotificationSetting n JOIN FETCH n.member m where m.id = :memberId")
-    Optional<NotificationSetting> findByMemberId(Long memberId);
 }

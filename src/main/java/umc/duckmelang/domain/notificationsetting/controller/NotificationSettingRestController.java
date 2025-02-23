@@ -30,7 +30,7 @@ public class NotificationSettingRestController {
     public ApiResponse<NotificationSettingResponseDto.NotificationSettingDto> getNotificationSetting(@AuthenticationPrincipal CustomUserDetails userDetails){
         Long memberId = userDetails.getMemberId();
         NotificationSetting notificationSetting = notificationSettingQueryService.findNotificationSetting(memberId);
-        return ApiResponse.onSuccess(NotificationSettingConverter.notificationSettingDto(notificationSetting));
+        return ApiResponse.onSuccess(NotificationSettingConverter.notificationSettingDto(notificationSetting, memberId));
     }
 
     @Operation(summary = "알림 설정 관리 API", description = "알림 설정을 변경합니다. 변경하지 않는 부분은 지우고, 변경할 부분만 써주세요(true/false 형식)")
@@ -40,6 +40,6 @@ public class NotificationSettingRestController {
         Long memberId = userDetails.getMemberId();
         notificationSettingCommandService.updateNotificationSetting(memberId, request);
         NotificationSetting notificationSetting = notificationSettingQueryService.findNotificationSetting(memberId);
-        return ApiResponse.onSuccess(NotificationSettingConverter.notificationSettingDto(notificationSetting));
+        return ApiResponse.onSuccess(NotificationSettingConverter.notificationSettingDto(notificationSetting, memberId));
     }
 }

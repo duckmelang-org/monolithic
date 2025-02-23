@@ -84,7 +84,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //소셜 회원가입 시 알림 설정 자동 생성
         NotificationSetting notificationSetting = NotificationSetting.builder()
-                .member(savedMember)
                 .chatNotificationEnabled(true)  // 기본값을 true로 설정
                 .requestNotificationEnabled(true)
                 .reviewNotificationEnabled(true)

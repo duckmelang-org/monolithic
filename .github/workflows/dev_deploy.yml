@@ -1,61 +1,64 @@
-name: CI/CD Pipeline
-
+name: Docker CI/CD Pipeline
 on:
   push:
-    branches: [ develop ]  # develop 브랜치에 push가 일어날 때 실행
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3  # 저장소 코드 체크아웃
+      - uses: actions/checkout@v3
 
-      - name: Set up JDK 17  # Java 개발 킷 설정
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Make application.yml  # application.yml 파일 생성
+      - name: Make application.yml
         run: |
           cd ./src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
         shell: bash
 
-      - name: Create empty application-dev.yml  # 빈 application-dev.yml 파일 생성
+      - name: Create empty application-dev.yml
         run: |
           cd ./src/main/resources
           touch application-dev.yml
         shell: bash
 
-      - name: Grant execute permission for gradlew  # gradlew 실행 권한 부여
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle  # Gradle을 사용하여 프로젝트 빌드
+      - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
 
-      - name: Upload build artifact  # 빌드된 아티팩트 업로드
-        uses: actions/upload-artifact@v4 #v4로 변경
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          name: duckmealng
-          path: build/libs/*.jar
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng:latest
 
   deploy:
-    needs: build  # build 작업이 성공적으로 완료된 후 실행
+    needs: build-and-push
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download build artifact  # 이전 단계에서 업로드한 아티팩트 다운로드
-        uses: actions/download-artifact@v4 #v4로 변경
-        with:
-          name: duckmealng
-          path: build/libs/
+      - uses: actions/checkout@v3
 
-      - name: Deploy to EC2  # EC2에 배포
+      - name: Copy Dockerfile to EC2
         env:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
@@ -63,11 +66,40 @@ jobs:
         run: |
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
-          jar_file=$(find build/libs -name '*.jar' ! -name '*plain.jar' | head -n 1)
-          scp -i private_key.pem -o StrictHostKeyChecking=no "$jar_file" $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/duckmelang.jar
+          scp -i private_key.pem -o StrictHostKeyChecking=no Dockerfile $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/
+
+      - name: Deploy to EC2
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/duckmealng:latest
+        run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            pgrep java | xargs -r kill -15  # 기존에 실행 중인 Java 프로세스 종료
-            sleep 10
-            nohup java -jar /home/$EC2_USERNAME/duckmelang.jar > app.log 2>&1 &  # 새 버전 애플리케이션 실행
+            # Docker 로그인 (sudo 사용)
+            echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+            # 로그 디렉토리 생성
+            sudo mkdir -p /home/$EC2_USERNAME/logs
+            sudo chown $EC2_USERNAME:$EC2_USERNAME /home/$EC2_USERNAME/logs
+
+            # 최신 이미지 가져오기
+            sudo docker pull ${DOCKER_IMAGE}
+
+            # 실행 중인 컨테이너 종료
+            sudo docker stop duckmealng-container || true
+            sudo docker rm duckmealng-container || true
+
+            # 새 컨테이너 실행 (로그 파일 저장)
+            sudo docker run -d \\
+              --name duckmealng-container \\
+              -p 8080:8080 \\
+              -v /home/$EC2_USERNAME/logs:/app/logs \\
+              --restart unless-stopped \\
+              ${DOCKER_IMAGE} \\
+              sh -c \"java -jar /app/app.jar > /app/logs/app.log 2>&1\"
+
+            # 사용하지 않는 이미지 정리
+            sudo docker image prune -af --force
           "
-          rm -f private_key.pem  # 민감한 정보 삭제
+          rm -f private_key.pem
