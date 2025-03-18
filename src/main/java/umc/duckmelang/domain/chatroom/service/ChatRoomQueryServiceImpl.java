@@ -101,7 +101,7 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
             member = chatRoom.getPost().getMember();
         else throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
 
-        MemberProfileImage memberProfileImage = memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtAsc(member.getId()).orElse(null);
+        MemberProfileImage memberProfileImage = memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(member.getId()).orElse(null);
         PostImage postImage = postImageRepository.findFirstByPostIdOrderByCreatedAtAsc(chatRoom.getPost().getId()).orElse(null);
 
         return ChatRoomResponseDto.ChatRoomDetailDto.builder()

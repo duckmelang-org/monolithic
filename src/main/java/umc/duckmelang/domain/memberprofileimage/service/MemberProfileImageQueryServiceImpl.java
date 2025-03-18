@@ -31,18 +31,18 @@ public class MemberProfileImageQueryServiceImpl implements MemberProfileImageQue
     @Override
     @Transactional
     public Optional<MemberProfileImage> getLatestPublicMemberProfileImage(@ExistsMember Long memberId) {
-        return memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtAsc(memberId);
+        return memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(memberId);
     }
 
     @Override
     @Transactional
     public Page<MemberProfileImage> getAllMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
-        return memberProfileImageRepository.findAllByMemberIdAndMemberImageNot(memberId, defaultProfileImage, PageRequest.of(page,10));
+        return memberProfileImageRepository.findAllByMemberIdAndMemberImageNotOrderByCreatedAtDesc(memberId, defaultProfileImage, PageRequest.of(page,10));
     }
 
     @Override
     public Page<MemberProfileImage> getPublicMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
-        return memberProfileImageRepository.findAllByIsPublicIsTrueAndMemberIdAndMemberImageNot(memberId, defaultProfileImage, PageRequest.of(page,10));
+        return memberProfileImageRepository.findAllByIsPublicIsTrueAndMemberIdAndMemberImageNotOrderByCreatedAtDesc(memberId, defaultProfileImage, PageRequest.of(page,10));
     }
 
     @Override
