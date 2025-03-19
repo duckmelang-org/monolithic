@@ -96,15 +96,16 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
 
         Member member = null;
         if (Objects.equals(chatRoom.getPost().getMember().getId(), memberId))
-            member = chatRoom.getPost().getMember();
-        else if (Objects.equals(chatRoom.getOtherMember().getId(), memberId))
             member = chatRoom.getOtherMember();
+        else if (Objects.equals(chatRoom.getOtherMember().getId(), memberId))
+            member = chatRoom.getPost().getMember();
         else throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
 
-        MemberProfileImage memberProfileImage = memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtAsc(member.getId()).orElse(null);
+        MemberProfileImage memberProfileImage = memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(member.getId()).orElse(null);
         PostImage postImage = postImageRepository.findFirstByPostIdOrderByCreatedAtAsc(chatRoom.getPost().getId()).orElse(null);
 
         return ChatRoomResponseDto.ChatRoomDetailDto.builder()
+                .myId(memberId)
                 .oppositeId(member.getId())
                 .oppositeNickname(member.getNickname())
                 .oppositeProfileImage(memberProfileImage != null ? memberProfileImage.getMemberImage() : "")

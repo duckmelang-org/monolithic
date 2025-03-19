@@ -49,6 +49,7 @@ public class ChatRoomResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ChatRoomDetailDto{
+        private Long myId;
         private Long oppositeId;
         private String oppositeNickname;
         private String oppositeProfileImage;
