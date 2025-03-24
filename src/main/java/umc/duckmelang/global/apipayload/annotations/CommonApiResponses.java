@@ -1,4 +1,4 @@
-package umc.duckmelang.global.annotations;
+package umc.duckmelang.global.apipayload.annotations;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

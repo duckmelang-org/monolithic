@@ -6,8 +6,9 @@ import umc.duckmelang.domain.landmine.domain.Landmine;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
-import umc.duckmelang.domain.member.dto.MemberResponseDto;
-import umc.duckmelang.domain.member.dto.MemberSignUpDto;
+import umc.duckmelang.domain.member.dto.member.MemberResponseDto;
+import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
+import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.memberevent.domain.MemberEvent;
 import umc.duckmelang.domain.memberidol.domain.MemberIdol;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
@@ -26,6 +27,7 @@ public class MemberConverter {
                 .password(request.getPassword())
                 .memberStatus(MemberStatus.ACTIVE)
                 .isProfileComplete(false)
+                .role(Role.USER)
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package umc.duckmelang.global.config;
+package umc.duckmelang.global.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import umc.duckmelang.global.security.exception.CustomAccessDeniedHandler;
 import umc.duckmelang.global.security.filter.JwtAuthorizationFilter;
 import umc.duckmelang.global.security.exception.CustomAuthenticationEntryPoint;
 import umc.duckmelang.domain.auth.oauth.CustomOAuth2UserService;
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
@@ -35,8 +37,7 @@ public class SecurityConfig {
     public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
         configureCommonSecurity(http);
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()  // 개발 환경에서는 모든 요청 허용
-        );
+                .requestMatchers("/**").permitAll());// 개발 환경에서는 모든 요청 허용
         return http.build();
     }
 
@@ -57,8 +58,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private HttpSecurity configureCommonSecurity(HttpSecurity http) throws Exception {
-        return http
+    private void configureCommonSecurity(HttpSecurity http) throws Exception {
+            http
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
@@ -69,9 +70,10 @@ public class SecurityConfig {
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(httpSecurityExceptionHandlingCustomizer -> {
-                    httpSecurityExceptionHandlingCustomizer.authenticationEntryPoint(customAuthenticationEntryPoint);
-                });
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
     }
 
     @Bean

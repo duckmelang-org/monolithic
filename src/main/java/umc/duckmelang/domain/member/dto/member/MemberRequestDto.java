@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.member.dto;
+package umc.duckmelang.domain.member.dto.member;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

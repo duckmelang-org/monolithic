@@ -2,7 +2,7 @@ package umc.duckmelang.domain.member.converter;
 
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 
 @Component
 public class MemberFilterConverter {

@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.member.dto;
+package umc.duckmelang.domain.member.dto.member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

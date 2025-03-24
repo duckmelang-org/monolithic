@@ -2,7 +2,6 @@ package umc.duckmelang.domain.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,7 @@ import umc.duckmelang.domain.notification.domain.Notification;
 import umc.duckmelang.domain.notification.dto.NotificationResponseDto;
 import umc.duckmelang.domain.notification.service.NotificationCommandService;
 import umc.duckmelang.domain.notification.service.NotificationQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.security.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ExistNotification;

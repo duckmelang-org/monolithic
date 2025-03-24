@@ -14,7 +14,7 @@ import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.redis.refreshtoken.RefreshTokenService;
+import umc.duckmelang.global.security.redis.RefreshTokenService;
 import umc.duckmelang.global.security.jwt.JwtTokenProvider;
 
 import java.io.IOException;
@@ -56,8 +56,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(ErrorStatus.AUTH_USER_NOT_FOUND));
 
-        String accessToken = jwtTokenProvider.generateAccessToken(member.getId());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId());
+        String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getRole().name());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId(), member.getRole().name());
         refreshTokenService.saveRefreshToken(refreshToken, member.getId());
 
         AuthResponseDto.LoginResponse loginResponse = AuthResponseDto.LoginResponse.builder()

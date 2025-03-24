@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.application.service.ApplicationQueryService;
 import umc.duckmelang.domain.member.converter.MemberProfileConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.service.member.MemberQueryService;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;

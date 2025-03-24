@@ -4,8 +4,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -15,7 +13,6 @@ import java.util.Date;
  * JWT 생성 및 기본 정보 제공 클래스
  */
 @Component
-@EnableWebSecurity
 public class JwtTokenProvider {
     private final Key key;
     private final long accessTokenExpiration;
@@ -33,9 +30,10 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(Long memberId, long expiration) {
+    public String createToken(Long memberId, String role, long expiration) {
         return Jwts.builder()
                 .setSubject(String.valueOf(memberId))
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -43,13 +41,13 @@ public class JwtTokenProvider {
     }
 
     // Access Token 생성
-    public String generateAccessToken(Long memberId) {
-        return createToken(memberId, accessTokenExpiration);
+    public String generateAccessToken(Long memberId, String role) {
+        return createToken(memberId, role, accessTokenExpiration);
     }
 
     // RefreshToken 생성
-    public String generateRefreshToken(Long memberId) {
-        return createToken(memberId, refreshTokenExpiration);
+    public String generateRefreshToken(Long memberId, String role) {
+        return createToken(memberId, role, refreshTokenExpiration);
     }
 
     // JWT에서 Claims 파싱
@@ -65,6 +63,12 @@ public class JwtTokenProvider {
     public Long getMemberIdFromToken(String token) {
         Claims claims = parseClaims(token);
         return Long.valueOf(claims.getSubject());
+    }
+
+    // JWT에서 사용자 Role 추출
+    public String getRoleFromToken(String token){
+        Claims claims = parseClaims(token);
+        return claims.get("role", String.class);
     }
 
     // JWT 서명 키 반환

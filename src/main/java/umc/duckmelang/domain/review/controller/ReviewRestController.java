@@ -15,17 +15,14 @@ import umc.duckmelang.domain.review.dto.ReviewRequestDto;
 import umc.duckmelang.domain.review.dto.ReviewResponseDto;
 import umc.duckmelang.domain.review.service.ReviewCommandService;
 import umc.duckmelang.domain.review.service.ReviewQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.security.user.CustomUserDetails;
-import umc.duckmelang.global.validation.annotation.ExistPost;
-import umc.duckmelang.global.validation.annotation.ExistsMember;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController

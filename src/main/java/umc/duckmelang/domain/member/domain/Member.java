@@ -8,6 +8,7 @@ import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.materelationship.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
+import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.memberidol.domain.MemberIdol;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 import umc.duckmelang.domain.notification.domain.Notification;
@@ -88,6 +89,9 @@ public class Member extends BaseEntity {
         this.memberStatus = MemberStatus.DELETED;
         this.deletedAt = LocalDateTime.now();
     }
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberProfileImage> memberProfileImageList = new ArrayList<>();

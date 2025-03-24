@@ -22,4 +22,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.AUTH_USER_NOT_FOUND.getMessage()));
         return new CustomUserDetails(member);
     }
+
+    public CustomUserDetails loadUserByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .filter(m -> m.getMemberStatus() != MemberStatus.DELETED)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.AUTH_USER_NOT_FOUND.getMessage()));
+        return new CustomUserDetails(member);
+    }
 }

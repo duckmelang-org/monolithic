@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.facade.ProfileFacadeService;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
@@ -17,7 +17,7 @@ import umc.duckmelang.domain.review.converter.ReviewConverter;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.dto.ReviewResponseDto;
 import umc.duckmelang.domain.review.service.ReviewQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;

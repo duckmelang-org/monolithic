@@ -1,8 +1,6 @@
 package umc.duckmelang.domain.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.duckmelang.domain.member.converter.MemberProfileConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MyPageRequestDto;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageRequestDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
 import umc.duckmelang.domain.memberprofileimage.converter.MemberProfileImageConverter;
@@ -71,8 +69,8 @@ public class MyPageManagementRestController {
 
     @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
     @DeleteMapping("/account/delete")
-    public ApiResponse<String> deleteMember(HttpServletRequest request){
-        myPageCommandService.deleteMember(request);
+    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
+        myPageCommandService.deleteMember(userDetails.getMemberId());
         return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
     }
 }

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
 import umc.duckmelang.global.apipayload.ApiResponse;

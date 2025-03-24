@@ -10,12 +10,9 @@ import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingRequestD
 import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingResponseDto;
 import umc.duckmelang.domain.notificationsetting.service.NotificationSettingCommandService;
 import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
-import umc.duckmelang.domain.post.dto.PostRequestDto;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.security.user.CustomUserDetails;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/notifications/setting")

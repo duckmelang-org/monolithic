@@ -2,9 +2,8 @@ package umc.duckmelang.domain.member.service.member;
 
 import umc.duckmelang.domain.landmine.domain.Landmine;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MemberRequestDto;
-import umc.duckmelang.domain.member.dto.MemberSignUpDto;
-import umc.duckmelang.domain.member.dto.MyPageRequestDto;
+import umc.duckmelang.domain.member.dto.member.MemberRequestDto;
+import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
 import umc.duckmelang.domain.memberevent.domain.MemberEvent;
 import umc.duckmelang.domain.memberidol.domain.MemberIdol;
 

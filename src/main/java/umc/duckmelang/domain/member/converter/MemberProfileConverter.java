@@ -3,7 +3,7 @@ package umc.duckmelang.domain.member.converter;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.auth.domain.enums.ProviderKind;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 
 @Component

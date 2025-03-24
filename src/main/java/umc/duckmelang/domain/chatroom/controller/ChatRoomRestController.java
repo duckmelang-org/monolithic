@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import umc.duckmelang.domain.chatroom.converter.ChatRoomConverter;
 import umc.duckmelang.domain.chatroom.dto.ChatRoomResponseDto;
 import umc.duckmelang.domain.chatroom.service.ChatRoomQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.security.user.CustomUserDetails;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/chatrooms")

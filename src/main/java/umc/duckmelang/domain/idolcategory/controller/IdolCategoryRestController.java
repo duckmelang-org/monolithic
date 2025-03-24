@@ -9,7 +9,7 @@ import umc.duckmelang.domain.idolcategory.converter.IdolCategoryConverter;
 import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.idolcategory.dto.IdolCategoryResponseDto;
 import umc.duckmelang.domain.idolcategory.service.IdolCategoryQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;

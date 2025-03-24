@@ -10,7 +10,7 @@ import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
-import umc.duckmelang.domain.postidol.domain.PostIdol;
+import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.domain.postimage.domain.PostImage;
 
 import java.util.ArrayList;

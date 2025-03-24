@@ -1,9 +1,8 @@
-package umc.duckmelang.domain.postidol.domain;
+package umc.duckmelang.domain.post.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
-import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.global.common.BaseEntity;
 
 

@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.member.dto;
+package umc.duckmelang.domain.member.dto.mypage;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

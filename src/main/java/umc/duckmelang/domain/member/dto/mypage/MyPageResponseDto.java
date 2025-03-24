@@ -1,11 +1,10 @@
-package umc.duckmelang.domain.member.dto;
+package umc.duckmelang.domain.member.dto.mypage;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 
 public class MyPageResponseDto {
 

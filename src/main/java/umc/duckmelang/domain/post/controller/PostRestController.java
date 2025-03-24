@@ -1,7 +1,6 @@
 package umc.duckmelang.domain.post.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.idolcategory.dto.IdolCategoryResponseDto;
 import umc.duckmelang.domain.idolcategory.service.IdolCategoryQueryService;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
 import umc.duckmelang.domain.memberidol.converter.MemberIdolConverter;
 import umc.duckmelang.domain.memberidol.domain.MemberIdol;
@@ -36,7 +35,7 @@ import umc.duckmelang.domain.post.service.PostCommandService;
 import umc.duckmelang.domain.post.service.PostQueryService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;
