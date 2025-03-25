@@ -20,10 +20,7 @@ import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.postimage.dto.PostThumbnailResponseDto;
 import umc.duckmelang.domain.postimage.service.PostImageQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.EventCategoryException;
-import umc.duckmelang.global.apipayload.exception.IdolCategoryException;
-import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.PostException;
+import umc.duckmelang.global.apipayload.exception.*;
 
 import java.util.List;
 
@@ -61,6 +58,13 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
             );
         }
         return bookmarkRepository.save(bookmark);
+    }
+
+    @Override
+    public void deleteBookmark(Long postId) {
+        Bookmark bookmark = bookmarkRepository.findById(postId)
+                .orElseThrow(() -> new BookmarkException(ErrorStatus.INVALID_BOOKMARK));
+        bookmarkRepository.delete(bookmark);
     }
 }
 

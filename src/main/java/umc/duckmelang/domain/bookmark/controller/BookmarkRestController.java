@@ -42,4 +42,12 @@ public class BookmarkRestController {
         Bookmark bookmark = bookmarkCommandService.joinBookmark(postId, userDetails.getMemberId());
         return ApiResponse.onSuccess(BookmarkConverter.bookmarkJoinResultDto(bookmark));
     }
+
+    @DeleteMapping("posts/{postId}/bookmarks")
+    @CommonApiResponses
+    @Operation(summary="게시글 스크랩 삭제 API", description = "스크랩 삭제하는 API 입니다.")
+    public ApiResponse<String> deleteBookmark ( @PathVariable(name="postId") Long postId) {
+        bookmarkCommandService.deleteBookmark(postId);
+        return ApiResponse.onSuccess("스크랩을 성공적으로 삭제했습니다");
+    }
 }
