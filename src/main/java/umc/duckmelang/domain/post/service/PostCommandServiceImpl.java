@@ -16,6 +16,8 @@ import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
+import umc.duckmelang.domain.postidol.domain.PostIdol;
+import umc.duckmelang.domain.postidol.repository.PostIdolRepository;
 import umc.duckmelang.domain.postimage.converter.PostImageConverter;
 import umc.duckmelang.domain.postimage.repository.PostImageRepository;
 import umc.duckmelang.domain.uuid.domain.Uuid;
@@ -27,8 +29,10 @@ import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;
 import umc.duckmelang.global.aws.AmazonS3Manager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +44,21 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final IdolCategoryRepository idolCategoryRepository;
     private final UuidRepository uuidRepository;
     private final PostImageRepository postImageRepository;
+    private final PostIdolRepository postIdolRepository;
 
     private final AmazonS3Manager s3Manager;
+
+    // 게시글과 이미지 업로드 처리
+    private void savePostImages(Post post, List<MultipartFile> images) {
+        for (MultipartFile file : images) {
+            String uuid = UUID.randomUUID().toString();
+            Uuid savedUuid = uuidRepository.save(Uuid.builder()
+                    .uuid(uuid).build());
+
+            String imageUrl = s3Manager.uploadFile(s3Manager.generatePostImageKeyName(savedUuid), file);
+            postImageRepository.save(PostImageConverter.toPostImage(post, imageUrl));
+        }
+    }
 
     @Override
     public Post joinPost(PostRequestDto.PostJoinDto request, Long memberId) {
@@ -66,14 +83,11 @@ public class PostCommandServiceImpl implements PostCommandService {
     public Post joinPost(PostRequestDto.PostJoinDto request, Long memberId, List<MultipartFile> postImages) {
         Post post = joinPost(request, memberId);
 
-        for (MultipartFile file : postImages){
-            String uuid = UUID.randomUUID().toString();
-            Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                    .uuid(uuid).build());
-
-            String imageUrl = s3Manager.uploadFile(s3Manager.generatePostImageKeyName(savedUuid), file);
-            postImageRepository.save(PostImageConverter.toPostImage(post, imageUrl));
+        // 이미지 업로드 처리
+        if (postImages != null && !postImages.isEmpty()) {
+            savePostImages(post, postImages);
         }
+
         return post;
     }
 
@@ -91,6 +105,47 @@ public class PostCommandServiceImpl implements PostCommandService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new PostException(ErrorStatus.POST_NOT_FOUND));
         postRepository.delete(post);
+    }
+
+    @Override
+    public Post patchPost(Long postId, PostRequestDto.PostJoinDto request, List<MultipartFile> images ) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
+
+        // 게시글 수정
+        post.updatePost(request.getTitle(), request.getContent(),
+                eventCategoryRepository.findById(request.getCategoryId())
+                        .orElseThrow(() -> new EventCategoryException(ErrorStatus.EVENT_CATEGORY_NOT_FOUND)),
+                request.getDate());
+
+        // 기존 PostIdol 삭제
+        List<PostIdol> existingPostIdols = new ArrayList<>(post.getPostIdolList()); // 복사본 생성
+        for (PostIdol postIdol : existingPostIdols) {
+            post.getPostIdolList().remove(postIdol);
+            postIdolRepository.delete(postIdol);
+        }
+
+        List<IdolCategory> idolCategories = idolCategoryRepository.findAllById(request.getIdolIds());
+        if (idolCategories.isEmpty()) {
+            throw new IdolCategoryException(ErrorStatus.IDOL_CATEGORY_NOT_FOUND);
+        }
+
+        List<PostIdol> updatedPostIdols = idolCategories.stream()
+                .map(idolCategory -> PostIdol.builder()
+                        .post(post)
+                        .idolCategory(idolCategory)
+                        .build())
+                .toList();
+
+        post.getPostIdolList().addAll(updatedPostIdols);
+
+        if (images != null && !images.isEmpty()) {
+            postImageRepository.deleteAllByPost(post);
+            savePostImages(post, images);  // 이미지 업로드 처리
+        }
+
+        return postRepository.save(post);
+
     }
 }
 
