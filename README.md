@@ -8,7 +8,7 @@
 
 |팀원|팀원|팀원|팀원|
 |:---:|:---:|:---:|:---:|
-|<img src="https://github.com/sharick1201.png" width="160px"/>|<img src="https://github.com/shinjw01.png" width="160px"/>|<img src="https://github.com/YangYoonseo.png" width="160px"/>|<img src="https://github.com/erika0915.png" width="160px"/>|
+|<img src="https://github.com/sharick1201.png" width="160px"/>|<img src="https://github.com/LePetitRenard01.png" width="160px"/>|<img src="https://github.com/YangYoonseo.png" width="160px"/>|<img src="https://github.com/erika0915.png" width="160px"/>|
 |[샤릭/박시은](https://github.com/sharick1201)|[벤티/신지우](https://github.com/LePetitRenard01)|[서야/양윤서](https://github.com/YangYoonseo)|[에리카/최수희](https://github.com/erika0915)|
 |회원 프로필&이미지 관리 API / 채팅 API|서버 관리 / 채팅방&동행요청 API|게시글 API / 알림 API|회원가입&로그인&JWT 설정 / API 전체 관리 및 리팩토링|
 
