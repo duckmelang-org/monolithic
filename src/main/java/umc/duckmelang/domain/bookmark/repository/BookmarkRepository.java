@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.post.domain.Post;
+import java.util.Optional;
+
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
@@ -18,5 +20,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Page<Post> findBookmarks(Long memberId, Pageable pageable);
 
     boolean existsByMemberAndPost(Member member, Post post);
+
+    Optional<Bookmark> findByMemberAndPost(Member member, Post post);
+
 
 }

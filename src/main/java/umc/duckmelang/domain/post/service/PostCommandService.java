@@ -12,4 +12,6 @@ public interface PostCommandService {
     Post joinPost(PostRequestDto.PostJoinDto request, Long memberId, List<MultipartFile> postImages);
     Post patchPostStatus(Long postId, Short wanted);
     void deleteMyPost(Long postId);
+    Post patchPost(Long postId, PostRequestDto.PostJoinDto request, List<MultipartFile> images);
+
 }
