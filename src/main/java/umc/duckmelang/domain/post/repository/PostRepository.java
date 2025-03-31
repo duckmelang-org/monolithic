@@ -64,4 +64,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findMyPost(Long memberId, Pageable pageable);
 
     int countAllByMemberId(Long memberId);
+
 }

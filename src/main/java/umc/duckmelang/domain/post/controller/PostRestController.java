@@ -99,11 +99,29 @@ public class PostRestController {
         return ApiResponse.onSuccess(PostConverter.postJoinResultDto(post));
     }
 
+    @Operation(summary = "게시글 수정 - API", description = "게시글 수정하는 API입니다.")
+    @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CommonApiResponses
+    public ApiResponse<PostResponseDto.PostJoinResultDto> patchPost (@ExistPost @PathVariable(name="postId") Long postId, @RequestPart @Valid PostRequestDto.PostJoinDto request,
+                                                                     @RequestPart(value = "images", required = false) List<MultipartFile> images){
+        Post post = postCommandService.patchPost(postId, request, images);
+        return ApiResponse.onSuccess(PostConverter.postJoinResultDto(post));
+    }
+
+    @Operation(summary = "게시글 삭제 - API", description = "게시글을 삭제하는 API입니다. 기능은 피드 관리 - 피드 목록 삭제 API 와 같음. 게시글 상세에서 삭제하고 싶을까봐 만들어놓음(삭제해도 무방)")
+    @DeleteMapping("/{postId}")
+    @CommonApiResponses
+    public ApiResponse<String>deletePost(@ExistPost @PathVariable(name="postId") Long postId){
+        postCommandService.deleteMyPost(postId);
+        return ApiResponse.onSuccess("게시글을 성공적으로 삭제했습니다.");
+    }
+
     @Operation(summary = "게시글 작성 - 행사 종류 전체 조회 API", description = "게시글 작성하는 페이지에서 행사 목록 전체를 받아오는 API입니다.")
     @GetMapping("/events")
     public ApiResponse<List<EventCategoryResponseDto.EventCategoryDto>> getAllCategories(){
         return ApiResponse.onSuccess(eventCategoryQueryService.getGroupedCategories());
     }
+
 
     @Operation(summary = "게시글 검색 API", description = "게시글 검색 API입니다. title 기준으로 검색합니다. " +
             "사용자가 기존에 설정한 필터링 조건이 아닌, 검색할 때마다 새로운 필터 값을 적용하여 조회합니다. 다만, 지뢰 필터링은 동일하게 적용되어있습니다." +
@@ -148,4 +166,6 @@ public class PostRestController {
     public ApiResponse<MemberIdolResponseDto.IdolDto> addMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
         return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
     }
+
+
 }
