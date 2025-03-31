@@ -69,14 +69,8 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
     }
 
     @Override
-    public void deleteBookmark(Long postId, Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
-
-        Bookmark bookmark = bookmarkRepository.findByMemberAndPost(member, post)
+    public void deleteBookmark(Long bookmarkId) {
+        Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
                 .orElseThrow(() -> new BookmarkException(ErrorStatus.INVALID_BOOKMARK));
         bookmarkRepository.delete(bookmark);
     }

@@ -16,12 +16,9 @@ import java.util.Optional;
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     @EntityGraph(attributePaths = "post")
-    @Query("SELECT b.post FROM Bookmark b JOIN b.post WHERE b.member.id = :memberId")
-    Page<Post> findBookmarks(Long memberId, Pageable pageable);
+    @Query("SELECT b FROM Bookmark b WHERE b.member.id = :memberId")
+    Page<Bookmark> findBookmarks(Long memberId, Pageable pageable);
+
 
     boolean existsByMemberAndPost(Member member, Post post);
-
-    Optional<Bookmark> findByMemberAndPost(Member member, Post post);
-
-
 }
