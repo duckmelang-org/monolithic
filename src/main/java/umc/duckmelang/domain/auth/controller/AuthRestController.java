@@ -33,8 +33,8 @@ public class AuthRestController {
 
     @GetMapping("/login/{loginType}")
     @Operation(summary = "소셜 로그인", description = "구글/카카오/네이버 소셜 로그인을 진행합니다.")
-    public ApiResponse<LoginResponse> kakaoLogin(@PathVariable LoginType loginType, @RequestParam String accessToken) {
-        LoginResponse loginResponse= authService.socialLogin(loginType, accessToken);
+    public ApiResponse<LoginResponse> kakaoLogin(@PathVariable LoginType loginType, @RequestParam String code) {
+        LoginResponse loginResponse= authService.socialLogin(loginType, code);
         return ApiResponse.onSuccess(loginResponse);
     }
 

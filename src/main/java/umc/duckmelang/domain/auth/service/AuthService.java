@@ -12,6 +12,8 @@ import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.auth.service.strategy.SocialLoginStrategy;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.domain.enums.LoginType;
+import umc.duckmelang.domain.member.domain.enums.MemberStatus;
+import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.TokenException;

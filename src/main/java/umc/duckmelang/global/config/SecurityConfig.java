@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import umc.duckmelang.domain.auth.exception.CustomAccessDeniedHandler;
-import umc.duckmelang.domain.auth.filter.JwtAuthorizationFilter;
+import umc.duckmelang.domain.auth.jwt.filter.JwtAuthorizationFilter;
 import umc.duckmelang.domain.auth.exception.CustomAuthenticationEntryPoint;
 import umc.duckmelang.domain.auth.user.CustomUserDetailsService;
 
@@ -61,10 +61,6 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .logout(logout -> logout.logoutUrl("/spring-logout"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .oauth2Login(oauth2 -> oauth2
-//                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-//                        .successHandler(oAuth2LoginSuccessHandler)
-//                )
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(customAuthenticationEntryPoint)

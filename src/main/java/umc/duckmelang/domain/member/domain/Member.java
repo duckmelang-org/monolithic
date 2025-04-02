@@ -52,7 +52,7 @@ public class Member extends BaseEntity {
     @Column(unique = true, columnDefinition = "TINYTEXT")
     private String email;
 
-    @Column(length = 100)
+    @Column(nullable = true, length = 100)
     private String password; // 소셜 로그인은 null 가능
 
     @Enumerated(EnumType.STRING)

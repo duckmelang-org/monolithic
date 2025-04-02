@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.auth.filter;
+package umc.duckmelang.domain.auth.jwt.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
