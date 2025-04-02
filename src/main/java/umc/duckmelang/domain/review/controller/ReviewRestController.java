@@ -46,6 +46,15 @@ public class ReviewRestController {
         return ApiResponse.onSuccess(ReviewConverter.reviewJoinResultDto(review));
     }
 
+    @DeleteMapping("/{reviewId}")
+    @CommonApiResponses
+    @Operation(summary="후기글 삭제 API", description = "후기글 삭제 API입니다")
+    public ApiResponse<String> deleteReview (@PathVariable Long reviewId){
+        reviewCommandService.deleteReview(reviewId);
+        return ApiResponse.onSuccess("후기를 성공적으로 삭제했습니다");
+
+    }
+
     @GetMapping("/information")
     @CommonApiResponses
     @Operation(summary = "후기글 작성 페이지 내 관련 정보 조회 API", description = "후기글 작성 페이지에서 applicationId 외에 유저네임, 게시글 제목, 행사 날짜 등 정보를 보여주는 API 입니다. 최신 순으로 정렬되어 list로 내보냅니다.")

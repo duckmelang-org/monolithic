@@ -21,6 +21,7 @@ import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
+import umc.duckmelang.global.apipayload.exception.ReviewException;
 
 import java.util.Optional;
 
@@ -49,5 +50,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         notificationHelper.sendNotification(sender.getId(), receiver.getId(), REVIEW, sender.getNickname() + " 님이 후기를 작성했어요");
 
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public void deleteReview(Long reviewId){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewException(ErrorStatus.REVIEW_NOT_FOUND));
+        reviewRepository.delete(review);
     }
 }

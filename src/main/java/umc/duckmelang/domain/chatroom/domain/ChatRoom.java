@@ -59,7 +59,7 @@ public class ChatRoom extends BaseEntity {
 
     public boolean hasTerminated(){
         if (this.post == null) throw new PostException(ErrorStatus.POST_NOT_FOUND);
-        boolean result =  post.getEventDate().isAfter(ChronoLocalDate.from(LocalDateTime.now()));
+        boolean result =  post.getEventDate().isBefore(ChronoLocalDate.from(LocalDateTime.now()));
         if (result)
             this.chatRoomStatus = ChatRoomStatus.TERMINATED;
         return result;
