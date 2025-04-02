@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import umc.duckmelang.domain.auth.dto.kakao.KakaoLoginResponse;
+import umc.duckmelang.domain.auth.dto.kakao.KakaoTokenResponse;
 import umc.duckmelang.domain.auth.dto.kakao.KakaoUserInfoResponse;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class KakaoApiClient { // Kakao API 를 호출하기 위한 전용 class
     private final WebClient webClient;
 
@@ -36,8 +36,8 @@ public class KakaoApiClient { // Kakao API 를 호출하기 위한 전용 class
                         + "&redirect_uri=" + redirectUri
                         + "&code=" + code)
                 .retrieve()
-                .bodyToMono(KakaoLoginResponse.class)
-                .map(KakaoLoginResponse::accessToken)
+                .bodyToMono(KakaoTokenResponse.class)
+                .map(KakaoTokenResponse::accessToken)
                 .block();
     }
 
