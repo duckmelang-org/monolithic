@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.post.service;
+package umc.duckmelang.domain.post.service.postImage;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

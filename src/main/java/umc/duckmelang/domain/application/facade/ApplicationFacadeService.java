@@ -11,7 +11,7 @@ import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
-import umc.duckmelang.domain.post.service.PostImageQueryService;
+import umc.duckmelang.domain.post.service.postImage.PostImageQueryService;
 
 @Service
 @RequiredArgsConstructor

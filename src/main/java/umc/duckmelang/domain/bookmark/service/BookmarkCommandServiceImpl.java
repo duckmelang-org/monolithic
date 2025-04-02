@@ -14,7 +14,7 @@ import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQuer
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
-import umc.duckmelang.domain.post.service.PostImageQueryService;
+import umc.duckmelang.domain.post.service.postImage.PostImageQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;

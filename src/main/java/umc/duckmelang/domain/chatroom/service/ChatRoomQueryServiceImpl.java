@@ -18,7 +18,7 @@ import umc.duckmelang.domain.member.repository.MemberProfileImageRepository;
 import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.domain.post.domain.PostImage;
 import umc.duckmelang.domain.post.repository.PostImageRepository;
-import umc.duckmelang.domain.post.service.PostImageQueryService;
+import umc.duckmelang.domain.post.service.postImage.PostImageQueryService;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;

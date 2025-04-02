@@ -14,7 +14,7 @@ import umc.duckmelang.domain.member.domain.MemberProfileImage;
 @Repository
 public interface MemberProfileImageRepository extends JpaRepository<MemberProfileImage, Long> {
     Optional<MemberProfileImage> findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(Long memberId);
-    Page<MemberProfileImage> findAllByMemberIdAndMemberImageNotOrderByCreatedAtDesc(Long memberId, String memberImage, Pageable pageable);
+    Page<MemberProfileImage> findAllByMemberIdOrderByCreatedAtDesc(Long memberId, Pageable pageable);
     Page<MemberProfileImage> findAllByIsPublicIsTrueAndMemberIdAndMemberImageNotOrderByCreatedAtDesc(Long memberId, String memberImage, Pageable pageable);
 
     @Query("SELECT mpi FROM MemberProfileImage mpi WHERE (mpi.member.id, mpi.createdAt) IN " +

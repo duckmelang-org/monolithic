@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.post.service;
+package umc.duckmelang.domain.post.service.postImage;
 
 import java.util.Map;
 import java.util.*;

@@ -42,7 +42,7 @@ public class OthersProfileRestController {
         return ApiResponse.onSuccess(profileFacadeService.getProfileByMemberId(memberId));
     }
 
-    @Operation(summary = "다른 멤버 프로필 사진 조회 API",description = "path variable로 프로필 사진들을 조회하고자하는 상대 member의 id를 받습니다.")
+    @Operation(summary = "다른 멤버 프로필 사진 조회 API",description = "path variable로 프로필 사진들을 조회하고자하는 상대 member의 id를 받습니다. 디폴트 사진을 제외한 사진 리스트를 보냅니다.")
     @GetMapping(path = "/{memberId}/images")
     ApiResponse<MemberProfileImageResponseDto.MemberProfileImageListDto> getProfileImages(@PathVariable @ExistsMember Long memberId, @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         Page<MemberProfileImage> memberProfileImagePage = memberProfileImageQueryService.getPublicMemberProfileImageByMemberId(memberId, page);

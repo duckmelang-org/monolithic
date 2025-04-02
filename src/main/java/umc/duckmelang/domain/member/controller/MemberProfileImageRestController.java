@@ -25,7 +25,7 @@ public class MemberProfileImageRestController{
     private final MemberProfileImageQueryService memberProfileImageQueryService;
     private final MemberProfileImageCommandService memberProfileImageCommandService;
 
-    @Operation(summary = "내 프로필 사진 전체 조회 API", description = "본인의 프로필 사진을 모두 조회하는 API입니다. 비공개된 사진과 공개된 사진 모두 확인 가능합니다.")
+    @Operation(summary = "내 프로필 사진 전체 조회 API", description = "본인의 프로필 사진을 모두 조회하는 API입니다. 디폴트 이미지, 비공개된 사진과 공개된 사진 모두 확인 가능합니다.")
     @GetMapping("")
     public ApiResponse<MemberProfileImageResponseDto.MemberProfileImageListDto> getAllProfileImages(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                                     @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
