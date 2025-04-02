@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.eventcategory.domain.EventCategory;
 import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.domain.PostIdol;
-import umc.duckmelang.domain.postimage.domain.PostImage;
+import umc.duckmelang.domain.post.domain.PostImage;
 
 import java.util.ArrayList;
 import java.util.Collections;

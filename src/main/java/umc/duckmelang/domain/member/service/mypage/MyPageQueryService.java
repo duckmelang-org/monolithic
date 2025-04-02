@@ -6,5 +6,5 @@ import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 public interface MyPageQueryService {
     MyPageResponseDto.MyPageProfileEditBeforeDto getMemberProfileBeforeEdit(Long memberId);
     MemberFilterDto.FilterResponseDto getMemberFilter(Long memberId);
-    MyPageResponseDto.LoginInfoDto getLoginInfo(Long memberId);
+    //MyPageResponseDto.LoginInfoDto getLoginInfo(Long memberId);
 }

@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.bookmark.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,13 +15,14 @@ import umc.duckmelang.domain.bookmark.service.BookmarkQueryService;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name="Bookmarks", description = "북마크 관련 API")
 @Validated
 public class BookmarkRestController {
 

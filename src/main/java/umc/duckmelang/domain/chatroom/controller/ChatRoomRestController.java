@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.chatroom.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,10 +14,11 @@ import umc.duckmelang.domain.chatroom.dto.ChatRoomResponseDto;
 import umc.duckmelang.domain.chatroom.service.ChatRoomQueryService;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 
 @RestController
 @RequestMapping("/chatrooms")
+@Tag(name="ChatRooms", description = "채팅 관련 API")
 @RequiredArgsConstructor
 public class ChatRoomRestController {
     private final ChatRoomQueryService chatRoomQueryService;

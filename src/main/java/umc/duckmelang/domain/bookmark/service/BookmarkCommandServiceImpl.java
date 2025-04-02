@@ -6,26 +6,18 @@ import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.bookmark.converter.BookmarkConverter;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.bookmark.repository.BookmarkRepository;
-import umc.duckmelang.domain.eventcategory.domain.EventCategory;
-import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.notification.service.NotificationCommandService;
 import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
 import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
-import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
-import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
-import umc.duckmelang.domain.postimage.dto.PostThumbnailResponseDto;
-import umc.duckmelang.domain.postimage.service.PostImageQueryService;
+import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
+import umc.duckmelang.domain.post.service.PostImageQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.EventCategoryException;
-import umc.duckmelang.global.apipayload.exception.IdolCategoryException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;
-
-import java.util.List;
 
 import static umc.duckmelang.domain.notification.domain.enums.NotificationType.BOOKMARK;
 

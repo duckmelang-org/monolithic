@@ -10,7 +10,6 @@ import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.eventcategory.domain.EventCategory;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.postimage.domain.PostImage;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.PostException;
 import umc.duckmelang.global.common.BaseEntity;

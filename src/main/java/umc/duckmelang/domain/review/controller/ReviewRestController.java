@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,7 @@ import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reviews")
+@Tag(name = "Reviews", description = "리뷰 관련 API")
 @Validated
 public class ReviewRestController {
     private final ReviewCommandService reviewCommandService;

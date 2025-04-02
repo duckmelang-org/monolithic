@@ -3,19 +3,15 @@ package umc.duckmelang.domain.member.domain;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
-import umc.duckmelang.domain.auth.domain.Auth;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.materelationship.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
+import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.notification.domain.Notification;
 import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.review.domain.Review;
-import umc.duckmelang.domain.memberevent.domain.MemberEvent;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.landmine.domain.Landmine;
@@ -35,37 +31,46 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-    @Column(length = 30, nullable = true)
+    @Column(length = 30)
     private String nickname;
 
     @Column(length = 500)
     private String introduction;
 
-    @Column(nullable = true)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
     private Gender gender;
 
     @Column(unique = true, columnDefinition = "TINYTEXT")
     private String email;
 
-    @Column(nullable = false, length = 100)
-    private String password;
+    @Column(length = 100)
+    private String password; // 소셜 로그인은 null 가능
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private LoginType loginType; // BASIC, KAKAO, GOOGLE, NAVER
+
+    @Column(name = "oauth_id")
+    private String oauthId;
+
     private boolean isProfileComplete = false;
 
-    public void completeProfile(){
-        this.isProfileComplete = true;
-    }
+    private LocalDateTime deletedAt; // 탈퇴한 시간 저장
+
+    @Enumerated(EnumType.STRING)
+    private MemberStatus memberStatus = MemberStatus.ACTIVE;
 
     @Enumerated(EnumType.STRING)
     private Gender filterGender;
@@ -73,31 +78,9 @@ public class Member extends BaseEntity {
     private Integer filterMinAge;
     private Integer filterMaxAge;
 
-    // 필터 조건 업데이트 메서드
-    public void updateFilter(Gender gender, Integer minAge, Integer maxAge){
-        this.filterGender = gender;
-        this.filterMinAge = minAge;
-        this.filterMaxAge = maxAge;
-    }
-
-    @Enumerated(EnumType.STRING)
-    private MemberStatus memberStatus = MemberStatus.ACTIVE;
-
-    private LocalDateTime deletedAt; // 탈퇴한 시간 저장
-
-    public void deleteMember(){
-        this.memberStatus = MemberStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
+    // === 연관관계 메서드 === //
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberProfileImage> memberProfileImageList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Auth> authList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberIdol> memberIdolList = new ArrayList<>();
@@ -139,6 +122,22 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "notification_setting_id")
     private NotificationSetting notificationSetting;
 
+    // === 도메인 메서드 === //
+    public void completeProfile(){
+        this.isProfileComplete = true;
+    }
+
+    // 필터 조건 업데이트 메서드
+    public void updateFilter(Gender gender, Integer minAge, Integer maxAge){
+        this.filterGender = gender;
+        this.filterMinAge = minAge;
+        this.filterMaxAge = maxAge;
+    }
+
+    public void deleteMember(){
+        this.memberStatus = MemberStatus.DELETED;
+        this.deletedAt = LocalDateTime.now();
+    }
 
     // 비밀번호 설정 함수
     public void encodePassword(String password){

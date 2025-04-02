@@ -9,9 +9,9 @@ import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.dto.member.MemberResponseDto;
 import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
 import umc.duckmelang.domain.member.domain.enums.Role;
-import umc.duckmelang.domain.memberevent.domain.MemberEvent;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.domain.MemberEvent;
+import umc.duckmelang.domain.member.domain.MemberIdol;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
 
 import java.util.List;
 import java.util.stream.Collectors;

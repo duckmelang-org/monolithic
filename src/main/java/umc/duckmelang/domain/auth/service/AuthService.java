@@ -8,14 +8,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.auth.dto.AuthResponseDto;
+import umc.duckmelang.domain.auth.client.KakaoApiClient;
+import umc.duckmelang.domain.auth.dto.response.LoginResponse;
+import umc.duckmelang.domain.auth.service.strategy.SocialLoginStrategy;
+import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.member.repository.MemberRepository;
+import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.TokenException;
-import umc.duckmelang.global.security.redis.RefreshTokenServiceImpl;
-import umc.duckmelang.global.security.jwt.JwtTokenProvider;
-import umc.duckmelang.global.security.jwt.JwtUtil;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.redis.RefreshTokenServiceImpl;
+import umc.duckmelang.domain.auth.jwt.JwtTokenProvider;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.AuthException;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,22 +29,26 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenService;
-    private final JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
+    private final Map<String, SocialLoginStrategy> strategyMap;
 
-   // 사용자 로그인 - 인증 및 토큰 발급
+    // 자체 로그인
     @Transactional
-    public AuthResponseDto.TokenResponse login(String email, String password){
+    public LoginResponse login(String email, String password){
         try{
             Authentication authentication = authenticate(email, password);
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Long memberId = userDetails.getMemberId();
-            String role = userDetails.getRole().name();
 
-            String accessToken = jwtTokenProvider.generateAccessToken(memberId, role);
-            String refreshToken = jwtTokenProvider.generateRefreshToken(memberId, role);
+            Long memberId = userDetails.getMemberId();
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+            String accessToken = jwtTokenProvider.generateAccessToken(memberId, member.getRole().name());
+            String refreshToken = jwtTokenProvider.generateRefreshToken(memberId, member.getRole().name());
             refreshTokenService.saveRefreshToken(refreshToken, memberId);
 
-            return new AuthResponseDto.TokenResponse(accessToken, refreshToken, memberId);
+            return new LoginResponse(memberId, accessToken, refreshToken, member.isProfileComplete());
+
         } catch (UsernameNotFoundException e) {
             throw new AuthException(ErrorStatus.AUTH_USER_NOT_FOUND);
         } catch (BadCredentialsException e) {
@@ -48,12 +58,15 @@ public class AuthService {
 
     // 토큰 재발급
     @Transactional
-    public AuthResponseDto.TokenResponse reissue(String refreshToken) {
+    public LoginResponse reissue(String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
             throw new TokenException(ErrorStatus.MISSING_TOKEN);
         }
         // RefreshToken 유효성 확인 및 memberId 추출
         Long memberId = refreshTokenService.validateRefreshToken(refreshToken);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
         String role = jwtTokenProvider.getRoleFromToken(refreshToken);
 
         // 새 토큰 발급 및 저장
@@ -61,7 +74,7 @@ public class AuthService {
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(memberId, role);
 
         refreshTokenService.saveRefreshToken(newRefreshToken, memberId);
-        return new AuthResponseDto.TokenResponse(newAccessToken, newRefreshToken, memberId);
+        return new LoginResponse(memberId, newAccessToken, newRefreshToken, member.isProfileComplete());
     }
 
     // 사용자 로그아웃 - RefreshToken 삭제

@@ -1,10 +1,9 @@
 package umc.duckmelang.domain.member.converter;
 
 import org.springframework.stereotype.Component;
-import umc.duckmelang.domain.auth.domain.enums.ProviderKind;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
 
 @Component
 public class MemberProfileConverter {
@@ -47,18 +46,18 @@ public class MemberProfileConverter {
                 .build();
     }
 
-    public static MyPageResponseDto.LoginInfoDto toLoginInfoDto(Member member){
-        boolean isKakaoLinked = member.getAuthList().stream()
-                .anyMatch(auth-> auth.getProvider() == ProviderKind.KAKAO);
-
-        boolean isGoogleLinked = member.getAuthList().stream()
-                .anyMatch(auth-> auth.getProvider() == ProviderKind.GOOGLE);
-
-        return MyPageResponseDto.LoginInfoDto.builder()
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .isKakaoLinked(isKakaoLinked)
-                .isGoogleLinked(isGoogleLinked)
-                .build();
-    }
+//    public static MyPageResponseDto.LoginInfoDto toLoginInfoDto(Member member){
+//        boolean isKakaoLinked = member.getAuthList().stream()
+//                .anyMatch(auth-> auth.getProvider() == ProviderKind.KAKAO);
+//
+//        boolean isGoogleLinked = member.getAuthList().stream()
+//                .anyMatch(auth-> auth.getProvider() == ProviderKind.GOOGLE);
+//
+//        return MyPageResponseDto.LoginInfoDto.builder()
+//                .nickname(member.getNickname())
+//                .email(member.getEmail())
+//                .isKakaoLinked(isKakaoLinked)
+//                .isGoogleLinked(isGoogleLinked)
+//                .build();
+//    }
 }

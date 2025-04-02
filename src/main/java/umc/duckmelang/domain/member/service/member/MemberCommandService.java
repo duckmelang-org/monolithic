@@ -4,8 +4,8 @@ import umc.duckmelang.domain.landmine.domain.Landmine;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.member.MemberRequestDto;
 import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
-import umc.duckmelang.domain.memberevent.domain.MemberEvent;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
+import umc.duckmelang.domain.member.domain.MemberEvent;
+import umc.duckmelang.domain.member.domain.MemberIdol;
 
 import java.util.List;
 

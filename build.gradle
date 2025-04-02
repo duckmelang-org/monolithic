@@ -66,6 +66,12 @@ dependencies {
 	// S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+	// WebClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Netty
+	implementation 'io.projectreactor.netty:reactor-netty:1.1.0'
+
 	// Jackson (JSON 직렬화 형식 지정을 위해 등록)
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'

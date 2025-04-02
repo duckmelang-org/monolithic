@@ -2,7 +2,7 @@ package umc.duckmelang.domain.idolcategory.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
+import umc.duckmelang.domain.member.domain.MemberIdol;
 import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.global.common.BaseEntity;
 

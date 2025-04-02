@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

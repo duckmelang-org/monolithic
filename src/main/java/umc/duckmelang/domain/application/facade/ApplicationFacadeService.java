@@ -7,11 +7,11 @@ import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.dto.ShowApplicationDto;
 import umc.duckmelang.domain.application.service.ApplicationQueryService;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.domain.post.domain.Post;
-import umc.duckmelang.domain.postimage.dto.PostThumbnailResponseDto;
-import umc.duckmelang.domain.postimage.service.PostImageQueryService;
+import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
+import umc.duckmelang.domain.post.service.PostImageQueryService;
 
 @Service
 @RequiredArgsConstructor

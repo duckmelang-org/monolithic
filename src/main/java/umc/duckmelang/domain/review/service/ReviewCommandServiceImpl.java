@@ -7,12 +7,7 @@ import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.repository.ApplicationRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;
-import umc.duckmelang.domain.notification.service.NotificationCommandService;
 import umc.duckmelang.domain.notification.service.NotificationHelper;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
-import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
 import umc.duckmelang.domain.review.converter.ReviewConverter;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.dto.ReviewRequestDto;
@@ -20,9 +15,6 @@ import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
-
-import java.util.Optional;
 
 import static umc.duckmelang.domain.notification.domain.enums.NotificationType.REVIEW;
 
