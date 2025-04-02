@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.auth.redis;
+package umc.duckmelang.domain.auth.refreshToken;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.auth.redis;
+package umc.duckmelang.domain.auth.refreshToken;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

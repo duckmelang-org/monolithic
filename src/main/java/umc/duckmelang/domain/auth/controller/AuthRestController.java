@@ -11,16 +11,18 @@ import umc.duckmelang.domain.auth.dto.request.LoginRequest;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.auth.service.AuthService;
 import umc.duckmelang.domain.auth.service.strategy.SocialLoginStrategy;
+import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Auth", description = "인증 API")
 public class AuthRestController {
     private final AuthService authService;
-    private final SocialLoginStrategy socialLoginStrategy;
     private final MyPageCommandService myPageCommandService;
 
     @PostMapping("/login")
@@ -30,9 +32,10 @@ public class AuthRestController {
     }
 
     @GetMapping("/login/{loginType}")
-    @Operation(summary = "소셜 로그인", description = " ")
-    public ApiResponse<LoginResponse> kakaoLogin(@RequestParam String accessToken) {
-        return ApiResponse.onSuccess(socialLoginStrategy.login(accessToken));
+    @Operation(summary = "소셜 로그인", description = "구글/카카오/네이버 소셜 로그인을 진행합니다.")
+    public ApiResponse<LoginResponse> kakaoLogin(@PathVariable LoginType loginType, @RequestParam String accessToken) {
+        LoginResponse loginResponse= authService.socialLogin(loginType, accessToken);
+        return ApiResponse.onSuccess(loginResponse);
     }
 
     @PostMapping("/token/refresh")
