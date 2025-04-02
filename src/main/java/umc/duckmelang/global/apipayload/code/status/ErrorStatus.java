@@ -68,6 +68,13 @@ public enum ErrorStatus implements BaseErrorCode {
     UNAVAILABLE_TO_APPLY_FOR_CONFIRMED_POST(HttpStatus.FORBIDDEN, "APPLICATION4004", "이미 확정된 게시글에 동행 요청을 처리할 수 없습니다."),
     UNAVAILABLE_TO_APPLY_FOR_OWN_POST(HttpStatus.FORBIDDEN, "APPLICATION4005", "본인 게시글에 동행 요청할 수 없습니다."),
 
+    //스크랩 관련 에러
+    INVALID_BOOKMARK(HttpStatus.NOT_FOUND, "BOOKMARK4001", "해당하는 스크랩이 없습니다."),
+    DUPLICATE_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK4002", "이미 스크랩 된 게시글입니다."),
+    
+    // 후기 관련 에러 
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "해당하는 후기가 없습니다"),
+
     // 채팅 통신 관련 에러
     JSON_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "WEBSOCKET4001", "메시지 변환 중 매핑 오류가 발생했습니다."),
     INVALID_JSON_FORMAT(HttpStatus.BAD_REQUEST, "WEBSOCKET4002", "유효하지 않은 JSON 형식입니다."),
