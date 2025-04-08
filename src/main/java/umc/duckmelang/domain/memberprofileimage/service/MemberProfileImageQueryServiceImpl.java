@@ -37,7 +37,7 @@ public class MemberProfileImageQueryServiceImpl implements MemberProfileImageQue
     @Override
     @Transactional
     public Page<MemberProfileImage> getAllMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
-        return memberProfileImageRepository.findAllByMemberIdAndMemberImageNotOrderByCreatedAtDesc(memberId, defaultProfileImage, PageRequest.of(page,10));
+        return memberProfileImageRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId, PageRequest.of(page,10));
     }
 
     @Override

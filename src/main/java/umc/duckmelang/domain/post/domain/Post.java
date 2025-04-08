@@ -137,4 +137,20 @@ public class Post extends BaseEntity {
     public void increaseViewCount() {
         this.viewCount++;
     }
+
+    public void updatePost(String title, String content, EventCategory eventCategory, LocalDate eventDate) {
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (eventCategory != null) {
+            this.eventCategory = eventCategory;
+        }
+        if (eventDate != null) {
+            this.eventDate = eventDate;
+        }
+    }
+
 }
