@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import umc.duckmelang.global.apipayload.exception.ChatRoomException;
 import umc.duckmelang.mongo.chatmessage.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chatroom.converter.ChatRoomConverter;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
@@ -28,6 +29,9 @@ public class ChatRoomCommandServiceImpl implements ChatRoomCommandService {
     @Override
     @Transactional
     public ChatRoom createChatRoom(ChatMessageRequestDto.CreateChatMessageDto request) {
+
+        if(chatRoomRepository.findByPostIdAndOtherMemberId(request.getPostId(), request.getSenderId()).isPresent())
+            throw new ChatRoomException(ErrorStatus.CHATROOM_ALREADY_EXISTS);
 
         // 요청 데이터의 필드가 유효한지 확인한다.
         Member receivedMember = memberRepository.findById(request.getReceiverId())

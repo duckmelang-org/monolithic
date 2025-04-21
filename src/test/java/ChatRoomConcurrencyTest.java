@@ -6,6 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.chatroom.service.ChatRoomCommandService;
 import umc.duckmelang.domain.chatroom.service.ChatRoomCommandServiceImpl;
 import umc.duckmelang.mongo.chatmessage.domain.enums.MessageType;
@@ -32,9 +34,9 @@ import static org.mockito.Mockito.*;
 /**
  * 채팅방 생성 시 발생할 수 있는 동시성 문제를 테스트하는 클래스
  */
+
 @ExtendWith(MockitoExtension.class)
 class ChatRoomCommandServiceConcurrencyTest {
-
     @Mock
     private ChatRoomRepository chatRoomRepository;
 
@@ -55,9 +57,9 @@ class ChatRoomCommandServiceConcurrencyTest {
     @BeforeEach
     void setUp() {
         // 테스트 데이터 초기화
-        Long postId = 1L;
-        Long senderId = 2L;
-        Long receiverId = 3L;
+        Long postId = 1_000_000_000L;
+        Long senderId = 2_000_000_000L;
+        Long receiverId = 3_000_000_000L;
 
         sender = Member.builder().id(senderId).build();
         receiver = Member.builder().id(receiverId).build();
