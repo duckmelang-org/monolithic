@@ -4,12 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.chatroom.service.ChatRoomCommandService;
 import umc.duckmelang.domain.chatroom.service.ChatRoomCommandServiceImpl;
+import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.ChatRoomException;
 import umc.duckmelang.mongo.chatmessage.domain.enums.MessageType;
 import umc.duckmelang.mongo.chatmessage.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
@@ -22,9 +25,12 @@ import umc.duckmelang.domain.chatroom.domain.enums.ChatRoomStatus;
 
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,116 +88,85 @@ class ChatRoomCommandServiceConcurrencyTest {
     @Test
     @DisplayName("동시 요청 시 채팅방 중복 생성 이슈 테스트")
     void concurrentChatRoomCreationTest() throws InterruptedException {
-        // Given: 채팅방이 존재하지 않는 상황을 가정
-        when(chatRoomRepository.findByPostIdAndOtherMemberId(anyLong(), anyLong()))
-                .thenReturn(Optional.empty()); // 항상 빈 값 반환
+        // Given
+        final int numberOfThreads = 20;
 
-        // 저장 시 입력된 엔티티를 그대로 반환하도록 설정
+        // Thread-safe 변수들 준비
+        final AtomicInteger findCallCount = new AtomicInteger(0);
+        final AtomicInteger successCount = new AtomicInteger(0);
+        final AtomicReference<ChatRoom> savedChatRoom = new AtomicReference<>();
+
+        // CyclicBarrier를 사용하여 스레드들이 동시에 실행되도록 조정
+        final CyclicBarrier cyclicBarrier = new CyclicBarrier(numberOfThreads);
+
+        // 완료 신호를 위한 CountDownLatch
+        final CountDownLatch completionLatch = new CountDownLatch(numberOfThreads);
+
+        // 첫 번째 조회는 빈 결과를 반환하고, 그 이후에는 존재하는 채팅방을 반환하도록 설정
+        when(chatRoomRepository.findByPostIdAndOtherMemberId(anyLong(), anyLong()))
+                .thenAnswer(invocation -> {
+                    int currentCall = findCallCount.getAndIncrement();
+
+                    // 첫 번째 호출에만 빈 Optional 반환
+                    if (currentCall == 0) {
+                        return Optional.empty();
+                    }
+
+                    // 이미 채팅방이 생성된 경우, 저장된 채팅방 반환
+                    ChatRoom chatRoom = savedChatRoom.get();
+                    if (chatRoom != null) {
+                        return Optional.of(chatRoom);
+                    }
+
+                    // 아직 저장되지 않았으면 빈 값 반환 (이 경우는 거의 발생하지 않음)
+                    return Optional.empty();
+                });
+
+        // 채팅방 저장 시 AtomicReference에 저장하고 그대로 반환
         when(chatRoomRepository.save(any(ChatRoom.class)))
                 .thenAnswer(invocation -> {
                     ChatRoom chatRoom = invocation.getArgument(0);
+                    savedChatRoom.set(chatRoom);
                     return chatRoom;
                 });
 
-        // When: 동시에 여러 스레드에서 채팅방 생성 요청
-        int numberOfThreads = 5;
+        // When: 여러 스레드에서 동시에 요청
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        AtomicInteger saveCount = new AtomicInteger(0);
 
-        // 저장 메소드 호출 횟수를 카운트하기 위한 설정
-        doAnswer(invocation -> {
-            saveCount.incrementAndGet();
-            return invocation.callRealMethod();
-        }).when(chatRoomRepository).save(any(ChatRoom.class));
-
-        // 여러 스레드에서 동시에 요청
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.execute(() -> {
                 try {
+                    // 모든 스레드가 이 지점에서 대기
+                    cyclicBarrier.await();
                     chatRoomCommandService.createChatRoom(requestDto);
+                    successCount.incrementAndGet();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 } finally {
-                    latch.countDown();
+                    completionLatch.countDown();
                 }
             });
         }
 
-        // 모든 스레드가 완료될 때까지 대기
-        latch.await();
+        // 완료 대기
+        boolean completed = completionLatch.await(10, TimeUnit.SECONDS);
+        assertTrue(completed, "테스트가 제한 시간 내에 완료되지 않았습니다");
+
+        // 리소스 정리
         executorService.shutdown();
+        boolean terminated = executorService.awaitTermination(5, TimeUnit.SECONDS);
+        assertTrue(terminated, "ExecutorService가 시간 내에 종료되지 않았습니다");
 
-        // Then: 채팅방 조회와 저장이 각각 요청 수만큼 호출되었는지 확인
-        verify(chatRoomRepository, times(numberOfThreads)).findByPostIdAndOtherMemberId(anyLong(), anyLong());
-
-        // save 메소드가 여러 번 호출되었다면 동시성 문제가 존재함을 의미
-        assertEquals(numberOfThreads, saveCount.get(),
-                "동시성 문제: 동일한 채팅방이 여러 번 생성되었습니다");
-    }
-
-    @Test
-    @DisplayName("동기화를 적용한 채팅방 생성 메소드 테스트")
-    void synchronizedChatRoomCreationTest() throws InterruptedException {
-        // Given: 첫 번째 조회는 빈 값, 그 이후 조회에서는 이미 생성된 채팅방 반환
-        ChatRoom existingChatRoom = ChatRoom.builder()
-                .id(1L)
-                .post(post)
-                .otherMember(sender)
-                .chatRoomStatus(ChatRoomStatus.ONGOING)
-                .build();
-
-        // AtomicInteger로 호출 횟수 추적
-        AtomicInteger callCount = new AtomicInteger(0);
-
-        // 첫 번째 호출만 빈 값 반환, 그 이후에는 existingChatRoom 반환
-        when(chatRoomRepository.findByPostIdAndOtherMemberId(anyLong(), anyLong()))
-                .thenAnswer(invocation -> {
-                    if (callCount.getAndIncrement() == 0) {
-                        return Optional.empty();
-                    } else {
-                        return Optional.of(existingChatRoom);
-                    }
-                });
-
-        when(chatRoomRepository.save(any(ChatRoom.class))).thenReturn(existingChatRoom);
-
-        // 동기화된 서비스 메소드 사용 (테스트용 목업 생성)
-        ChatRoomCommandService synchronizedService = new ChatRoomCommandServiceImpl(
-                chatRoomRepository, memberRepository, postRepository) {
-            @Override
-            public synchronized ChatRoom createChatRoom(ChatMessageRequestDto.CreateChatMessageDto request) {
-                return super.createChatRoom(request);
-            }
-        };
-
-        // When: 동시에 여러 스레드에서 채팅방 생성 요청
-        int numberOfThreads = 5;
-        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        AtomicInteger saveCount = new AtomicInteger(0);
-
-        // 저장 메소드 호출 횟수를 카운트
-        doAnswer(invocation -> {
-            saveCount.incrementAndGet();
-            return existingChatRoom;
-        }).when(chatRoomRepository).save(any(ChatRoom.class));
-
-        // 여러 스레드에서 동시에 요청
-        for (int i = 0; i < numberOfThreads; i++) {
-            executorService.execute(() -> {
-                try {
-                    synchronizedService.createChatRoom(requestDto);
-                } finally {
-                    latch.countDown();
-                }
-            });
+        // Then
+        // 1. ChatRoom 저장 호출 횟수는 정확히 1번이어야 함 (중복 생성 방지)
+        try{
+            verify(chatRoomRepository, times(1)).save(any(ChatRoom.class));
+        } catch (TooManyActualInvocations e){
+            fail("채팅방 생성 요청이 중복되고 있습니다.");
         }
 
-        // 모든 스레드가 완료될 때까지 대기
-        latch.await();
-        executorService.shutdown();
-
-        // Then: 동기화로 인해 저장은 단 한 번만 이루어져야 함
-        assertEquals(1, saveCount.get(),
-                "동기화 적용 후에도 중복 저장이 발생했습니다");
+        // 2. 성공 횟수도 정확히 1번이어야 함
+        assertEquals(1, successCount.get(), "성공 횟수가 1이 아닙니다");
     }
 }
