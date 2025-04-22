@@ -89,7 +89,7 @@ class ChatRoomCommandServiceConcurrencyTest {
     @DisplayName("동시 요청 시 채팅방 중복 생성 이슈 테스트")
     void concurrentChatRoomCreationTest() throws InterruptedException {
         // Given
-        final int numberOfThreads = 20;
+        final int numberOfThreads = 100;
 
         // Thread-safe 변수들 준비
         final AtomicInteger findCallCount = new AtomicInteger(0);
