@@ -10,6 +10,8 @@ import org.hibernate.exception.LockAcquisitionException;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
+import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.ChatRoomException;
 import umc.duckmelang.global.redis.concurrency.CustomSpringELParser;
 import umc.duckmelang.global.redis.concurrency.RedissonLock;
 
@@ -41,7 +43,7 @@ public class RedissonLockAspect {
         try {
             lockAcquired = rLock.tryLock(redissonLock.waitTime(), redissonLock.leaseTime(), redissonLock.timeUnit());
             if (!lockAcquired) {
-                throw new LockAcquisitionException("Failed to acquire lock: " + key, new SQLException()); // 명시적 예외 던지기
+                throw new ChatRoomException(ErrorStatus.CHATROOM_BEING_CREATED); // 명시적 예외 던지기
             }
             log.info("redisson key {}", key);
             return transactionProceedAspect.proceed(joinPoint);

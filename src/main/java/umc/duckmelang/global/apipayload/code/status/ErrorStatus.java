@@ -94,7 +94,8 @@ public enum ErrorStatus implements BaseErrorCode {
     
     // 채팅방 관련 에러
     CHATROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "APPLICATION4001", "존재하지 않는 채팅방입니다."),
-    CHATROOM_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "APPLICATION4002", "이미 존재하는 채팅방입니다.");
+    CHATROOM_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "APPLICATION4002", "이미 존재하는 채팅방입니다."),
+    CHATROOM_BEING_CREATED(HttpStatus.BAD_REQUEST, "APPLICATION4003", "생성중인 채팅방입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
