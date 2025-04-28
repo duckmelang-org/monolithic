@@ -1,4 +1,4 @@
-package umc.duckmelang.global.concurrency;
+package umc.duckmelang.global.redis.concurrency.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;

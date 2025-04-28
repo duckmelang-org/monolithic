@@ -1,11 +1,10 @@
 package umc.duckmelang.domain.chatroom.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import umc.duckmelang.global.apipayload.exception.ChatRoomException;
-import umc.duckmelang.global.concurrency.RedissonLock;
+import umc.duckmelang.global.redis.concurrency.RedissonLock;
 import umc.duckmelang.mongo.chatmessage.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chatroom.converter.ChatRoomConverter;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
@@ -28,8 +27,7 @@ public class ChatRoomCommandServiceImpl implements ChatRoomCommandService {
 
     // 채팅 생성 시, 채팅방이 있는지 조회하고, 없으면 채팅방을 생성하기 위한 ChatMessageCommandService에 사용된다.
     @Override
-    @RedissonLock(key = "\"chatroom\".concat(#request.getReceiverId()).concat('-').concat(#request.getSenderId()).concat('#')" +
-            ".concat(#request.getPostId())")
+    @RedissonLock(key = "'chatroom:'.concat(#request.getPostId()).concat('-').concat(#request.getSenderId())")
     public ChatRoom createChatRoom(ChatMessageRequestDto.CreateChatMessageDto request) {
 
         if(chatRoomRepository.findByPostIdAndOtherMemberId(request.getPostId(), request.getSenderId()).isPresent())

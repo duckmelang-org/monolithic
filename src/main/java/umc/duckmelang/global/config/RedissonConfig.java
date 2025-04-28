@@ -15,7 +15,7 @@ public class RedissonConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
-    private static final String REDISSON_HOST_PREFIX = "redis://"; //SSL connection
+    private static final String REDISSON_HOST_PREFIX = "redis://";
 
     @Bean
     public RedissonClient redissonClient() {

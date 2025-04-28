@@ -1,4 +1,4 @@
-package umc.duckmelang.global.concurrency;
+package umc.duckmelang.global.redis.concurrency;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

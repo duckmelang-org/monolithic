@@ -57,7 +57,7 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// redis (동시성)
+	// redisson (동시성)
 	implementation 'org.redisson:redisson:3.45.1'
 
 	// mongoDB (채팅 이력 저장용)
