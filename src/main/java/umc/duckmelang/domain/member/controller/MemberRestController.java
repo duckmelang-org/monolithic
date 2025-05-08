@@ -3,6 +3,7 @@ package umc.duckmelang.domain.member.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,20 +17,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import umc.duckmelang.domain.member.converter.MemberConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MemberRequestDto;
-import umc.duckmelang.domain.member.dto.MemberResponseDto;
-import umc.duckmelang.domain.member.dto.MemberSignUpDto;
+import umc.duckmelang.domain.member.dto.member.MemberRequestDto;
+import umc.duckmelang.domain.member.dto.member.MemberResponseDto;
+import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
 import umc.duckmelang.domain.member.service.member.MemberCommandService;
-import umc.duckmelang.domain.memberevent.domain.MemberEvent;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageCommandService;
+import umc.duckmelang.domain.member.domain.MemberEvent;
+import umc.duckmelang.domain.member.domain.MemberIdol;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/members")
+@Tag(name="Member", description = "회원가입 후 프로필 설정하는 API")
 @RequiredArgsConstructor
 public class MemberRestController {
     private final MemberCommandService memberCommandService;
@@ -65,8 +67,6 @@ public class MemberRestController {
         List<EventCategory> idolCategoryList = eventCategoryQueryService.getAllEventCategoryList();
         return ApiResponse.onSuccess(EventCategoryConverter.toEventCategoryListDto(idolCategoryList));
     }
-
-
 
     @Operation(summary = "관심있는 행사 종류 선택 API", description = "회원이 관심있는 행사(들)를 선택하는 API입니다. 하나도 선택하지 않을 수 있습니다.(이 경우 빈 리스트를 반환합니다)")
     @PostMapping("/{memberId}/events")
@@ -106,7 +106,6 @@ public class MemberRestController {
                 !exists,
                 exists ? "이미 사용 중인 닉네임입니다." : "사용 가능한 닉네임입니다."
         );
-
         return ApiResponse.onSuccess(responseDto);
     }
 }

@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.landmine.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,20 +13,14 @@ import umc.duckmelang.domain.landmine.dto.LandmineResponseDto;
 import umc.duckmelang.domain.landmine.service.LandmineCommandService;
 import umc.duckmelang.domain.landmine.service.LandmineQueryService;
 import umc.duckmelang.global.apipayload.ApiResponse;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 
 @RestController
 @RequestMapping("/mypage/landmines")
+@Tag(name="Landmines", description = "지뢰 관련 API")
 @RequiredArgsConstructor
 public class LandmineRestController {
-    private final LandmineQueryService landmineQueryService;
     private final LandmineCommandService landmineCommandService;
-
-    @Operation(summary = "현재 사용자가 설정한 지뢰 키워드 목록 조회 API", description = "사용자가 설정한 지뢰 키워드를 조회하는 API입니다.")
-    @GetMapping("")
-    public ApiResponse<LandmineResponseDto.LandmineListDto> getLandmineList(@AuthenticationPrincipal CustomUserDetails userDetails){
-        return ApiResponse.onSuccess(landmineQueryService.getLandmineList(userDetails.getMemberId()));
-    }
 
     @Operation(summary = "지뢰 키워드 추가 API", description = "사용자가 지뢰 키워드를 추가하는 API입니다.")
     @PostMapping("")

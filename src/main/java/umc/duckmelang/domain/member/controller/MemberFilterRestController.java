@@ -1,17 +1,19 @@
 package umc.duckmelang.domain.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
 import umc.duckmelang.global.apipayload.ApiResponse;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 
 @RestController
 @RequestMapping("/mypage/filters")
+@Tag(name="Filters", description = "필터 관련 API")
 @RequiredArgsConstructor
 public class MemberFilterRestController {
     private final MyPageQueryService myPageQueryService;
