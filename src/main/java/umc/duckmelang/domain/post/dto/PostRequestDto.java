@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.postimage.dto.PostImageRequestDto;
 
 import java.time.LocalDate;
 import java.util.List;

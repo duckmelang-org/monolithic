@@ -13,24 +13,18 @@ import umc.duckmelang.domain.materelationship.domain.MateRelationship;
 import umc.duckmelang.domain.materelationship.repository.MateRelationshipRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;
-import umc.duckmelang.domain.notification.service.NotificationCommandService;
 import umc.duckmelang.domain.notification.service.NotificationHelper;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
-import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 import umc.duckmelang.global.apipayload.exception.PostException;
+import umc.duckmelang.global.redis.concurrency.RedissonLock;
 
 import java.util.Optional;
 
 import static umc.duckmelang.domain.notification.domain.enums.NotificationType.REQUEST;
-import static umc.duckmelang.domain.notification.domain.enums.NotificationType.REVIEW;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +39,7 @@ public class ApplicationCommandServiceImpl implements ApplicationCommandService{
 
     @Override
     @Transactional
+    @RedissonLock(key = "'application:'.concat(#postId).concat('-').concat(#memberId)")
     public Application makeNewApplication(Long postId, Long memberId) {
         validateApplyingCondition(postId, memberId);
 

@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.notificationsetting.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -10,15 +11,13 @@ import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingRequestD
 import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingResponseDto;
 import umc.duckmelang.domain.notificationsetting.service.NotificationSettingCommandService;
 import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
-import umc.duckmelang.domain.post.dto.PostRequestDto;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
-import umc.duckmelang.global.security.user.CustomUserDetails;
-
-import java.util.Map;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 
 @RestController
 @RequestMapping("/notifications/setting")
+@Tag(name="Notification Settings", description = "알림 설정 관련 API")
 @RequiredArgsConstructor
 public class NotificationSettingRestController {
     private final NotificationSettingQueryService notificationSettingQueryService;

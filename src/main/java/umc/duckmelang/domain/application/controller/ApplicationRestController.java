@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,15 +14,16 @@ import umc.duckmelang.domain.application.service.ApplicationCommandService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ExistsApplication;
 import umc.duckmelang.domain.materelationship.domain.MateRelationship;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.domain.application.dto.*;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/requests")
+@Tag(name ="Application", description = "동행 요청 관련 API")
 @Validated
 public class ApplicationRestController {
     private final ApplicationCommandService applicationCommandService;

@@ -1,7 +1,7 @@
 package umc.duckmelang.domain.post.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,14 @@ import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.idolcategory.dto.IdolCategoryResponseDto;
 import umc.duckmelang.domain.idolcategory.service.IdolCategoryQueryService;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
-import umc.duckmelang.domain.memberidol.converter.MemberIdolConverter;
-import umc.duckmelang.domain.memberidol.domain.MemberIdol;
-import umc.duckmelang.domain.memberidol.dto.MemberIdolResponseDto;
-import umc.duckmelang.domain.memberidol.service.MemberIdolCommandService;
-import umc.duckmelang.domain.memberidol.service.MemberIdolQueryService;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.member.converter.MemberIdolConverter;
+import umc.duckmelang.domain.member.domain.MemberIdol;
+import umc.duckmelang.domain.member.dto.memberIdol.MemberIdolResponseDto;
+import umc.duckmelang.domain.member.service.memberIdol.MemberIdolCommandService;
+import umc.duckmelang.domain.member.service.memberIdol.MemberIdolQueryService;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ExistIdol;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
@@ -36,13 +36,14 @@ import umc.duckmelang.domain.post.service.PostCommandService;
 import umc.duckmelang.domain.post.service.PostQueryService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
+@Tag(name="Posts", description = "게시글 관련 API")
 @RequiredArgsConstructor
 @Validated
 public class PostRestController {
@@ -63,13 +64,6 @@ public class PostRestController {
                                                                         @AuthenticationPrincipal CustomUserDetails userDetails){
         MemberFilterDto.FilterResponseDto userFilter = myPageQueryService.getMemberFilter(userDetails.getMemberId());
         return ApiResponse.onSuccess(postQueryService.getFilteredPostList(page, userFilter.getGender(), userFilter.getMinAge(), userFilter.getMaxAge(), userDetails.getMemberId()));
-    }
-
-    @Operation(summary = "홈화면 - 관심 아이돌 목록 조회 API", description = "현재 내가 설정한 관심 있는 아이돌 목록을 조회합니다.")
-    @GetMapping("/idols")
-    public ApiResponse<MemberIdolResponseDto.IdolListDto> getSelectIdolResult(@AuthenticationPrincipal CustomUserDetails userDetails){
-        List<MemberIdol> memberIdolList = memberIdolQueryService.getIdolListByMember(userDetails.getMemberId());
-        return ApiResponse.onSuccess(MemberIdolConverter.toIdolListDto(memberIdolList));
     }
 
     @Operation(summary = "홈화면 - 게시글 아이돌 기반 조회 API", description = "해당하는 아이돌의 글만 조회하는 API 입니다." +
@@ -166,6 +160,4 @@ public class PostRestController {
     public ApiResponse<MemberIdolResponseDto.IdolDto> addMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
         return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
     }
-
-
 }

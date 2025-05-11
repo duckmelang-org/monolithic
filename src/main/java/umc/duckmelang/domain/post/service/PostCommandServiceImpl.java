@@ -10,16 +10,14 @@ import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.idolcategory.repository.IdolCategoryRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.memberprofileimage.converter.MemberProfileImageConverter;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
-import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
-import umc.duckmelang.domain.postidol.domain.PostIdol;
-import umc.duckmelang.domain.postidol.repository.PostIdolRepository;
-import umc.duckmelang.domain.postimage.converter.PostImageConverter;
-import umc.duckmelang.domain.postimage.repository.PostImageRepository;
+import umc.duckmelang.domain.post.domain.PostIdol;
+import umc.duckmelang.domain.post.repository.PostIdolRepository;
+import umc.duckmelang.domain.post.converter.PostImageConverter;
+import umc.duckmelang.domain.post.repository.PostImageRepository;
 import umc.duckmelang.domain.uuid.domain.Uuid;
 import umc.duckmelang.domain.uuid.repository.UuidRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
@@ -32,7 +30,6 @@ import umc.duckmelang.global.aws.AmazonS3Manager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +42,6 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final UuidRepository uuidRepository;
     private final PostImageRepository postImageRepository;
     private final PostIdolRepository postIdolRepository;
-
     private final AmazonS3Manager s3Manager;
 
     // 게시글과 이미지 업로드 처리

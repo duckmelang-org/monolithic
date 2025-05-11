@@ -1,34 +1,53 @@
 package umc.duckmelang.domain.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import org.springframework.web.multipart.MultipartFile;
+import umc.duckmelang.domain.member.converter.MemberProfileConverter;
+import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.member.dto.mypage.MyPageRequestDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.facade.ProfileFacadeService;
+import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
+import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
+import umc.duckmelang.domain.member.converter.MemberProfileImageConverter;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.dto.profileImage.MemberProfileImageResponseDto;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageCommandService;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
+import umc.duckmelang.domain.post.service.PostCommandService;
 import umc.duckmelang.domain.post.service.PostQueryService;
-import umc.duckmelang.global.security.user.CustomUserDetails;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
+import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.domain.review.converter.ReviewConverter;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.dto.ReviewResponseDto;
 import umc.duckmelang.domain.review.service.ReviewQueryService;
-import umc.duckmelang.global.annotations.CommonApiResponses;
+import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/mypage")
+@Tag(name="MyPage", description = "마이페이지에 해당하는 API")
 @RequiredArgsConstructor
 public class MyPageRestController {
     private final ProfileFacadeService profileFacadeService;
     private final PostQueryService postQueryService;
     private final ReviewQueryService reviewQueryService;
+    private final MyPageCommandService myPageCommandService;
+    private final MemberProfileImageCommandService memberProfileImageCommandService;
+    private final MyPageQueryService myPageQueryService;
+    private final PostCommandService postCommandService;
 
     @Operation(summary = "마이페이지 - 조회 API", description = "마이페이지 첫 화면에 노출되는 회원 정보를 조회해오는 API입니다. 사용자의 닉네임, 성별, 나이, 대표 프로필 사진을 불러옵니다.")
     @GetMapping("")
@@ -57,4 +76,37 @@ public class MyPageRestController {
         Page<Post> postList = postQueryService.getPostListByMember(userDetails.getMemberId(), page);
         return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
     }
+
+    @Operation(summary = "내 프로필 수정 - 기존 프로필 정보 조회 API", description = "피그마 상에서는 기존 프로필 사진만 조회하게 되어있는데 혹시 닉네임도 필요하실까 해서 일단 넣어놓았습니다.")
+    @GetMapping("/profile/edit")
+    public ApiResponse<MyPageResponseDto.MyPageProfileEditBeforeDto> getMyPageMemberProfileImage(@AuthenticationPrincipal CustomUserDetails userDetails){
+        return ApiResponse.onSuccess(myPageQueryService.getMemberProfileBeforeEdit(userDetails.getMemberId()));
+    }
+
+    @Operation(summary = "내 프로필 수정 - 닉네임, 자기소개 수정 API", description = "내 프로필을 수정하는 API입니다. 사용자의 닉네임과 자기소개를 수정합니다.")
+    @PatchMapping("/profile/edit")
+    public ApiResponse<MyPageResponseDto.MyPageProfileEditAfterDto> updateMyPageMemberProfile(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody MyPageRequestDto.UpdateMemberProfileDto request) {
+        Member updatedMember = myPageCommandService.updateMemberProfile( userDetails.getMemberId(), request);
+        return ApiResponse.onSuccess(MemberProfileConverter.toMemberProfileEditAfterDto(updatedMember));
+    }
+
+    @Operation(summary = "내 프로필 수정 - 내 프로필 사진 추가 API", description = "내 프로필을 수정하는 API입니다. 사용자의 프로필 이미지를 추가합니다.")
+    @PostMapping(value = "/profile/image/edit", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ApiResponse<MemberProfileImageResponseDto.MemberProfileImageDto> updateProfileImage (@AuthenticationPrincipal CustomUserDetails userDetails, @RequestPart("profileImage") MultipartFile profileImage) {
+        MemberProfileImage memberProfileImage = memberProfileImageCommandService.createProfileImage(userDetails.getMemberId(), profileImage);
+        return ApiResponse.onSuccess(MemberProfileImageConverter.toMemberProfileImageDto(memberProfileImage));
+    }
+
+    @Operation(summary = "피드 관리 - 피드 목록 삭제 API", description = "내 피드 목록을 삭제하는 API입니다.")
+    @DeleteMapping("/posts/{postId}")
+    public ApiResponse<String> deleteMyPost(@ExistPost @PathVariable("postId") Long postId){
+        postCommandService.deleteMyPost(postId);
+        return ApiResponse.onSuccess("피드를 성공적으로 삭제했습니다.");
+    }
+
+//    @Operation(summary = "설정 - 로그인 정보 조회 API", description = "사용자의 로그인 정보를 반환합니다. 사용자 닉네임과 이메일 그리고 카카오톡/구글 이나 자체 로그인 사용자인지 구분합니다.")
+//    @GetMapping("/info")
+//    public ApiResponse<MyPageResponseDto.LoginInfoDto> getLoginInfo(@AuthenticationPrincipal CustomUserDetails userDetails){
+//        return ApiResponse.onSuccess(myPageQueryService.getLoginInfo(userDetails.getMemberId()));
+//    }
 }

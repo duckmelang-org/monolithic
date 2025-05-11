@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.member.converter.MemberFilterConverter;
 import umc.duckmelang.domain.member.converter.MemberProfileConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.MemberFilterDto;
-import umc.duckmelang.domain.member.dto.MyPageResponseDto;
+import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
+import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.memberprofileimage.domain.MemberProfileImage;
-import umc.duckmelang.domain.memberprofileimage.service.MemberProfileImageQueryService;
+import umc.duckmelang.domain.member.domain.MemberProfileImage;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
@@ -34,9 +34,9 @@ public class MyPageQueryServiceImpl implements MyPageQueryService{
         return MemberFilterConverter.toFilterResponseDto(member);
     }
 
-    public MyPageResponseDto.LoginInfoDto getLoginInfo(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        return MemberProfileConverter.toLoginInfoDto(member);
-    }
+//    public MyPageResponseDto.LoginInfoDto getLoginInfo(Long memberId){
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+//        return MemberProfileConverter.toLoginInfoDto(member);
+//    }
 }

@@ -14,11 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import umc.duckmelang.global.security.filter.JwtAuthorizationFilter;
-import umc.duckmelang.global.security.exception.CustomAuthenticationEntryPoint;
-import umc.duckmelang.domain.auth.oauth.CustomOAuth2UserService;
-import umc.duckmelang.global.security.user.CustomUserDetailsService;
-import umc.duckmelang.domain.auth.oauth.OAuth2LoginSuccessHandler;
+import umc.duckmelang.domain.auth.exception.CustomAccessDeniedHandler;
+import umc.duckmelang.domain.auth.jwt.filter.JwtAuthorizationFilter;
+import umc.duckmelang.domain.auth.exception.CustomAuthenticationEntryPoint;
+import umc.duckmelang.domain.auth.user.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -27,16 +26,14 @@ public class SecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     @Profile({"dev", "local"})
     public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
         configureCommonSecurity(http);
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()  // 개발 환경에서는 모든 요청 허용
-        );
+                .requestMatchers("/**").permitAll());// 개발 환경에서는 모든 요청 허용
         return http.build();
     }
 
@@ -57,21 +54,18 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private HttpSecurity configureCommonSecurity(HttpSecurity http) throws Exception {
-        return http
+    private void configureCommonSecurity(HttpSecurity http) throws Exception {
+            http
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .logout(logout -> logout.logoutUrl("/spring-logout"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(oAuth2LoginSuccessHandler)
-                )
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(httpSecurityExceptionHandlingCustomizer -> {
-                    httpSecurityExceptionHandlingCustomizer.authenticationEntryPoint(customAuthenticationEntryPoint);
-                });
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
     }
 
     @Bean
