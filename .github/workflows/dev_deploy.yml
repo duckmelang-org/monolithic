@@ -141,9 +141,8 @@ jobs:
               -p 8080:8080 \\
               -v /home/$EC2_USERNAME/logs:/app/logs \\
               --restart unless-stopped \\
-              ${DOCKER_IMAGE} \\
-              sh -c \"java -jar /app/app.jar > /app/logs/app.log 2>&1\"
-
+              ${DOCKER_IMAGE}
+          
             # 사용하지 않는 이미지 정리
             sudo docker image prune -af --force
           "
