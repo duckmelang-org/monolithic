@@ -18,7 +18,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
 
@@ -50,7 +49,7 @@ jobs:
           path: build/reports/tests/test
 
   build-and-push:
-    needs: test  # test 작업이 성공한 후에만 실행
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -118,32 +117,21 @@ jobs:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
-          DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/duckmealng:latest
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
             # Docker 로그인 (sudo 사용)
             echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-            # 로그 디렉토리 생성
-            sudo mkdir -p /home/$EC2_USERNAME/logs
-            sudo chown $EC2_USERNAME:$EC2_USERNAME /home/$EC2_USERNAME/logs
-
-            # 최신 이미지 가져오기
-            sudo docker pull ${DOCKER_IMAGE}
-
-            # 실행 중인 컨테이너 종료
-            sudo docker stop duckmealng-container || true
-            sudo docker rm duckmealng-container || true
-
-            # 새 컨테이너 실행 (로그 파일 저장)
-            sudo docker run -d \\
-              --name duckmealng-container \\
-              -p 8080:8080 \\
-              -v /home/$EC2_USERNAME/logs:/app/logs \\
-              --restart unless-stopped \\
-              ${DOCKER_IMAGE}
+            # 필요한 최신 이미지 pull
+            sudo docker compose pull
           
-            # 사용하지 않는 이미지 정리
+            # 이전 서비스 중단 및 삭제
+            sudo docker compose down
+
+           # 새 컨테이너 실행
+            sudo docker compose up -d
+
+             # 이미지 정리
             sudo docker image prune -af --force
           "
           rm -f private_key.pem
