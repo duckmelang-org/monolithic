@@ -111,6 +111,8 @@ jobs:
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no Dockerfile $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/
+          scp -i private_key.pem -o StrictHostKeyChecking=no compose.yaml $EC2_USERNAME@$EC2_HOST:/home/$EC2_USERNAME/
+          
 
       - name: Deploy to EC2
         env:
