@@ -95,18 +95,6 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng:latest
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng-mongo:latest
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng-redis:latest
 
   deploy:
     needs: build-and-push

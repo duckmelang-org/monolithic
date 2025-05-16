@@ -19,8 +19,11 @@ services:
     restart: unless-stopped
 
   redis:
-    image: shinjwde/duckmealng-redis:latest
+    image: shinjwde/duckmealng-redivs:latest
     container_name: duckmealng-redis
     ports:
       - "6379:6379"
     restart: unless-stopped
+
+volumes:
+  mongo-data:
