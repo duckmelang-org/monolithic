@@ -1,7 +1,7 @@
 name: Docker CI/CD Pipeline
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop ]g
   workflow_dispatch:
 
 jobs:
@@ -95,6 +95,18 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng-mongo:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/duckmealng-redis:latest
 
   deploy:
     needs: build-and-push
