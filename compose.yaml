@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: shinjwde/duckmealng-redivs:latest
+    image: shinjwde/duckmealng-redis:latest
     container_name: duckmealng-redis
     ports:
       - "6379:6379"
