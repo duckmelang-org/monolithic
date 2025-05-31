@@ -119,21 +119,19 @@ jobs:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            # Docker 로그인 (sudo 사용)
-            echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            # Swarm 초기화 (이미 된 경우 무시)
+          sudo docker swarm init || true
 
-            # 필요한 최신 이미지 pull
-            sudo docker compose pull
-          
-            # 이전 서비스 중단 및 삭제
-            sudo docker compose down
+          # Redis 비밀번호를 Secret으로 등록 (중복 시 무시)
+          echo "$REDIS_PASSWORD" | sudo docker secret create redis_password - 2>/dev/null || echo "Secret already exists"
 
-           # 새 컨테이너 실행
-            sudo docker compose up -d
+          # 스택 배포
+          sudo docker stack deploy -c compose.yaml mystack
 
-             # 이미지 정리
-            sudo docker image prune -af --force
+          # 이미지 정리
+          sudo docker image prune -af --force
           "
           rm -f private_key.pem
