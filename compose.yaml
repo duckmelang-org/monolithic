@@ -27,8 +27,7 @@ services:
     restart: unless-stopped
     secrets:
       - redis_password
-    command: >
-      sh -c "redis-server --requirepass $(cat /run/secrets/redis_password)"
+    command: [ "redis-server", "--requirepass", "/run/secrets/redis_password" ]
 
 volumes:
   mongo-data:
