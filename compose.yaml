@@ -9,6 +9,7 @@ services:
       - redis
     restart: unless-stopped
 
+
   mongo:
     image: shinjwde/duckmealng-mongo:latest
     container_name: duckmealng-mongo
@@ -24,6 +25,15 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+    secrets:
+      - redis_password
+    command: >
+      sh -c "redis-server --requirepass $(cat /run/secrets/redis_password)"
 
 volumes:
   mongo-data:
+
+
+secrets:
+  redis_password:
+    external: true
