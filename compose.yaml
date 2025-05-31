@@ -1,37 +1,44 @@
+version: "3.8"
+
 services:
   web:
     image: shinjwde/duckmealng:latest
-    container_name: duckmealng-web
     ports:
       - "8080:8080"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - redis_password
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
     depends_on:
       - mongo
       - redis
-    restart: unless-stopped
-
 
   mongo:
     image: shinjwde/duckmealng-mongo:latest
-    container_name: duckmealng-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   redis:
     image: shinjwde/duckmealng-redis:latest
-    container_name: duckmealng-redis
     ports:
       - "6379:6379"
-    restart: unless-stopped
     secrets:
       - redis_password
     command: [ "redis-server", "--requirepass", "/run/secrets/redis_password" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
 
 volumes:
   mongo-data:
-
 
 secrets:
   redis_password:
