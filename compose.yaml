@@ -11,6 +11,10 @@ services:
     restart: on-failure
 
     environment:
+      - SPRING_DATA_MONGODB_HOST=localhost
+
+      - SPRING_DATA_REDIS_HOST=localhost
+
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
       - MONGO_USERNAME=${MONGO_USERNAME}
@@ -55,11 +59,12 @@ services:
 
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
-    command: sh -c 'redis-server --requirepass "$REDIS_PASSWORD"'
+    command: redis-server --requirepass ${REDIS_PASSWORD}
 
     restart: on-failure
 
 volumes:
 
   mongo-data:
+
 

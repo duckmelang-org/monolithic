@@ -125,15 +125,13 @@ jobs:
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
+          echo 'REDIS_PASSWORD=$REDIS_PASSWORD' > .env
+          echo 'MONGO_USERNAME=$MONGO_USERNAME' >> .env
+          echo 'MONGO_PASSWORD=$MONGO_PASSWORD' >> .env
 
-          cat > .env << 'EOF'
-          > REDIS_PASSWORD=$REDIS_PASSWORD
-          > MONGO_USERNAME=$MONGO_USERNAME
-          > MONGO_PASSWORD=$MONGO_PASSWORD
-          > EOF
-          
-          sudo docker-compose -f compose.yaml up -d
-          
+          sudo docker-compose down
+          sudo docker-compose up -d
+
           # 이미지 정리
           sudo docker image prune -af --force
           "
