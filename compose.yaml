@@ -1,45 +1,65 @@
 version: "3.8"
 
 services:
+
   web:
+
     image: shinjwde/duckmealng:latest
-    ports:
-      - "8080:8080"
-    deploy:
-      restart_policy:
-        condition: on-failure
-    secrets:
-      - redis_password
+
+    network_mode: host
+
+    restart: on-failure
+
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+      - MONGO_USERNAME=${MONGO_USERNAME}
+
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+
     depends_on:
+
       - mongo
+
       - redis
 
   mongo:
+
     image: shinjwde/duckmealng-mongo:latest
+
     ports:
+
       - "27017:27017"
+
     volumes:
+
       - mongo-data:/data/db
-    deploy:
-      restart_policy:
-        condition: on-failure
+
+    environment:
+
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+
+    restart: on-failure
 
   redis:
+
     image: shinjwde/duckmealng-redis:latest
+
     ports:
+
       - "6379:6379"
-    secrets:
-      - redis_password
-    command: [ "redis-server", "--requirepass", "/run/secrets/redis_password" ]
-    deploy:
-      restart_policy:
-        condition: on-failure
+
+    environment:
+
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+    command: sh -c 'redis-server --requirepass "$REDIS_PASSWORD"'
+
+    restart: on-failure
 
 volumes:
+
   mongo-data:
 
-secrets:
-  redis_password:
-    external: true

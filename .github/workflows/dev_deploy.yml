@@ -121,17 +121,19 @@ jobs:
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "
-            # Swarm 초기화 (이미 된 경우 무시)
-          sudo docker swarm init || true
 
-          # Redis 비밀번호를 Secret으로 등록 (중복 시 무시)
-          echo "$REDIS_PASSWORD" | sudo docker secret create redis_password - 2>/dev/null || echo "Secret already exists"
-
-          # 스택 배포
-          sudo docker stack deploy -c compose.yaml mystack
-
+          cat > .env << 'EOF'
+          > REDIS_PASSWORD=$REDIS_PASSWORD
+          > MONGO_USERNAME=$MONGO_USERNAME
+          > MONGO_PASSWORD=$MONGO_PASSWORD
+          > EOF
+          
+          sudo docker-compose -f compose.yaml up -d
+          
           # 이미지 정리
           sudo docker image prune -af --force
           "
