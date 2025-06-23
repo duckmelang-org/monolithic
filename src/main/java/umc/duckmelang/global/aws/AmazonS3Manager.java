@@ -23,8 +23,7 @@ public class AmazonS3Manager{
 
     private final AmazonConfig amazonConfig;
 
-    private final UuidRepository uuidRepository;
-
+    // todo : s3 내 파일 경로까지 리턴할 것. (db에 저장 후 삭제할 때 조회해서 이용)
     public String uploadFile(String keyName, MultipartFile file){
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -36,6 +35,28 @@ public class AmazonS3Manager{
         }
 
         return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
+    }
+
+    public String deleteFile(String keyName) {
+
+        String result = "success";
+
+        try {
+            boolean isObjectExist = amazonS3.doesObjectExist(amazonConfig.getBucket(), keyName);
+            if (isObjectExist) {
+                amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
+            } else {
+                result = "file not found";
+            }
+        } catch (Exception e) {
+            log.debug("Delete File failed", e);
+        }
+
+        return result;
+    }
+
+    public String generateIdolCategoryKeyName(Uuid uuid) {
+        return amazonConfig.getIdolCategoryImagePath() + '/' + uuid.getUuid();
     }
 
     public String generateMemberProfileImageKeyName(Uuid uuid) {
@@ -53,4 +74,6 @@ public class AmazonS3Manager{
     public String generateChatMessageFileKeyName(Uuid uuid) {
         return amazonConfig.getChatMessageFilePath() + '/' + uuid.getUuid();
     }
+
+
 }
