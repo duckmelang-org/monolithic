@@ -1,8 +1,7 @@
-package umc.duckmelang.domain.notificationsetting.domain;
+package umc.duckmelang.domain.notification.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.global.common.BaseEntity;
 
 @Entity

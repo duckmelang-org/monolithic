@@ -1,10 +1,9 @@
-package umc.duckmelang.domain.notification.service;
+package umc.duckmelang.domain.notification.service.notification;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import umc.duckmelang.domain.notification.domain.Notification;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NotificationQueryService {
     List<Notification> getNotificationList(Long memberId);

@@ -4,15 +4,9 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
-import umc.duckmelang.domain.notification.domain.Notification;
-import umc.duckmelang.domain.notification.service.NotificationQueryService;
-import umc.duckmelang.domain.post.domain.Post;
+import umc.duckmelang.domain.notification.service.notification.NotificationQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.validation.annotation.ExistNotification;
-import umc.duckmelang.global.validation.annotation.ExistsMember;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

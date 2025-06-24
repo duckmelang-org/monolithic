@@ -1,10 +1,10 @@
-package umc.duckmelang.domain.notificationsetting.converter;
+package umc.duckmelang.domain.notification.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
-import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingRequestDto;
-import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingResponseDto;
+import umc.duckmelang.domain.notification.domain.NotificationSetting;
+import umc.duckmelang.domain.notification.dto.NotificationSettingRequestDto;
+import umc.duckmelang.domain.notification.dto.NotificationSettingResponseDto;
 
 @Component
 @RequiredArgsConstructor

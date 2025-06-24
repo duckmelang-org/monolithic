@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.notification.service;
+package umc.duckmelang.domain.notification.service.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,8 +8,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import umc.duckmelang.domain.notification.domain.Notification;
 import umc.duckmelang.domain.notification.repository.EmitterRepository;
 import umc.duckmelang.domain.notification.repository.NotificationRepository;
-import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.NotificationException;
 
 import java.util.List;
 

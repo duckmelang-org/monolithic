@@ -9,7 +9,7 @@ import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
+import umc.duckmelang.domain.notification.domain.NotificationSetting;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.application.domain.Application;

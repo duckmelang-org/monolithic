@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.notificationsetting.dto;
+package umc.duckmelang.domain.notification.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

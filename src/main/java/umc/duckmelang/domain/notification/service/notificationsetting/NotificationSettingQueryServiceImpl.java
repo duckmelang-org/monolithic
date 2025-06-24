@@ -1,11 +1,10 @@
-package umc.duckmelang.domain.notificationsetting.service;
+package umc.duckmelang.domain.notification.service.notificationsetting;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
-import umc.duckmelang.domain.notificationsetting.repository.NotificationSettingRepository;
+import umc.duckmelang.domain.notification.domain.NotificationSetting;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.NotificationSettingException;
 

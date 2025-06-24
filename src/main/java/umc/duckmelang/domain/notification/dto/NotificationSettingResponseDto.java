@@ -1,12 +1,9 @@
-package umc.duckmelang.domain.notificationsetting.dto;
+package umc.duckmelang.domain.notification.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import umc.duckmelang.domain.notification.domain.enums.NotificationType;
-
-import java.time.LocalDateTime;
 
 public class NotificationSettingResponseDto {
 

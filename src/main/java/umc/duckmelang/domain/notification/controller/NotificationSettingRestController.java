@@ -1,16 +1,16 @@
-package umc.duckmelang.domain.notificationsetting.controller;
+package umc.duckmelang.domain.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import umc.duckmelang.domain.notificationsetting.converter.NotificationSettingConverter;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
-import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingRequestDto;
-import umc.duckmelang.domain.notificationsetting.dto.NotificationSettingResponseDto;
-import umc.duckmelang.domain.notificationsetting.service.NotificationSettingCommandService;
-import umc.duckmelang.domain.notificationsetting.service.NotificationSettingQueryService;
+import umc.duckmelang.domain.notification.converter.NotificationSettingConverter;
+import umc.duckmelang.domain.notification.domain.NotificationSetting;
+import umc.duckmelang.domain.notification.dto.NotificationSettingRequestDto;
+import umc.duckmelang.domain.notification.dto.NotificationSettingResponseDto;
+import umc.duckmelang.domain.notification.service.notificationsetting.NotificationSettingCommandService;
+import umc.duckmelang.domain.notification.service.notificationsetting.NotificationSettingQueryService;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;

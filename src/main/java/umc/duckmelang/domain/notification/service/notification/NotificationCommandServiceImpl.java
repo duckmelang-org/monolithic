@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.notification.service;
+package umc.duckmelang.domain.notification.service.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
