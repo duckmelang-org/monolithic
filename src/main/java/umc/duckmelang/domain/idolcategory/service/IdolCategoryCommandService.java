@@ -7,5 +7,5 @@ import java.util.List;
 public interface IdolCategoryCommandService {
     void deleteIdolCategory(Long idolId);
     void createIdolCategory(List<String> names, List<MultipartFile> files);
-    void updateIdolCategory(IdolCategoryRequestDto.idolCategoryRequestList request, List<MultipartFile> files);
+    void updateIdolCategory(IdolCategoryRequestDto.IdolCategoryRequestList request, List<MultipartFile> files);
 }

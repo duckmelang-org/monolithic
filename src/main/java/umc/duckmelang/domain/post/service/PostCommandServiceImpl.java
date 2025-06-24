@@ -12,6 +12,7 @@ import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
+import umc.duckmelang.domain.post.domain.PostImage;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.post.domain.PostIdol;
@@ -20,6 +21,7 @@ import umc.duckmelang.domain.post.converter.PostImageConverter;
 import umc.duckmelang.domain.post.repository.PostImageRepository;
 import umc.duckmelang.domain.uuid.domain.Uuid;
 import umc.duckmelang.domain.uuid.repository.UuidRepository;
+import umc.duckmelang.domain.uuid.service.UuidService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.EventCategoryException;
 import umc.duckmelang.global.apipayload.exception.IdolCategoryException;
@@ -39,7 +41,7 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final MemberRepository memberRepository;
     private final EventCategoryRepository eventCategoryRepository;
     private final IdolCategoryRepository idolCategoryRepository;
-    private final UuidRepository uuidRepository;
+    private final UuidService uuidService;
     private final PostImageRepository postImageRepository;
     private final PostIdolRepository postIdolRepository;
     private final AmazonS3Manager s3Manager;
@@ -47,12 +49,15 @@ public class PostCommandServiceImpl implements PostCommandService {
     // 게시글과 이미지 업로드 처리
     private void savePostImages(Post post, List<MultipartFile> images) {
         for (MultipartFile file : images) {
-            String uuid = UUID.randomUUID().toString();
-            Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                    .uuid(uuid).build());
+            String uuid = uuidService.generateUniqueUuidString();
 
-            String imageUrl = s3Manager.uploadFile(s3Manager.generatePostImageKeyName(savedUuid), file);
-            postImageRepository.save(PostImageConverter.toPostImage(post, imageUrl));
+            String imageUrl = s3Manager.uploadFile(s3Manager.generatePostImageKeyName(uuid), file);
+            postImageRepository.save(
+                    PostImage.builder()
+                            .post(post)
+                            .postImageUrl(imageUrl)
+                            .uuid(uuid)
+                    .build());
         }
     }
 

@@ -22,6 +22,9 @@ public class PostImage extends BaseEntity {
     @Column(name = "post_image_url", columnDefinition = "VARCHAR(1024)")
     private String postImageUrl;
 
+    @Column(unique = true)
+    private String uuid; // 연관관계x
+
     // 연관관계 편의 메서드
     public void setPost(Post post) {
         if (this.post != null) {

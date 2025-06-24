@@ -13,6 +13,7 @@ import umc.duckmelang.domain.member.dto.profileImage.MemberProfileImageRequestDt
 import umc.duckmelang.domain.member.repository.MemberProfileImageRepository;
 import umc.duckmelang.domain.uuid.domain.Uuid;
 import umc.duckmelang.domain.uuid.repository.UuidRepository;
+import umc.duckmelang.domain.uuid.service.UuidService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
@@ -25,7 +26,7 @@ import java.util.UUID;
 public class MemberProfileImageCommandServiceImpl implements MemberProfileImageCommandService {
     private final MemberProfileImageRepository memberProfileImageRepository;
     private final MemberRepository memberRepository;
-    private final UuidRepository uuidRepository;
+    private final UuidService uuidService;
     private final AmazonS3Manager s3Manager;
 
     @Value("${spring.custom.default.profile-image}")
@@ -68,16 +69,21 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        String uuid = UUID.randomUUID().toString();
-        Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                .uuid(uuid).build());
+        String uuid = uuidService.generateUniqueUuidString();
 
         // 프로필 사진을 선택하지 않은 경우, 기본 프로필 사진으로 설정
         String profileImageUrl;
         if (profileImage == null || profileImage.isEmpty())
             profileImageUrl = defaultProfileImage;
-        else profileImageUrl = s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(savedUuid), profileImage);
+        else profileImageUrl = s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(uuid), profileImage);
 
-        return memberProfileImageRepository.save(MemberProfileImageConverter.toCreateMemberProfileImage(member, profileImageUrl));
+        return memberProfileImageRepository.save(
+                MemberProfileImage.builder()
+                        .memberImage(profileImageUrl)
+                        .member(member)
+                        .isPublic(true)
+                        .uuid(uuid)
+                        .build()
+        );
     }
 }

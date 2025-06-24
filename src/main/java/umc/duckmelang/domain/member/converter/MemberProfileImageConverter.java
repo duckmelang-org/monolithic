@@ -60,11 +60,4 @@ public class MemberProfileImageConverter {
                 .build();
     }
 
-    public static MemberProfileImage toCreateMemberProfileImage(Member member, String memberProfileImageURL) {
-        return MemberProfileImage.builder()
-                .memberImage(memberProfileImageURL)
-                .member(member)
-                .isPublic(true)
-                .build();
-    }
 }

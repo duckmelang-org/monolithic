@@ -23,7 +23,6 @@ public class AmazonS3Manager{
 
     private final AmazonConfig amazonConfig;
 
-    // todo : s3 내 파일 경로까지 리턴할 것. (db에 저장 후 삭제할 때 조회해서 이용)
     public String uploadFile(String keyName, MultipartFile file){
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -55,24 +54,24 @@ public class AmazonS3Manager{
         return result;
     }
 
-    public String generateIdolCategoryKeyName(Uuid uuid) {
-        return amazonConfig.getIdolCategoryImagePath() + '/' + uuid.getUuid();
+    public String generateIdolCategoryKeyName(String uuid) {
+        return amazonConfig.getIdolCategoryImagePath() + '/' + uuid;
     }
 
-    public String generateMemberProfileImageKeyName(Uuid uuid) {
-        return amazonConfig.getMemberProfileImagePath() + '/' + uuid.getUuid();
+    public String generateMemberProfileImageKeyName(String uuid) {
+        return amazonConfig.getMemberProfileImagePath() + '/' + uuid;
     }
 
-    public String generatePostImageKeyName(Uuid uuid) {
-        return amazonConfig.getPostImagePath() + '/' + uuid.getUuid();
+    public String generatePostImageKeyName(String uuid) {
+        return amazonConfig.getPostImagePath() + '/' + uuid;
     }
 
-    public String generateChatMessageImageKeyName(Uuid uuid) {
-        return amazonConfig.getChatMessageImagePath() + '/' + uuid.getUuid();
+    public String generateChatMessageImageKeyName(String uuid) {
+        return amazonConfig.getChatMessageImagePath() + '/' + uuid;
     }
 
-    public String generateChatMessageFileKeyName(Uuid uuid) {
-        return amazonConfig.getChatMessageFilePath() + '/' + uuid.getUuid();
+    public String generateChatMessageFileKeyName(String uuid) {
+        return amazonConfig.getChatMessageFilePath() + '/' + uuid;
     }
 
 
