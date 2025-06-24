@@ -62,9 +62,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private LoginType loginType; // BASIC, KAKAO, GOOGLE, NAVER
 
-    @Column(name = "oauth_id")
-    private String oauthId;
-
     private boolean isProfileComplete = false;
 
     private LocalDateTime deletedAt; // 탈퇴한 시간 저장
