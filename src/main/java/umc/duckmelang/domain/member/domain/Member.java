@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
-import umc.duckmelang.domain.materelationship.domain.MateRelationship;
+import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
@@ -15,8 +15,6 @@ import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.landmine.domain.Landmine;
-import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.common.BaseEntity;
 import umc.duckmelang.global.common.serializer.LocalDateSerializer;
 

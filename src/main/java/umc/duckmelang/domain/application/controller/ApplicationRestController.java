@@ -13,7 +13,7 @@ import umc.duckmelang.domain.application.facade.ApplicationFacadeService;
 import umc.duckmelang.domain.application.service.ApplicationCommandService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ExistsApplication;
-import umc.duckmelang.domain.materelationship.domain.MateRelationship;
+import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.domain.application.dto.*;

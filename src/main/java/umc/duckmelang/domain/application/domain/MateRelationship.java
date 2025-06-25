@@ -1,9 +1,8 @@
-package umc.duckmelang.domain.materelationship.domain;
+package umc.duckmelang.domain.application.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.global.common.BaseEntity;
 
 
