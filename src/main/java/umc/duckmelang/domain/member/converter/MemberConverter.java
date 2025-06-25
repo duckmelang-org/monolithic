@@ -116,10 +116,6 @@ public class MemberConverter {
                 .build();
     }
 
-    public static Member toMemberWithIntroduction(Member member, String introduction) {
-        member.updateIntroduction(introduction);
-        return member;
-    }
 
     public static MemberResponseDto.CreateIntroductionResultDto toCreateIntroductionResponseDto(Member member) {
         return MemberResponseDto.CreateIntroductionResultDto.builder()

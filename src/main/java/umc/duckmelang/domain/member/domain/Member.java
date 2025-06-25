@@ -141,7 +141,6 @@ public class Member extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    // 복사 생성자
     public Member(Member other) {
         this.introduction = other.introduction;
     }
@@ -163,23 +162,14 @@ public class Member extends BaseEntity {
         return age;
     }
 
-    // 자기소개 업데이트 메서드
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
-    // 프로필 업데이트 메서드
     public void updateProfile(String nickname, String introduction) {
-        if (nickname == null || nickname.isBlank()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_NICKNAME);
-        }
-        if (introduction == null || introduction.isBlank()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_INTRODUCTION);
-        }
         this.nickname = nickname;
         this.introduction = introduction;
     }
-
     public Member(Long id) {
         this.id = id;
     }

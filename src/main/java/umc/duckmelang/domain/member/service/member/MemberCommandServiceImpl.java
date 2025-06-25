@@ -150,18 +150,14 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public Member createIntroduction(Long memberId, MemberRequestDto.CreateIntroductionDto request) {
         Member member = getMemberOrThrow(memberId);
 
-        // 자기소개 문구 유효성검증
         if (request.getIntroduction().trim().isEmpty()) {
             throw new MemberException(ErrorStatus.MEMBER_EMPTY_INTRODUCTION);
         }
 
-        // 자기소개 업데이트
-        Member updatedMember = MemberConverter.toMemberWithIntroduction(member, request.getIntroduction());
+        member.updateIntroduction(request.getIntroduction());
+        member.completeProfile();
 
-        // 자기소개 업데이트
-        updatedMember.completeProfile();
-
-        return memberRepository.save(updatedMember);
+        return memberRepository.save(member);
     }
 
     @Override
