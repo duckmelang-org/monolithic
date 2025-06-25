@@ -126,15 +126,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public List<Landmine> createLandmines(Long memberId, MemberRequestDto.CreateLandminesDto request) {
         Member member = getMemberOrThrow(memberId);
 
-        // 지뢰를 하나도 설정하지 않은 경우, 아래 로직을 진행하지 않고 바로 빈 리스트를 return
         if (request.getLandmineContents() == null || request.getLandmineContents().isEmpty()) {
             return Collections.emptyList();
         }
 
-        // 지뢰 내용을 가져온다
         List<String> landmineContents = request.getLandmineContents();
-
-        // 지뢰 내용을 검증하여 중복된 키워드가 있는지 체크하고, 있다면 에러 발생
         Set<String> uniqueContents = new HashSet<>();
         for (String content : landmineContents) {
             if (!uniqueContents.add(content)) {
@@ -142,10 +138,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
             }
         }
 
-        // 기존 데이터 존재 시 삭제
-        landmineRepository.deleteAllByMember(member);
-
-        // 새 데이터 저장
         List<Landmine> landmineList = request.getLandmineContents().stream()
                 .map(content -> MemberConverter.toLandmine(member, content))
                 .collect(Collectors.toList());

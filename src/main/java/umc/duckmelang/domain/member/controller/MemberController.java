@@ -67,7 +67,7 @@ public class MemberController {
     @PostMapping("/{memberId}/landmines")
     public ApiResponse<MemberResponseDto.CreateLandmineResultDto> createLandmines(@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.CreateLandminesDto request) {
         List<Landmine> updatedLandmineList = memberCommandService.createLandmines(memberId, request);
-        return ApiResponse.onSuccess(MemberConverter.toCreateLandmineResponseDto(updatedLandmineList));
+        return ApiResponse.onSuccess(MemberConverter.toCreateLandmineResponseDto(memberId, updatedLandmineList));
     }
 
     @Operation(summary = "프로필 사진 설정 API", description = "회원이 최초로 프로필 사진을 설정하는 API입니다. 프로필 사진을 설정하지 않을 경우 기본 프로필이 설정됩니다.")

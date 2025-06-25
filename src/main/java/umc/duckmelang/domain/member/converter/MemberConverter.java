@@ -76,14 +76,9 @@ public class MemberConverter {
     }
 
     public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(Long memberId, List<MemberEvent> memberEventList) {
-        if (memberEventList == null || memberEventList.isEmpty()) {
-            return MemberResponseDto.SelectEventsResultDto.builder()
-                    .memberId(null)
-                    .eventCategoryIds(List.of())
-                    .build();
-        }
-
-        List<Long> eventCategoryIds = memberEventList.stream()
+        List<Long> eventCategoryIds = (memberEventList == null || memberEventList.isEmpty())
+                ? List.of()
+                : memberEventList.stream()
                 .map(memberEvent -> memberEvent.getEventCategory().getId())
                 .toList();
 
@@ -100,22 +95,15 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.CreateLandmineResultDto toCreateLandmineResponseDto(List<Landmine> landmineList) {
-        // landmineList가 비어있을 경우
-        if (landmineList == null || landmineList.isEmpty()) {
-            return MemberResponseDto.CreateLandmineResultDto.builder()
-                    .memberId(null) // memberId를 null로 설정
-                    .landmineContents(new ArrayList<>()) // 빈 리스트 반환
-                    .build();
-        }
-
-        Member member = landmineList.get(0).getMember(); // 반환된 리스트 내 모든 MemberEvent는 같은 Member를 참조하고 있음을 전제
-        List<String> landmineContents = landmineList.stream()
+    public static MemberResponseDto.CreateLandmineResultDto toCreateLandmineResponseDto(Long memberId, List<Landmine> landmineList) {
+        List<String> landmineContents = (landmineList == null || landmineList.isEmpty())
+                ? List.of()
+                : landmineList.stream()
                 .map(Landmine::getContent)
-                .collect(Collectors.toList());
+                .toList();
 
         return MemberResponseDto.CreateLandmineResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .landmineContents(landmineContents)
                 .build();
     }
