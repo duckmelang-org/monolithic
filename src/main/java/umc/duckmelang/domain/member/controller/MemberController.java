@@ -53,14 +53,14 @@ public class MemberController {
     @PostMapping("/{memberId}/idols")
     public ApiResponse<MemberResponseDto.SelectIdolsResultDto> selectIdols(@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.SelectIdolsDto request) {
         List<MemberIdol> updatedMemberIdolList = memberCommandService.selectIdols(memberId, request);
-        return ApiResponse.onSuccess(MemberConverter.toSelectIdolResponseDto(updatedMemberIdolList));
+        return ApiResponse.onSuccess(MemberConverter.toSelectIdolResponseDto(memberId, updatedMemberIdolList));
     }
 
     @Operation(summary = "관심있는 행사 종류 선택 API", description = "회원이 관심있는 행사(들)를 선택하는 API입니다. 하나도 선택하지 않을 수 있습니다.(이 경우 빈 리스트를 반환합니다)")
     @PostMapping("/{memberId}/events")
     public ApiResponse<MemberResponseDto.SelectEventsResultDto> selectEvents(@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.SelectEventsDto request) {
         List<MemberEvent> updatedMemberEventList = memberCommandService.selectEvents(memberId, request);
-        return ApiResponse.onSuccess(MemberConverter.toSelectEventResponseDto(updatedMemberEventList));
+        return ApiResponse.onSuccess(MemberConverter.toSelectEventResponseDto(memberId, updatedMemberEventList));
     }
 
     @Operation(summary = "지뢰 설정 API", description = "회원이 기피하는 키워드(들)를 선택하는 API입니다. 하나도 선택하지 않을 수 있습니다.(이 경우 빈 리스트를 반환합니다)")

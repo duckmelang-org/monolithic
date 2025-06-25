@@ -57,14 +57,13 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.SelectIdolsResultDto toSelectIdolResponseDto(List<MemberIdol> memberIdolList) {
-        Member member = memberIdolList.get(0).getMember();
+    public static MemberResponseDto.SelectIdolsResultDto toSelectIdolResponseDto(Long memberId, List<MemberIdol> memberIdolList) {
         List<Long> idolCategoryIds = memberIdolList.stream()
                 .map(memberIdol -> memberIdol.getIdolCategory().getId())
                 .toList();
 
         return MemberResponseDto.SelectIdolsResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .idolCategoryIds(idolCategoryIds)
                 .build();
     }
@@ -76,25 +75,22 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(List<MemberEvent> memberEventList) {
-        // memberEventList가 비어있을 경우
+    public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(Long memberId, List<MemberEvent> memberEventList) {
         if (memberEventList == null || memberEventList.isEmpty()) {
             return MemberResponseDto.SelectEventsResultDto.builder()
-                    .memberId(null) // memberId를 null로 설정
-                    .eventCategoryIds(new ArrayList<>()) // 빈 리스트 반환
+                    .memberId(null)
+                    .eventCategoryIds(List.of())
                     .build();
         }
 
-        Member member = memberEventList.get(0).getMember(); // 반환된 리스트 내 모든 MemberEvent는 같은 Member를 참조하고 있음을 전제
         List<Long> eventCategoryIds = memberEventList.stream()
                 .map(memberEvent -> memberEvent.getEventCategory().getId())
                 .toList();
 
         return MemberResponseDto.SelectEventsResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .eventCategoryIds(eventCategoryIds)
                 .build();
-
     }
 
     public static Landmine toLandmine(Member member, String content) {

@@ -105,21 +105,15 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public List<MemberEvent> selectEvents(Long memberId, MemberRequestDto.SelectEventsDto request) {
         Member member = getMemberOrThrow(memberId);
 
-        // 선호하는 행사를 하나도 고르지 않은 경우, 아래 로직을 진행하지 않고 바로 빈 리스트를 return
         if (request.getEventCategoryIds() == null || request.getEventCategoryIds().isEmpty()) {
             return Collections.emptyList();
         }
 
-        //행사 카테고리 조회 및 유효성 검증
         List<EventCategory> eventCategoryList = eventCategoryRepository.findAllById(request.getEventCategoryIds());
         if (eventCategoryList.size() != request.getEventCategoryIds().size()) {
             throw new EventCategoryException(ErrorStatus.INVALID_EVENT_CATEGORY);
         }
 
-        // 기존 데이터 존재 시 삭제
-        memberEventRepository.deleteAllByMember(member);
-
-        // 새 데이터 저장
         List<MemberEvent> memberEventList = eventCategoryList.stream()
                 .map(eventCategory -> MemberConverter.toMemberEvent(member, eventCategory))
                 .toList();
