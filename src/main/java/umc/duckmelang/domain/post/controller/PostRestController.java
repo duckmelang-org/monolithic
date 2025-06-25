@@ -109,13 +109,6 @@ public class PostRestController {
         return ApiResponse.onSuccess("게시글을 성공적으로 삭제했습니다.");
     }
 
-    @Operation(summary = "게시글 작성 - 행사 종류 전체 조회 API", description = "게시글 작성하는 페이지에서 행사 목록 전체를 받아오는 API입니다.")
-    @GetMapping("/events")
-    public ApiResponse<List<EventCategoryResponseDto.EventCategoryDto>> getAllCategories(){
-        return ApiResponse.onSuccess(eventCategoryQueryService.getGroupedCategories());
-    }
-
-
     @Operation(summary = "게시글 검색 API", description = "게시글 검색 API입니다. title 기준으로 검색합니다. " +
             "사용자가 기존에 설정한 필터링 조건이 아닌, 검색할 때마다 새로운 필터 값을 적용하여 조회합니다. 다만, 지뢰 필터링은 동일하게 적용되어있습니다." +
             "필터 값(gender, minAge, maxAge)은 각각 선택적으로 적용되며, 요청 시 지정하지 않으면 전체 검색이 가능합니다.")
@@ -145,18 +138,5 @@ public class PostRestController {
     public ApiResponse<PostResponseDto.PostPreviewListDto> getMyPostList(@AuthenticationPrincipal CustomUserDetails userDetails, @ValidPageNumber @RequestParam(name ="page", defaultValue = "0") Integer page){
         Page<Post> postList = postQueryService.getMyPostList(userDetails.getMemberId(), page);
         return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
-    }
-
-    @Operation(summary = "게시글 작성 - 관심 아이돌 목록 검색 API", description = "키워드를 통해 관심있는 아이돌을 찾는 API입니다.")
-    @GetMapping("/idols/search")
-    public ApiResponse<IdolCategoryResponseDto.IdolListDto> getIdolListByKeyword(@RequestParam("keyword") String keyword){
-        List<IdolCategory> idolCategoryList = idolCategoryQueryService.getIdolListByKeyword(keyword);
-        return ApiResponse.onSuccess(IdolCategoryConverter.toIdolListDto(idolCategoryList));
-    }
-
-    @Operation(summary = "게시글 작성 - 관심 아이돌 추가 API", description = "관심 아이돌을 추가하는 API입니다.")
-    @PostMapping("/idols/{idolId}")
-    public ApiResponse<MemberIdolResponseDto.IdolDto> addMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
-        return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
     }
 }
