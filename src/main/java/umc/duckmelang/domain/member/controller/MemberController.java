@@ -53,8 +53,6 @@ public class MemberController {
     @PostMapping("/{memberId}/idols")
     public ApiResponse<MemberResponseDto.SelectIdolsResultDto> selectIdols(@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.SelectIdolsDto request) {
         List<MemberIdol> updatedMemberIdolList = memberCommandService.selectIdols(memberId, request);
-        if (updatedMemberIdolList.isEmpty()) {
-            throw new IllegalArgumentException("선택된 아이돌 카테고리가 없습니다.");}
         return ApiResponse.onSuccess(MemberConverter.toSelectIdolResponseDto(updatedMemberIdolList));
     }
 

@@ -90,16 +90,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        // 아이돌 카테고리 조회 및 유효성 검증
         List<IdolCategory> idolCategoryList = idolCategoryRepository.findAllById(request.getIdolCategoryIds());
         if (idolCategoryList.size() != request.getIdolCategoryIds().size()) {
             throw new IdolCategoryException(ErrorStatus.INVALID_IDOL_CATEGORY);
         }
 
-        // 기존 데이터 존재 시 삭제
-        memberIdolRepository.deleteAllByMember(member);
-
-        // 새 데이터 저장
         List<MemberIdol> memberIdolList = idolCategoryList.stream()
                 .map(idolCategory -> MemberConverter.toMemberIdol(member, idolCategory))
                 .toList();

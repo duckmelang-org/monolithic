@@ -58,8 +58,7 @@ public class MemberConverter {
     }
 
     public static MemberResponseDto.SelectIdolsResultDto toSelectIdolResponseDto(List<MemberIdol> memberIdolList) {
-
-        Member member = memberIdolList.get(0).getMember(); // 반환된 리스트 내 모든 MemberIdol은 같은 Member를 참조하고 있음을 전제
+        Member member = memberIdolList.get(0).getMember();
         List<Long> idolCategoryIds = memberIdolList.stream()
                 .map(memberIdol -> memberIdol.getIdolCategory().getId())
                 .toList();
