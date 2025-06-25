@@ -73,8 +73,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public Member registerProfile(Long memberId, MemberRequestDto.ProfileRequestDto request){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
 
         if(memberRepository.existsByNickname(request.getNickname())){
             throw new MemberException(ErrorStatus.DUPLICATE_NICKNAME);
@@ -87,8 +86,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public List<MemberIdol> selectIdols(Long memberId, MemberRequestDto.SelectIdolsDto request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
 
         List<IdolCategory> idolCategoryList = idolCategoryRepository.findAllById(request.getIdolCategoryIds());
         if (idolCategoryList.size() != request.getIdolCategoryIds().size()) {
@@ -105,8 +103,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public List<MemberEvent> selectEvents(Long memberId, MemberRequestDto.SelectEventsDto request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
 
         // 선호하는 행사를 하나도 고르지 않은 경우, 아래 로직을 진행하지 않고 바로 빈 리스트를 return
         if (request.getEventCategoryIds() == null || request.getEventCategoryIds().isEmpty()) {
@@ -133,9 +130,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public List<Landmine> createLandmines(Long memberId, MemberRequestDto.CreateLandminesDto request) {
-        // 회원 조회 및 유효성 검증
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
 
         // 지뢰를 하나도 설정하지 않은 경우, 아래 로직을 진행하지 않고 바로 빈 리스트를 return
         if (request.getLandmineContents() == null || request.getLandmineContents().isEmpty()) {
@@ -167,9 +162,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public Member createIntroduction(Long memberId, MemberRequestDto.CreateIntroductionDto request) {
-        // 회원 조회 및 유효성 검증
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
 
         // 자기소개 문구 유효성검증
         if (request.getIntroduction().trim().isEmpty()) {
@@ -188,5 +181,10 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public boolean isNicknameExists(String nickname){
         return memberRepository.existsByNickname(nickname);
+    }
+
+    private Member getMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 }
