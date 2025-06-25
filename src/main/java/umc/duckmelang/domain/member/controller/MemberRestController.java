@@ -61,13 +61,6 @@ public class MemberRestController {
         return ApiResponse.onSuccess(MemberConverter.toSelectIdolResponseDto(updatedMemberIdolList));
     }
 
-    @Operation(summary = "행사 종류 조회 API", description = "행사의 종류를 모두 조회해옵니다.")
-    @GetMapping("/events")
-    public ApiResponse<EventCategoryResponseDto.EventCategoryListDto> getAllEventCategoryList() {
-        List<EventCategory> idolCategoryList = eventCategoryQueryService.getAllEventCategoryList();
-        return ApiResponse.onSuccess(EventCategoryConverter.toEventCategoryListDto(idolCategoryList));
-    }
-
     @Operation(summary = "관심있는 행사 종류 선택 API", description = "회원이 관심있는 행사(들)를 선택하는 API입니다. 하나도 선택하지 않을 수 있습니다.(이 경우 빈 리스트를 반환합니다)")
     @PostMapping("/{memberId}/events")
     public ApiResponse<MemberResponseDto.SelectEventsResultDto> selectEvents(@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.SelectEventsDto request) {
