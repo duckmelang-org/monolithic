@@ -11,19 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import umc.duckmelang.domain.eventcategory.dto.EventCategoryResponseDto;
-import umc.duckmelang.domain.eventcategory.service.EventCategoryQueryService;
-import umc.duckmelang.domain.idolcategory.converter.IdolCategoryConverter;
-import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
-import umc.duckmelang.domain.idolcategory.dto.IdolCategoryResponseDto;
-import umc.duckmelang.domain.idolcategory.service.IdolCategoryQueryService;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
-import umc.duckmelang.domain.member.converter.MemberIdolConverter;
-import umc.duckmelang.domain.member.dto.memberIdol.MemberIdolResponseDto;
-import umc.duckmelang.domain.member.service.memberIdol.MemberIdolCommandService;
-import umc.duckmelang.domain.member.service.memberIdol.MemberIdolQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ExistIdol;
 import umc.duckmelang.domain.post.converter.PostConverter;
@@ -49,10 +39,6 @@ public class PostRestController {
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
     private final PostFacadeService postFacadeService;
-    private final MemberIdolQueryService memberIdolQueryService;
-    private final MemberIdolCommandService memberIdolCommandService;
-    private final IdolCategoryQueryService idolCategoryQueryService;
-    private final EventCategoryQueryService eventCategoryQueryService;
     private final MyPageQueryService myPageQueryService;
 
     @Operation(summary = "홈화면 - 게시글 전체 조회 API", description = "조건이 없으면 모든 게시글을 반환하고, 조건이 있으면 해당 조건에 따라 게시글을 조회하는 API입니다." + "\n" +
