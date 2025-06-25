@@ -21,7 +21,7 @@ import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 @Tag(name="Images", description = "내 프로필 사진 관련 API")
 @RequestMapping("/mypage/profile/image")
 @RequiredArgsConstructor
-public class MemberProfileImageRestController{
+public class ProfileImageController {
     private final MemberProfileImageQueryService memberProfileImageQueryService;
     private final MemberProfileImageCommandService memberProfileImageCommandService;
 

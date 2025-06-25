@@ -30,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name="Others", description = "다른 사람의 프로필 조회 관련 API")
 @RequestMapping(path = "/profile")
-public class OthersProfileRestController {
+public class OthersProfileController {
     private final ProfileFacadeService profileFacadeService;
     private final MemberProfileImageQueryService memberProfileImageQueryService;
     private final PostQueryService postQueryService;

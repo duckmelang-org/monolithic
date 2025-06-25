@@ -40,7 +40,7 @@ import java.util.List;
 @RequestMapping("/mypage")
 @Tag(name="MyPage", description = "마이페이지에 해당하는 API")
 @RequiredArgsConstructor
-public class MyPageRestController {
+public class MypageController {
     private final ProfileFacadeService profileFacadeService;
     private final PostQueryService postQueryService;
     private final ReviewQueryService reviewQueryService;

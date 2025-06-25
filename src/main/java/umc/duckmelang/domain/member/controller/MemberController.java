@@ -7,9 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import umc.duckmelang.domain.eventcategory.converter.EventCategoryConverter;
-import umc.duckmelang.domain.eventcategory.domain.EventCategory;
-import umc.duckmelang.domain.eventcategory.dto.EventCategoryResponseDto;
 import umc.duckmelang.domain.eventcategory.service.EventCategoryQueryService;
 import umc.duckmelang.domain.landmine.domain.Landmine;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +30,7 @@ import java.util.List;
 @RequestMapping("/members")
 @Tag(name="Member", description = "회원가입 후 프로필 설정하는 API")
 @RequiredArgsConstructor
-public class MemberRestController {
+public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberProfileImageCommandService memberProfileImageCommandService;
     private final EventCategoryQueryService eventCategoryQueryService;
