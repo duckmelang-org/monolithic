@@ -80,10 +80,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
             throw new MemberException(ErrorStatus.DUPLICATE_NICKNAME);
         }
 
-        member.setNickname(request.getNickname());
-        member.setBirth(request.getBirth());
-        member.setGender(request.getGender());
-
+        member.updateProfile(request.getNickname(), request.getBirth(), request.getGender());
         return memberRepository.save(member);
     }
 

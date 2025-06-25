@@ -120,6 +120,12 @@ public class Member extends BaseEntity {
     private NotificationSetting notificationSetting;
 
     // === 도메인 메서드 === //
+    public void updateProfile(String nickname, LocalDate birth, Gender gender){
+        this.nickname = nickname;
+        this.birth = birth;
+        this.gender = gender;
+    }
+
     public void completeProfile(){
         this.isProfileComplete = true;
     }
