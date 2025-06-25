@@ -14,6 +14,5 @@ public interface PostQueryService {
     Optional<Post> getPostDetail(Long postId);
     Page<Post> getFilteredPostListByTitle(String keyword, Gender gender, Integer minAge, Integer maxAge, Integer page, Long memberId);
     Optional<Post> findById(Long postId);
-    Page<Post> getMyPostList(Long memberId, Integer page);
     int getPostCount(Long memberId);
 }

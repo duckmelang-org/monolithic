@@ -70,11 +70,6 @@ public class PostQueryServiceImpl implements PostQueryService{
         return postRepository.findById(postId);
     }
 
-    @Override
-    public Page<Post> getMyPostList(Long memberId, Integer page){
-        return postRepository.findMyPost(memberId, PageRequest.of(page, 10));
-    }
-
     /**
      * 특정 멤버가 작성한 게시물 수 조회: 프로필 조회 시 사용
      *

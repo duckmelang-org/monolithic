@@ -131,12 +131,4 @@ public class PostRestController {
         Post post = postCommandService.patchPostStatus(postId, wanted);
         return ApiResponse.onSuccess(PostConverter.postStatusDto(post));
     }
-
-    @Operation(summary = "나의 동행 페이지- 내 게시글 조회 API", description = "나의 동행에서 내 게시글을 확인하는 API입니다.")
-    @GetMapping("/my")
-    @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostPreviewListDto> getMyPostList(@AuthenticationPrincipal CustomUserDetails userDetails, @ValidPageNumber @RequestParam(name ="page", defaultValue = "0") Integer page){
-        Page<Post> postList = postQueryService.getMyPostList(userDetails.getMemberId(), page);
-        return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
-    }
 }
