@@ -10,7 +10,7 @@ import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.service.member.MemberQueryService;
 import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;

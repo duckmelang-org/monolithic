@@ -15,7 +15,7 @@ import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQuery
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.domain.review.converter.ReviewConverter;
 import umc.duckmelang.domain.review.domain.Review;

@@ -22,8 +22,8 @@ import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageComma
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
-import umc.duckmelang.domain.post.service.PostCommandService;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostCommandService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;

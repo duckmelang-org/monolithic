@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.post.service;
+package umc.duckmelang.domain.post.service.post;
 
 import org.springframework.data.domain.Page;
 import umc.duckmelang.domain.member.domain.enums.Gender;

@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.post.service;
+package umc.duckmelang.domain.post.service.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

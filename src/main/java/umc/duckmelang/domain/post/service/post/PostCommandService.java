@@ -1,9 +1,8 @@
-package umc.duckmelang.domain.post.service;
+package umc.duckmelang.domain.post.service.post;
 
 import org.springframework.web.multipart.MultipartFile;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
-import umc.duckmelang.domain.post.dto.PostResponseDto;
 
 import java.util.*;
 
