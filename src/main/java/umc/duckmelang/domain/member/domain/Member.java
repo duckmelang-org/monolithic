@@ -130,7 +130,6 @@ public class Member extends BaseEntity {
         this.isProfileComplete = true;
     }
 
-    // 필터 조건 업데이트 메서드
     public void updateFilter(Gender gender, Integer minAge, Integer maxAge){
         this.filterGender = gender;
         this.filterMinAge = minAge;
@@ -140,11 +139,6 @@ public class Member extends BaseEntity {
     public void deleteMember(){
         this.memberStatus = MemberStatus.DELETED;
         this.deletedAt = LocalDateTime.now();
-    }
-
-    // 비밀번호 설정 함수
-    public void encodePassword(String password){
-        this.password=password;
     }
 
     // 복사 생성자
