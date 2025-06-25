@@ -36,20 +36,12 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
 
     @Override
     public Bookmark joinBookmark(Long postId, Long memberId) {
-//        Member 엔티티 조회
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-//        Post 엔티티 조회
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
+        Member member = getMemberOrThrow(memberId);
+        Post post = getPostOrThrow(postId);
+        validateSelfBookmark(member, post);
+        validateDuplicateBookmark(member, post);
 
-//        이미 스크랩되어있는지 확인
-        if(bookmarkRepository.existsByMemberAndPost(member,post)){
-            throw new BookmarkException(ErrorStatus.DUPLICATE_BOOKMARK);
-        }
-
-
-//        게시물 대표 이미지 URL 조회
+        // 게시물 대표 이미지 URL 조회
         PostThumbnailResponseDto postThumbnail = postImageQueryService.getLatestPostImage(postId);
         String postImageUrl = (postThumbnail != null) ? postThumbnail.getPostImageUrl() : null;
 
@@ -65,10 +57,38 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
     }
 
     @Override
-    public void deleteBookmark(Long bookmarkId) {
-        Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
-                .orElseThrow(() -> new BookmarkException(ErrorStatus.INVALID_BOOKMARK));
+    public void deleteBookmark(Long postId, Long memberId) {
+        Member member = getMemberOrThrow(memberId);
+        Post post = getPostOrThrow(postId);
+        Bookmark bookmark = getBookmarkOrThrow(member, post);
         bookmarkRepository.delete(bookmark);
+    }
+
+    private Member getMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
+
+    private Post getPostOrThrow(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
+    }
+
+    private Bookmark getBookmarkOrThrow(Member member, Post post) {
+        return bookmarkRepository.findByMemberAndPost(member, post)
+                .orElseThrow(() -> new BookmarkException(ErrorStatus.INVALID_BOOKMARK));
+    }
+
+    private void validateDuplicateBookmark(Member member, Post post) {
+        if (bookmarkRepository.existsByMemberAndPost(member, post)) {
+            throw new BookmarkException(ErrorStatus.DUPLICATE_BOOKMARK);
+        }
+    }
+
+    private void validateSelfBookmark(Member member, Post post) {
+        if (member.getId().equals(post.getMember().getId())) {
+            throw new BookmarkException(ErrorStatus.CANNOT_BOOKMARK_OWN_POST);
+        }
     }
 }
 
