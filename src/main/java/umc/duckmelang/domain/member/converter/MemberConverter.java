@@ -22,10 +22,10 @@ import java.util.ArrayList;
 @Component
 public class MemberConverter {
 
-    public static Member toMember(MemberSignUpDto.SignupDto request){
+    public static Member toMember(MemberSignUpDto.SignupDto request, String encodedPassword) {
         return Member.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .memberStatus(MemberStatus.ACTIVE)
                 .isProfileComplete(false)
                 .role(Role.USER)

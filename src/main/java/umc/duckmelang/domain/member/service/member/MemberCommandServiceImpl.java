@@ -51,8 +51,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         if(memberRepository.existsByEmail(request.getEmail())){
             throw new MemberException(ErrorStatus.DUPLICATE_EMAIL);
         }
-        Member newMember = MemberConverter.toMember(request);
-        newMember.encodePassword(passwordEncoder.encode(request.getPassword()));
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        Member newMember = MemberConverter.toMember(request, encodedPassword);
         newMember = memberRepository.save(newMember);
 
         // 알림 설정 자동 추가
