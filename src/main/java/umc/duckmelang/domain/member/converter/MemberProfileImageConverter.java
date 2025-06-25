@@ -41,12 +41,6 @@ public class MemberProfileImageConverter {
                 .build();
     }
 
-    public static MemberProfileImage toMemberProfileImageWithChangedStatus(MemberProfileImage profileImage, boolean isPublic) {
-        profileImage.changeStatus(isPublic);
-        return profileImage;
-
-    }
-
     public static MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto toUpdateProfileImageStatusResultDto(MemberProfileImage updatedMemberProfileImage) {
         String changedStatus;
 

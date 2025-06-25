@@ -103,10 +103,4 @@ public class MypageController {
         postCommandService.deleteMyPost(postId);
         return ApiResponse.onSuccess("피드를 성공적으로 삭제했습니다.");
     }
-
-//    @Operation(summary = "설정 - 로그인 정보 조회 API", description = "사용자의 로그인 정보를 반환합니다. 사용자 닉네임과 이메일 그리고 카카오톡/구글 이나 자체 로그인 사용자인지 구분합니다.")
-//    @GetMapping("/info")
-//    public ApiResponse<MyPageResponseDto.LoginInfoDto> getLoginInfo(@AuthenticationPrincipal CustomUserDetails userDetails){
-//        return ApiResponse.onSuccess(myPageQueryService.getLoginInfo(userDetails.getMemberId()));
-//    }
 }
