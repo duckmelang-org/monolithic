@@ -89,12 +89,12 @@ public class AuthService {
         return new LoginResponse(memberId, newAccessToken, newRefreshToken, member.isProfileComplete());
     }
 
-    // 사용자 로그아웃 - RefreshToken 삭제
-    @Transactional
-    public void logout(Long memberId) {
-        // redis 에서 RefreshToken 삭제
-        refreshTokenService.removeRefreshToken(memberId);
-    }
+//    // 사용자 로그아웃 - RefreshToken 삭제
+//    @Transactional
+//    public void logout(Long memberId) {
+//        // redis 에서 RefreshToken 삭제
+//        refreshTokenService.removeRefreshToken(memberId);
+//    }
 
     // 이메일/비밀번호 기반 사용자 인증
     private Authentication authenticate(String email, String password) {

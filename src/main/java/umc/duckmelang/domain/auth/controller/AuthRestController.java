@@ -44,17 +44,17 @@ public class AuthRestController {
         return ApiResponse.onSuccess(authService.reissue(request.getRefreshToken()));
     }
 
-    @PostMapping("/logout")
-    @Operation(summary = "로그아웃 API", description = "로그아웃 처리합니다.")
-    public ApiResponse<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        authService.logout(userDetails.getMemberId());
-        return ApiResponse.onSuccess("로그아웃되었습니다.");
-    }
-
-    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
-    @DeleteMapping("/account/delete")
-    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
-        myPageCommandService.deleteMember(userDetails.getMemberId());
-        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
-    }
+//    @PostMapping("/logout")
+//    @Operation(summary = "로그아웃 API", description = "로그아웃 처리합니다.")
+//    public ApiResponse<String> logout(@AuthenticationPrincipal CustomUserDetails userDetails) {
+//        authService.logout(userDetails.getMemberId());
+//        return ApiResponse.onSuccess("로그아웃되었습니다.");
+//    }
+//
+//    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
+//    @DeleteMapping("/account/delete")
+//    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
+//        myPageCommandService.deleteMember(userDetails.getMemberId());
+//        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
+//    }
 }
