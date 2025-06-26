@@ -31,28 +31,31 @@ public class ChatMessageConverter {
                 .receiverId(request.getReceiverId())
                 .messageType(request.getMessageType())
                 .text(request.getText())
+                .uuids(List.of())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
 
-    public static ChatMessage toChatMessageWithImages(ChatMessageRequestDto.@Valid CreateChatMessageDto request, ChatRoom chatRoom, List<String> imageUrls) {
+    public static ChatMessage toChatMessageWithImages(ChatMessageRequestDto.@Valid CreateChatMessageDto request, ChatRoom chatRoom, List<String> imageUrls, List<String> uuids) {
         return ChatMessage.builder()
                 .chatRoomId(chatRoom.getId())
                 .senderId(request.getSenderId())
                 .receiverId(request.getReceiverId())
                 .messageType(request.getMessageType())
                 .imageUrls(imageUrls)
+                .uuids(uuids)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
 
-    public static ChatMessage toChatMessageWithFile(ChatMessageRequestDto.@Valid CreateChatMessageDto request, ChatRoom chatRoom, String fileUrl) {
+    public static ChatMessage toChatMessageWithFile(ChatMessageRequestDto.@Valid CreateChatMessageDto request, ChatRoom chatRoom, String fileUrl, String uuid) {
         return ChatMessage.builder()
                 .chatRoomId(chatRoom.getId())
                 .senderId(request.getSenderId())
                 .receiverId(request.getReceiverId())
                 .messageType(request.getMessageType())
                 .fileUrl(fileUrl)
+                .uuids(List.of(uuid))
                 .createdAt(LocalDateTime.now())
                 .build();
     }

@@ -1,6 +1,7 @@
 package umc.duckmelang.mongo.chatmessage.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -32,6 +33,8 @@ public class ChatMessage {
     private Long receiverId;   // 메세지를 받은 사람
 
     private Long chatRoomId;   // 대화가 이루어지고 있는 채팅방 ID
+
+    private List<String> uuids;
 
     @Enumerated(EnumType.STRING)
     private MessageType messageType; // 메시지 타입

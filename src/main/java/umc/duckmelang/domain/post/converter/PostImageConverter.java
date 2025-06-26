@@ -10,12 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PostImageConverter {
-    public static PostImage toPostImage(Post post, String imageUrl){
-        return PostImage.builder()
-                .post(post)
-                .postImageUrl(imageUrl)
-                .build();
-    }
 
     public static PostImageResponseDto.PostThumbnailListResponseDto toPostThumbnailListResponseDto(Page<PostThumbnailResponseDto> thumbnails){
         List<PostThumbnailResponseDto> thumbnailList = thumbnails.stream().collect(Collectors.toList());

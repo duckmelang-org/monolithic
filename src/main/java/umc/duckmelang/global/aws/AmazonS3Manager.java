@@ -23,8 +23,6 @@ public class AmazonS3Manager{
 
     private final AmazonConfig amazonConfig;
 
-    private final UuidRepository uuidRepository;
-
     public String uploadFile(String keyName, MultipartFile file){
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -38,19 +36,43 @@ public class AmazonS3Manager{
         return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
     }
 
-    public String generateMemberProfileImageKeyName(Uuid uuid) {
-        return amazonConfig.getMemberProfileImagePath() + '/' + uuid.getUuid();
+    public String deleteFile(String keyName) {
+
+        String result = "success";
+
+        try {
+            boolean isObjectExist = amazonS3.doesObjectExist(amazonConfig.getBucket(), keyName);
+            if (isObjectExist) {
+                amazonS3.deleteObject(amazonConfig.getBucket(), keyName);
+            } else {
+                result = "file not found";
+            }
+        } catch (Exception e) {
+            log.debug("Delete File failed", e);
+        }
+
+        return result;
     }
 
-    public String generatePostImageKeyName(Uuid uuid) {
-        return amazonConfig.getPostImagePath() + '/' + uuid.getUuid();
+    public String generateIdolCategoryKeyName(String uuid) {
+        return amazonConfig.getIdolCategoryImagePath() + '/' + uuid;
     }
 
-    public String generateChatMessageImageKeyName(Uuid uuid) {
-        return amazonConfig.getChatMessageImagePath() + '/' + uuid.getUuid();
+    public String generateMemberProfileImageKeyName(String uuid) {
+        return amazonConfig.getMemberProfileImagePath() + '/' + uuid;
     }
 
-    public String generateChatMessageFileKeyName(Uuid uuid) {
-        return amazonConfig.getChatMessageFilePath() + '/' + uuid.getUuid();
+    public String generatePostImageKeyName(String uuid) {
+        return amazonConfig.getPostImagePath() + '/' + uuid;
     }
+
+    public String generateChatMessageImageKeyName(String uuid) {
+        return amazonConfig.getChatMessageImagePath() + '/' + uuid;
+    }
+
+    public String generateChatMessageFileKeyName(String uuid) {
+        return amazonConfig.getChatMessageFilePath() + '/' + uuid;
+    }
+
+
 }

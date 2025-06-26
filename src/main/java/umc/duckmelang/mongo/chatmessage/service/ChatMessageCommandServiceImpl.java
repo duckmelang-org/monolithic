@@ -8,6 +8,7 @@ import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.repository.PostRepository;
+import umc.duckmelang.domain.uuid.service.UuidService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;
@@ -40,7 +41,7 @@ public class ChatMessageCommandServiceImpl implements ChatMessageCommandService 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Manager s3Manager;
-    private final UuidRepository uuidRepository;
+    private final UuidService uuidService;
 
 
     @Override
@@ -74,14 +75,14 @@ public class ChatMessageCommandServiceImpl implements ChatMessageCommandService 
                     throw new ChatMessageException(ErrorStatus.EMPTY_MESSAGE_IMAGE);
                 }
                 List<String> imageUrls = new ArrayList<>();
+                List<String> uuids = new ArrayList<>();
                 for (MultipartFile imageFile : request.getImageFiles()) {
-                    String uuid = UUID.randomUUID().toString();
-                    Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                            .uuid(uuid).build());
-                    String imageUrl = s3Manager.uploadFile(s3Manager.generateChatMessageImageKeyName(savedUuid), request.getFile());
+                    String uuid = uuidService.generateUniqueUuidString();
+                    String imageUrl = s3Manager.uploadFile(s3Manager.generateChatMessageImageKeyName(uuid), request.getFile());
+                    uuids.add(uuid);
                     imageUrls.add(imageUrl);
                 }
-                newChatMessage = ChatMessageConverter.toChatMessageWithImages(request, chatRoom, imageUrls);
+                newChatMessage = ChatMessageConverter.toChatMessageWithImages(request, chatRoom, imageUrls, uuids);
                 break;
 
             case FILE:
@@ -89,11 +90,9 @@ public class ChatMessageCommandServiceImpl implements ChatMessageCommandService 
                 if (request.getFile().isEmpty()) {
                     throw new ChatMessageException(ErrorStatus.EMPTY_MESSAGE_FILE);
                 }
-                String uuid = UUID.randomUUID().toString();
-                Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                        .uuid(uuid).build());
-                String fileUrl = s3Manager.uploadFile(s3Manager.generateChatMessageFileKeyName(savedUuid), request.getFile());
-                newChatMessage = ChatMessageConverter.toChatMessageWithFile(request, chatRoom, fileUrl);
+                String uuid = uuidService.generateUniqueUuidString();
+                String fileUrl = s3Manager.uploadFile(s3Manager.generateChatMessageFileKeyName(uuid), request.getFile());
+                newChatMessage = ChatMessageConverter.toChatMessageWithFile(request, chatRoom, fileUrl, uuid);
                 break;
 
             case LINK:

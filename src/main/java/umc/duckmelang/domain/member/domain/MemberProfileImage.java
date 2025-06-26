@@ -22,6 +22,9 @@ public class MemberProfileImage extends BaseEntity {
     @Column(nullable = false)
     private boolean isPublic; // true이면 전체 공개, false이면 나만 보기
 
+    @Column(unique = true)
+    private String uuid; // 연관관계x
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
