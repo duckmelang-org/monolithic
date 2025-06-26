@@ -66,24 +66,4 @@ public class IdolCategoryRestController {
         idolCategoryCommandService.updateIdolCategory(request, files);
         return ApiResponse.onSuccess("아이돌 카테고리를 수정했습니다.");
     }
-
-    @Operation(summary = "관심 아이돌 삭제 API(admin)", description = "관심 아이돌 목록에서 관심 아이돌을 삭제하는 API입니다.")
-    @DeleteMapping("/mypage/idols/{idolId}")
-    public ApiResponse<String> deleteMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
-        memberIdolCommandService.deleteMemberIdol(userDetails.getMemberId(), idolId);
-        return ApiResponse.onSuccess("해당 아이돌을 삭제했습니다.");
-    }
-
-    @Operation(summary = "아이돌 목록 검색 API", description = "키워드를 통해 관심있는 아이돌을 찾는 API입니다.")
-    @GetMapping("/mypage/idols/search")
-    public ApiResponse<IdolCategoryResponseDto.IdolListDto> getIdolListByKeyword(@RequestParam("keyword") String keyword){
-        List<IdolCategory> idolCategoryList = idolCategoryQueryService.getIdolListByKeyword(keyword);
-        return ApiResponse.onSuccess(IdolCategoryConverter.toIdolListDto(idolCategoryList));
-    }
-
-    @Operation(summary = "관심 아이돌 추가 API", description = "관심 아이돌을 추가하는 API입니다.")
-    @PostMapping("/mypage/idols/{idolId}")
-    public ApiResponse<MemberIdolResponseDto.IdolDto> addMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
-        return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
-    }
 }

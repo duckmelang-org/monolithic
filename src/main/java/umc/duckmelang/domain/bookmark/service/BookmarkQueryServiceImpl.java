@@ -33,6 +33,4 @@ public class BookmarkQueryServiceImpl implements BookmarkQueryService {
         return post.getBookmarkList().size();
 
     }
-
-
 }

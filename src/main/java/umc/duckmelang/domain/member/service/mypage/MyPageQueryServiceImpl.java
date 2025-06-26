@@ -33,10 +33,4 @@ public class MyPageQueryServiceImpl implements MyPageQueryService{
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         return MemberFilterConverter.toFilterResponseDto(member);
     }
-
-//    public MyPageResponseDto.LoginInfoDto getLoginInfo(Long memberId){
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-//        return MemberProfileConverter.toLoginInfoDto(member);
-//    }
 }

@@ -12,8 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface MemberIdolRepository extends JpaRepository<MemberIdol, Long> {
-    void deleteAllByMember(Member member);
-
     @Query("SELECT m FROM MemberIdol m JOIN FETCH m.idolCategory WHERE m.member.id = :memberId")
     List<MemberIdol> findByMember(@Param("memberId")Long memberId);
 

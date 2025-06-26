@@ -33,16 +33,18 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     private String defaultProfileImage;
 
     @Override
+    public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
+        Member member = getMemberOrThrow(memberId);
+        String profileImageUrl = uploadProfileImage(profileImage);
+        return memberProfileImageRepository.save(MemberProfileImageConverter.toCreateMemberProfileImage(member, profileImageUrl));
+    }
+
+    @Override
     @Transactional
     public void deleteProfileImage(Long memberId, Long imageId) {
-        MemberProfileImage profileImage = memberProfileImageRepository.findById(imageId)
-                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
-        // 삭제하려는 이미지가 사용자의 프로필 이미지인지 확인
-        if(!profileImage.getMember().getId().equals(memberId)){
-            throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
-        }
-        // 기본 프로필 이미지인지 확인하여 삭제 불가 처리
-        if(profileImage.getMemberImage().equals(defaultProfileImage)){
+        MemberProfileImage profileImage = getProfileImageOrThrow(imageId);
+        validateMemberOwnership(profileImage, memberId);
+        if (isDefaultProfileImage(profileImage)) {
             throw new MemberProfileImageException(ErrorStatus.CANNOT_UPDATE_DEFAULT_PROFILE_IMAGE);
         }
         memberProfileImageRepository.delete(profileImage);
@@ -51,20 +53,43 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     @Override
     @Transactional
     public MemberProfileImage updateProfileImageStatus(Long memberId, Long imageId, MemberProfileImageRequestDto.UpdateProfileImageStatusDto request) {
-        MemberProfileImage profileImage = memberProfileImageRepository.findById(imageId)
-                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
-        // 업데이트하려는 이미지가 사용자의 프로필 이미지인지 확인
-        if(!profileImage.getMember().getId().equals(memberId)){
-            throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
+        MemberProfileImage profileImage = getProfileImageOrThrow(imageId);
+        validateMemberOwnership(profileImage, memberId);
+        if (isDefaultProfileImage(profileImage)) {
+            throw new MemberProfileImageException(ErrorStatus.CANNOT_UPDATE_DEFAULT_PROFILE_IMAGE);
         }
-        // 기본 프로필 이미지인지 확인하여 업데이트 불가 처리
-        if(profileImage.getMemberImage().equals(defaultProfileImage)){
-            throw new MemberProfileImageException(ErrorStatus.CANNOT_DELETE_DEFAULT_PROFILE_IMAGE);
-        }
-        MemberProfileImage updatedProfileImage = MemberProfileImageConverter.toMemberProfileImageWithChangedStatus(profileImage, request.isPublicStatus());
-        return memberProfileImageRepository.save(updatedProfileImage);
+        profileImage.changeStatus(request.isPublicStatus());
+        return memberProfileImageRepository.save(profileImage);
     }
 
+    private Member getMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
+
+    private MemberProfileImage getProfileImageOrThrow(Long imageId) {
+        return memberProfileImageRepository.findById(imageId)
+                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
+    }
+
+    private void validateMemberOwnership(MemberProfileImage profileImage, Long memberId) {
+        if (!profileImage.getMember().getId().equals(memberId)) {
+            throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
+        }
+    }
+
+    private boolean isDefaultProfileImage(MemberProfileImage profileImage) {
+        return profileImage.getMemberImage().equals(defaultProfileImage);
+    }
+
+    private String uploadProfileImage(MultipartFile profileImage) {
+        if (profileImage == null || profileImage.isEmpty()) {
+            return defaultProfileImage;
+        }
+
+        String uuid = UUID.randomUUID().toString();
+        Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+        return s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(savedUuid), profileImage);
     @Override
     public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
         Member member = memberRepository.findById(memberId)

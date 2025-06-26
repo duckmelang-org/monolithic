@@ -22,10 +22,10 @@ import java.util.ArrayList;
 @Component
 public class MemberConverter {
 
-    public static Member toMember(MemberSignUpDto.SignupDto request){
+    public static Member toMember(MemberSignUpDto.SignupDto request, String encodedPassword) {
         return Member.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .memberStatus(MemberStatus.ACTIVE)
                 .isProfileComplete(false)
                 .role(Role.USER)
@@ -57,15 +57,13 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.SelectIdolsResultDto toSelectIdolResponseDto(List<MemberIdol> memberIdolList) {
-
-        Member member = memberIdolList.get(0).getMember(); // 반환된 리스트 내 모든 MemberIdol은 같은 Member를 참조하고 있음을 전제
+    public static MemberResponseDto.SelectIdolsResultDto toSelectIdolResponseDto(Long memberId, List<MemberIdol> memberIdolList) {
         List<Long> idolCategoryIds = memberIdolList.stream()
                 .map(memberIdol -> memberIdol.getIdolCategory().getId())
                 .toList();
 
         return MemberResponseDto.SelectIdolsResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .idolCategoryIds(idolCategoryIds)
                 .build();
     }
@@ -77,25 +75,17 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(List<MemberEvent> memberEventList) {
-        // memberEventList가 비어있을 경우
-        if (memberEventList == null || memberEventList.isEmpty()) {
-            return MemberResponseDto.SelectEventsResultDto.builder()
-                    .memberId(null) // memberId를 null로 설정
-                    .eventCategoryIds(new ArrayList<>()) // 빈 리스트 반환
-                    .build();
-        }
-
-        Member member = memberEventList.get(0).getMember(); // 반환된 리스트 내 모든 MemberEvent는 같은 Member를 참조하고 있음을 전제
-        List<Long> eventCategoryIds = memberEventList.stream()
+    public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(Long memberId, List<MemberEvent> memberEventList) {
+        List<Long> eventCategoryIds = (memberEventList == null || memberEventList.isEmpty())
+                ? List.of()
+                : memberEventList.stream()
                 .map(memberEvent -> memberEvent.getEventCategory().getId())
                 .toList();
 
         return MemberResponseDto.SelectEventsResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .eventCategoryIds(eventCategoryIds)
                 .build();
-
     }
 
     public static Landmine toLandmine(Member member, String content) {
@@ -105,22 +95,15 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDto.CreateLandmineResultDto toCreateLandmineResponseDto(List<Landmine> landmineList) {
-        // landmineList가 비어있을 경우
-        if (landmineList == null || landmineList.isEmpty()) {
-            return MemberResponseDto.CreateLandmineResultDto.builder()
-                    .memberId(null) // memberId를 null로 설정
-                    .landmineContents(new ArrayList<>()) // 빈 리스트 반환
-                    .build();
-        }
-
-        Member member = landmineList.get(0).getMember(); // 반환된 리스트 내 모든 MemberEvent는 같은 Member를 참조하고 있음을 전제
-        List<String> landmineContents = landmineList.stream()
+    public static MemberResponseDto.CreateLandmineResultDto toCreateLandmineResponseDto(Long memberId, List<Landmine> landmineList) {
+        List<String> landmineContents = (landmineList == null || landmineList.isEmpty())
+                ? List.of()
+                : landmineList.stream()
                 .map(Landmine::getContent)
-                .collect(Collectors.toList());
+                .toList();
 
         return MemberResponseDto.CreateLandmineResultDto.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .landmineContents(landmineContents)
                 .build();
     }
@@ -133,10 +116,6 @@ public class MemberConverter {
                 .build();
     }
 
-    public static Member toMemberWithIntroduction(Member member, String introduction) {
-        member.updateIntroduction(introduction);
-        return member;
-    }
 
     public static MemberResponseDto.CreateIntroductionResultDto toCreateIntroductionResponseDto(Member member) {
         return MemberResponseDto.CreateIntroductionResultDto.builder()

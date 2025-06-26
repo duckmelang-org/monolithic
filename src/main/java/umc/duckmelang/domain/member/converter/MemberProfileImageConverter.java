@@ -25,6 +25,7 @@ public class MemberProfileImageConverter {
                 .listSize(list.size())
                 .isFirst(page.isFirst())
                 .isLast(page.isLast())
+                .currentPage(page.getNumber())
                 .build();
     }
 
@@ -39,12 +40,6 @@ public class MemberProfileImageConverter {
         return MemberProfileImageResponseDto.DeleteProfileImageResultDto.builder()
                 .succeedMessage("프로필 사진이 성공적으로 삭제되었습니다.")
                 .build();
-    }
-
-    public static MemberProfileImage toMemberProfileImageWithChangedStatus(MemberProfileImage profileImage, boolean isPublic) {
-        profileImage.changeStatus(isPublic);
-        return profileImage;
-
     }
 
     public static MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto toUpdateProfileImageStatusResultDto(MemberProfileImage updatedMemberProfileImage) {

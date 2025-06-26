@@ -19,5 +19,6 @@ public class PostImageResponseDto {
         Long totalElements;
         Boolean isFirst;
         Boolean isLast;
+        Integer currentPage;
     }
 }

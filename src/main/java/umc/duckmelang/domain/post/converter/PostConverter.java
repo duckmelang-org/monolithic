@@ -51,6 +51,7 @@ public class PostConverter {
                 .totalPage(postList.getTotalPages())
                 .totalElements(postList.getTotalElements())
                 .listSize(postPreviewDtoList.size())
+                .currentPage(postList.getNumber())
                 .postList(postPreviewDtoList)
                 .build();
     }
