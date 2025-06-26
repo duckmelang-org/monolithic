@@ -25,6 +25,7 @@ public class MemberProfileImageConverter {
                 .listSize(list.size())
                 .isFirst(page.isFirst())
                 .isLast(page.isLast())
+                .currentPage(page.getNumber())
                 .build();
     }
 
