@@ -39,7 +39,7 @@ public class IdolCategoryRestController {
         return ApiResponse.onSuccess(IdolCategoryConverter.toIdolListDto(idolCategoryList));
     }
 
-    @DeleteMapping("/idols/{idolId}")
+    @DeleteMapping("/admin/idols/{idolId}")
     @Operation(summary = "특정 아이돌 카테고리 삭제 API(admin)", description = "관리자 기능. 아이돌 카테고리에서 특정 아이돌을 삭제합니다.")
     public ApiResponse<String> deleteIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
         if(userDetails.getRole() != Role.ADMIN)
@@ -48,7 +48,7 @@ public class IdolCategoryRestController {
         return ApiResponse.onSuccess("해당 아이돌 카테고리를 삭제했습니다.");
     }
 
-    @PostMapping(value = "/idols", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/admin/idols", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "아이돌 카테고리 추가 API(admin)", description = "관리자 기능. 아이돌 카테고리에 아이돌 이름, 이미지를 추가합니다.")
     public ApiResponse<String> createIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam("names") List<String> names,
                                           @RequestPart("files") List<MultipartFile> files) {
@@ -58,7 +58,7 @@ public class IdolCategoryRestController {
         return ApiResponse.onSuccess("아이돌 카테고리를 추가했습니다.");
     }
 
-    @PostMapping(value = "/idols/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/admin/idols/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "아이돌 카테고리 수정 API(admin)", description = "관리자 기능. 기존 아이돌 카테고리의 이름, 이미지를 수정합니다.")
     public ApiResponse<String> updateIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestPart("dtos") IdolCategoryRequestDto.IdolCategoryRequestList request, @RequestPart("files") List<MultipartFile> files){
         if(userDetails.getRole() != Role.ADMIN)
