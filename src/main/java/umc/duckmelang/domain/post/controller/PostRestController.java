@@ -11,20 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import umc.duckmelang.domain.eventcategory.dto.EventCategoryResponseDto;
-import umc.duckmelang.domain.eventcategory.service.EventCategoryQueryService;
-import umc.duckmelang.domain.idolcategory.converter.IdolCategoryConverter;
-import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
-import umc.duckmelang.domain.idolcategory.dto.IdolCategoryResponseDto;
-import umc.duckmelang.domain.idolcategory.service.IdolCategoryQueryService;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
-import umc.duckmelang.domain.member.converter.MemberIdolConverter;
-import umc.duckmelang.domain.member.domain.MemberIdol;
-import umc.duckmelang.domain.member.dto.memberIdol.MemberIdolResponseDto;
-import umc.duckmelang.domain.member.service.memberIdol.MemberIdolCommandService;
-import umc.duckmelang.domain.member.service.memberIdol.MemberIdolQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.validation.annotation.ExistIdol;
 import umc.duckmelang.domain.post.converter.PostConverter;
@@ -32,8 +21,8 @@ import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.facade.PostFacadeService;
-import umc.duckmelang.domain.post.service.PostCommandService;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostCommandService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
@@ -50,10 +39,6 @@ public class PostRestController {
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
     private final PostFacadeService postFacadeService;
-    private final MemberIdolQueryService memberIdolQueryService;
-    private final MemberIdolCommandService memberIdolCommandService;
-    private final IdolCategoryQueryService idolCategoryQueryService;
-    private final EventCategoryQueryService eventCategoryQueryService;
     private final MyPageQueryService myPageQueryService;
 
     @Operation(summary = "홈화면 - 게시글 전체 조회 API", description = "조건이 없으면 모든 게시글을 반환하고, 조건이 있으면 해당 조건에 따라 게시글을 조회하는 API입니다." + "\n" +
@@ -110,13 +95,6 @@ public class PostRestController {
         return ApiResponse.onSuccess("게시글을 성공적으로 삭제했습니다.");
     }
 
-    @Operation(summary = "게시글 작성 - 행사 종류 전체 조회 API", description = "게시글 작성하는 페이지에서 행사 목록 전체를 받아오는 API입니다.")
-    @GetMapping("/events")
-    public ApiResponse<List<EventCategoryResponseDto.EventCategoryDto>> getAllCategories(){
-        return ApiResponse.onSuccess(eventCategoryQueryService.getGroupedCategories());
-    }
-
-
     @Operation(summary = "게시글 검색 API", description = "게시글 검색 API입니다. title 기준으로 검색합니다. " +
             "사용자가 기존에 설정한 필터링 조건이 아닌, 검색할 때마다 새로운 필터 값을 적용하여 조회합니다. 다만, 지뢰 필터링은 동일하게 적용되어있습니다." +
             "필터 값(gender, minAge, maxAge)은 각각 선택적으로 적용되며, 요청 시 지정하지 않으면 전체 검색이 가능합니다.")
@@ -138,26 +116,5 @@ public class PostRestController {
     public ApiResponse<PostResponseDto.PostStatusDto> patchPostStatus(@ExistPost @PathVariable("postId") Long postId, @RequestParam("wanted") Short wanted){
         Post post = postCommandService.patchPostStatus(postId, wanted);
         return ApiResponse.onSuccess(PostConverter.postStatusDto(post));
-    }
-
-    @Operation(summary = "나의 동행 페이지- 내 게시글 조회 API", description = "나의 동행에서 내 게시글을 확인하는 API입니다.")
-    @GetMapping("/my")
-    @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostPreviewListDto> getMyPostList(@AuthenticationPrincipal CustomUserDetails userDetails, @ValidPageNumber @RequestParam(name ="page", defaultValue = "0") Integer page){
-        Page<Post> postList = postQueryService.getMyPostList(userDetails.getMemberId(), page);
-        return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
-    }
-
-    @Operation(summary = "게시글 작성 - 관심 아이돌 목록 검색 API", description = "키워드를 통해 관심있는 아이돌을 찾는 API입니다.")
-    @GetMapping("/idols/search")
-    public ApiResponse<IdolCategoryResponseDto.IdolListDto> getIdolListByKeyword(@RequestParam("keyword") String keyword){
-        List<IdolCategory> idolCategoryList = idolCategoryQueryService.getIdolListByKeyword(keyword);
-        return ApiResponse.onSuccess(IdolCategoryConverter.toIdolListDto(idolCategoryList));
-    }
-
-    @Operation(summary = "게시글 작성 - 관심 아이돌 추가 API", description = "관심 아이돌을 추가하는 API입니다.")
-    @PostMapping("/idols/{idolId}")
-    public ApiResponse<MemberIdolResponseDto.IdolDto> addMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
-        return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
     }
 }

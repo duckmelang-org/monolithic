@@ -4,19 +4,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
-import umc.duckmelang.domain.materelationship.domain.MateRelationship;
+import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
-import umc.duckmelang.domain.notificationsetting.domain.NotificationSetting;
+import umc.duckmelang.domain.notification.domain.NotificationSetting;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.landmine.domain.Landmine;
-import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.common.BaseEntity;
 import umc.duckmelang.global.common.serializer.LocalDateSerializer;
 
@@ -61,9 +59,6 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoginType loginType; // BASIC, KAKAO, GOOGLE, NAVER
-
-    @Column(name = "oauth_id")
-    private String oauthId;
 
     private boolean isProfileComplete = false;
 
@@ -123,11 +118,16 @@ public class Member extends BaseEntity {
     private NotificationSetting notificationSetting;
 
     // === 도메인 메서드 === //
+    public void updateProfile(String nickname, LocalDate birth, Gender gender){
+        this.nickname = nickname;
+        this.birth = birth;
+        this.gender = gender;
+    }
+
     public void completeProfile(){
         this.isProfileComplete = true;
     }
 
-    // 필터 조건 업데이트 메서드
     public void updateFilter(Gender gender, Integer minAge, Integer maxAge){
         this.filterGender = gender;
         this.filterMinAge = minAge;
@@ -139,12 +139,6 @@ public class Member extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    // 비밀번호 설정 함수
-    public void encodePassword(String password){
-        this.password=password;
-    }
-
-    // 복사 생성자
     public Member(Member other) {
         this.introduction = other.introduction;
     }
@@ -166,23 +160,14 @@ public class Member extends BaseEntity {
         return age;
     }
 
-    // 자기소개 업데이트 메서드
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
-    // 프로필 업데이트 메서드
     public void updateProfile(String nickname, String introduction) {
-        if (nickname == null || nickname.isBlank()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_NICKNAME);
-        }
-        if (introduction == null || introduction.isBlank()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_INTRODUCTION);
-        }
         this.nickname = nickname;
         this.introduction = introduction;
     }
-
     public Member(Long id) {
         this.id = id;
     }

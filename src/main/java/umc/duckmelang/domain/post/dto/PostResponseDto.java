@@ -38,6 +38,7 @@ public class PostResponseDto {
         Long totalElements;
         Boolean isFirst;
         Boolean isLast;
+        Integer currentPage;
     }
 
     @Getter

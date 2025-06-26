@@ -21,6 +21,7 @@ public class MemberProfileImageResponseDto {
         Long totalElements;
         Boolean isFirst;
         Boolean isLast;
+        Integer currentPage;
     }
 
     @Builder

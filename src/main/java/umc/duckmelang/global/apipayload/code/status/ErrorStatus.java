@@ -71,7 +71,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //스크랩 관련 에러
     INVALID_BOOKMARK(HttpStatus.NOT_FOUND, "BOOKMARK4001", "해당하는 스크랩이 없습니다."),
     DUPLICATE_BOOKMARK(HttpStatus.BAD_REQUEST, "BOOKMARK4002", "이미 스크랩 된 게시글입니다."),
-    
+    CANNOT_BOOKMARK_OWN_POST(HttpStatus.BAD_REQUEST,"BOOKMARK4003", "자신의 게시글은 스크랩할 수 없습니다."),
+
     // 후기 관련 에러 
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "해당하는 후기가 없습니다"),
 

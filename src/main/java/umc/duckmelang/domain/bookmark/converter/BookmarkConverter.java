@@ -48,6 +48,7 @@ public class BookmarkConverter {
                 .totalElements(bookmarkPage.getTotalElements())
                 .isFirst(bookmarkPage.isFirst())
                 .isLast(bookmarkPage.isLast())
+                .currentPage(bookmarkPage.getNumber())
                 .build();
     }
 

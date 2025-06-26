@@ -39,5 +39,6 @@ public class BookmarkResponseDto {
         private Long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
+        private Integer currentPage;
     }
 }

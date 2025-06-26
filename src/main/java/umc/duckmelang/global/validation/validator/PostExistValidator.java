@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.post.domain.Post;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.global.validation.annotation.ExistPost;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 

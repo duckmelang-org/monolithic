@@ -34,7 +34,7 @@ public class BookmarkRestController {
         return ApiResponse.onSuccess(BookmarkConverter.bookmarkPreviewListDto(postList));
     }
 
-    @PostMapping("posts/{postId}/bookmarks")
+    @PostMapping("/posts/{postId}/bookmarks")
     @CommonApiResponses
     @Operation(summary = "게시글 스크랩 API", description = "게시글 스크랩하는 API 입니다.")
     public ApiResponse<BookmarkResponseDto.BookmarkJoinResultDto>joinBookmark (@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable(name="postId") Long postId){
@@ -42,11 +42,11 @@ public class BookmarkRestController {
         return ApiResponse.onSuccess(BookmarkConverter.bookmarkJoinResultDto(bookmark));
     }
 
-    @DeleteMapping("bookmarks/{bookmarkId}")
+    @DeleteMapping("/posts/{postId}/bookmarks")
     @CommonApiResponses
-    @Operation(summary="게시글 스크랩 삭제 API", description = "스크랩 삭제하는 API 입니다. bookmarkId 조회는 나의 동행 페이지- 스크랩 내역 조회 API 에 결과로 나오도록 추가해두었습니다.")
-    public ApiResponse<String> deleteBookmark (@PathVariable(name="bookmarkId") Long bookmarkId) {
-        bookmarkCommandService.deleteBookmark(bookmarkId);
+    @Operation(summary="게시글 스크랩 삭제 API", description = "스크랩 취소하는 API입니다.")
+    public ApiResponse<String> deleteBookmark (@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable(name="postId") Long postId) {
+        bookmarkCommandService.deleteBookmark(postId, userDetails.getMemberId());
         return ApiResponse.onSuccess("스크랩을 성공적으로 삭제했습니다");
     }
 }

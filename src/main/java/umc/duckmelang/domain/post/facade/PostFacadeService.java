@@ -8,7 +8,7 @@ import umc.duckmelang.domain.chatroom.service.ChatRoomQueryService;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
-import umc.duckmelang.domain.post.service.PostQueryService;
+import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.service.ReviewQueryService;
 

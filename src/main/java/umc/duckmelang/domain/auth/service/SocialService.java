@@ -24,7 +24,6 @@ public class SocialService {
     private Member createNewMember(String email, String oauthId, LoginType loginType){
         Member newMember = Member.builder()
                 .email(email)
-                .oauthId(oauthId)
                 .loginType(loginType)
                 .role(Role.USER)
                 .memberStatus(MemberStatus.ACTIVE)

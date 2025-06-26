@@ -26,6 +26,7 @@ public class PostImageConverter {
                 .totalElements(thumbnails.getTotalElements())
                 .isFirst(thumbnails.isFirst())
                 .isLast(thumbnails.isLast())
+                .currentPage(thumbnails.getNumber())
                 .build();
     }
 

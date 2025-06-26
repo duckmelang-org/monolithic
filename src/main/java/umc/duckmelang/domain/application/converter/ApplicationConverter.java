@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.dto.ApplicationResponseDto;
 import umc.duckmelang.domain.application.dto.ShowApplicationDto;
-import umc.duckmelang.domain.materelationship.domain.MateRelationship;
+import umc.duckmelang.domain.application.domain.MateRelationship;
 import java.util.*;
 import java.util.stream.Collectors;
 
