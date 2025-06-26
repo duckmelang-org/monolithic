@@ -35,8 +35,22 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     @Override
     public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
         Member member = getMemberOrThrow(memberId);
-        String profileImageUrl = uploadProfileImage(profileImage);
-        return memberProfileImageRepository.save(MemberProfileImageConverter.toCreateMemberProfileImage(member, profileImageUrl));
+        String uuid = uuidService.generateUniqueUuidString();
+
+        // 프로필 사진을 선택하지 않은 경우, 기본 프로필 사진으로 설정
+        String profileImageUrl;
+        if (profileImage == null || profileImage.isEmpty())
+            profileImageUrl = defaultProfileImage;
+        else profileImageUrl = s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(uuid), profileImage);
+
+        return memberProfileImageRepository.save(
+                MemberProfileImage.builder()
+                        .memberImage(profileImageUrl)
+                        .member(member)
+                        .isPublic(true)
+                        .uuid(uuid)
+                        .build()
+        );
     }
 
     @Override
@@ -80,35 +94,5 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
 
     private boolean isDefaultProfileImage(MemberProfileImage profileImage) {
         return profileImage.getMemberImage().equals(defaultProfileImage);
-    }
-
-    private String uploadProfileImage(MultipartFile profileImage) {
-        if (profileImage == null || profileImage.isEmpty()) {
-            return defaultProfileImage;
-        }
-
-        String uuid = UUID.randomUUID().toString();
-        Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-        return s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(savedUuid), profileImage);
-    @Override
-    public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        String uuid = uuidService.generateUniqueUuidString();
-
-        // 프로필 사진을 선택하지 않은 경우, 기본 프로필 사진으로 설정
-        String profileImageUrl;
-        if (profileImage == null || profileImage.isEmpty())
-            profileImageUrl = defaultProfileImage;
-        else profileImageUrl = s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(uuid), profileImage);
-
-        return memberProfileImageRepository.save(
-                MemberProfileImage.builder()
-                        .memberImage(profileImageUrl)
-                        .member(member)
-                        .isPublic(true)
-                        .uuid(uuid)
-                        .build()
-        );
     }
 }
