@@ -47,8 +47,11 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(unique = true, columnDefinition = "TINYTEXT")
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "loginId", unique = true)
+    private String loginId;
 
     @Column(nullable = true, length = 100)
     private String password; // 소셜 로그인은 null 가능
