@@ -6,7 +6,6 @@ import lombok.*;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.notification.domain.NotificationSetting;
@@ -58,10 +57,6 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoginType loginType; // BASIC, KAKAO, GOOGLE, NAVER
 
     private boolean isProfileComplete = false;
 
