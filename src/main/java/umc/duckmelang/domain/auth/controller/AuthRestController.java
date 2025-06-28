@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.dto.request.AuthRequestDto;
 import umc.duckmelang.domain.auth.dto.request.LoginRequest;
 import umc.duckmelang.domain.auth.dto.response.CheckIdResponse;
+import umc.duckmelang.domain.auth.dto.response.LoginIdResponse;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.auth.service.AuthService;
-import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 @RestController
@@ -44,6 +44,13 @@ public class AuthRestController {
     public ApiResponse<CheckIdResponse> checkPhoneNum(@RequestParam String phoneNum) {
         boolean isDuplicate = authService.isDuplicatePhoneNum(phoneNum);
         return ApiResponse.onSuccess(new CheckIdResponse(isDuplicate));
+    }
+
+    @Operation(summary = "아이디 찾기 API", description = "전화번호를 기준으로 아이디를 반환합니다.")
+    @GetMapping("/find-id")
+    public ApiResponse<LoginIdResponse> findLoginId(@RequestParam String phoneNum) {
+        String email = authService.findLoginIdByPhoneNum(phoneNum);
+        return ApiResponse.onSuccess(new LoginIdResponse(email));
     }
 
 //    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")

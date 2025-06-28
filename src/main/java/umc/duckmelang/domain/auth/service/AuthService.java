@@ -87,4 +87,10 @@ public class AuthService {
     public boolean isDuplicatePhoneNum(String phoneNum){
         return memberRepository.existsByPhoneNum(phoneNum);
     }
+
+    public String findLoginIdByPhoneNum(String phoneNum){
+        Member member = memberRepository.findByPhoneNum(phoneNum)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        return member.getLoginId();
+    }
 }
