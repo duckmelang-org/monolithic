@@ -93,4 +93,10 @@ public class AuthService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         return member.getLoginId();
     }
+
+    @Transactional
+    public void addPhoneNum(String phoneNum, Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        member.updatePhoneNum(phoneNum);
+    }
 }

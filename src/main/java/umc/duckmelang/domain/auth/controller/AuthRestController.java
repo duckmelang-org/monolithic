@@ -4,13 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.dto.request.AuthRequestDto;
 import umc.duckmelang.domain.auth.dto.request.LoginRequest;
 import umc.duckmelang.domain.auth.dto.response.CheckIdResponse;
 import umc.duckmelang.domain.auth.dto.response.LoginIdResponse;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
+import umc.duckmelang.domain.auth.dto.response.PhoneNumResponse;
 import umc.duckmelang.domain.auth.service.AuthService;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 @RestController
@@ -52,6 +55,14 @@ public class AuthRestController {
         String email = authService.findLoginIdByPhoneNum(phoneNum);
         return ApiResponse.onSuccess(new LoginIdResponse(email));
     }
+
+    @Operation(summary = "전화번호 등록 API (IOS 연결 X)", description = "Firebase Auth 사용하지 않고 db에 전화번호를 등록하는 API입니다.")
+    @PostMapping("/phone")
+    public ApiResponse<PhoneNumResponse> addPhoneNum(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String phoneNum){
+        authService.addPhoneNum(phoneNum, userDetails.getMemberId());
+        return ApiResponse.onSuccess(new PhoneNumResponse(phoneNum));
+    }
+
 
 //    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
 //    @DeleteMapping("/account/delete")

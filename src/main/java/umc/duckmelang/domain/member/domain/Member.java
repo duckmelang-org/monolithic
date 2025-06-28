@@ -140,6 +140,10 @@ public class Member extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void updatePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
     public Member(Member other) {
         this.introduction = other.introduction;
     }
