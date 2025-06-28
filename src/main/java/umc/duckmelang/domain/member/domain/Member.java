@@ -52,6 +52,9 @@ public class Member extends BaseEntity {
     @Column(name = "loginId", unique = true)
     private String loginId;
 
+    @Column(name = "phone_num", unique = true)
+    private String phoneNum;
+
     @Column(nullable = true, length = 100)
     private String password; // 소셜 로그인은 null 가능
 
