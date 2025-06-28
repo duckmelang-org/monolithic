@@ -12,8 +12,6 @@ import umc.duckmelang.domain.auth.service.AuthService;
 import umc.duckmelang.domain.member.service.mypage.MyPageCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Auth", description = "인증 API")
@@ -24,7 +22,7 @@ public class AuthRestController {
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "RefreshToken과 AccessToken을 발급합니다.")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ApiResponse.onSuccess(authService.login(request.email(), request.password()));
+        return ApiResponse.onSuccess(authService.login(request.loginId(), request.password()));
     }
 
     @PostMapping("/token/refresh")
