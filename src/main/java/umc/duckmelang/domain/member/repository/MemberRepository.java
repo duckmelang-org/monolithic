@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByLoginId(String loginId);
     boolean existsByLoginId(String loginId);
     boolean existsByNickname(String nickname);
-
+    boolean existsByPhoneNum(String phoneNum);
 
     @Query("SELECT n from Member m JOIN m.notificationSetting n where m.id = :memberId")
     Optional<NotificationSetting> findNotificationSettingByMemberId(Long memberId);

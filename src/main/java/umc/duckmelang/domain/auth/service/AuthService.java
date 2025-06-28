@@ -83,4 +83,8 @@ public class AuthService {
     public boolean isDuplicateLoginId(String loginId){
         return memberRepository.existsByLoginId(loginId);
     }
+
+    public boolean isDuplicatePhoneNum(String phoneNum){
+        return memberRepository.existsByPhoneNum(phoneNum);
+    }
 }

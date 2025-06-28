@@ -39,6 +39,13 @@ public class AuthRestController {
         return ApiResponse.onSuccess(new CheckIdResponse(isDuplicate));
     }
 
+    @Operation(summary = "전화번호 중복 확인 API", description = "중복일 경우, true를 반환하고 중복되지 않을 경우 false를 반환합니다.")
+    @GetMapping("/phone")
+    public ApiResponse<CheckIdResponse> checkPhoneNum(@RequestParam String phoneNum) {
+        boolean isDuplicate = authService.isDuplicatePhoneNum(phoneNum);
+        return ApiResponse.onSuccess(new CheckIdResponse(isDuplicate));
+    }
+
 //    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
 //    @DeleteMapping("/account/delete")
 //    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
