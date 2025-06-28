@@ -144,6 +144,10 @@ public class Member extends BaseEntity {
         this.phoneNum = phoneNum;
     }
 
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     public Member(Member other) {
         this.introduction = other.introduction;
     }

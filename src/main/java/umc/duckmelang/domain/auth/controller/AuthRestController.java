@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.dto.request.AuthRequestDto;
 import umc.duckmelang.domain.auth.dto.request.LoginRequest;
+import umc.duckmelang.domain.auth.dto.request.ResetPasswordRequest;
 import umc.duckmelang.domain.auth.dto.response.CheckIdResponse;
 import umc.duckmelang.domain.auth.dto.response.LoginIdResponse;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
@@ -63,6 +64,12 @@ public class AuthRestController {
         return ApiResponse.onSuccess(new PhoneNumResponse(phoneNum));
     }
 
+    @Operation(summary = "비밀번호 찾기 API", description = "아이디를 기준으로 비밀번호를 재설정합니다.")
+    @PatchMapping("/find-password")
+    public ApiResponse<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request.loginId(), request.newPassword());
+        return ApiResponse.onSuccess("비밀번호가 성공적으로 변경되었습니다.");
+    }
 
 //    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
 //    @DeleteMapping("/account/delete")

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenService;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 자체 로그인
     @Transactional
@@ -98,5 +100,12 @@ public class AuthService {
     public void addPhoneNum(String phoneNum, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.updatePhoneNum(phoneNum);
+    }
+
+    @Transactional
+    public void resetPassword(String loginId, String newPassword){
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        member.updatePassword(passwordEncoder.encode(newPassword));
     }
 }
