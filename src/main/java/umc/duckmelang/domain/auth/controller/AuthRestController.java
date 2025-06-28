@@ -14,6 +14,7 @@ import umc.duckmelang.global.apipayload.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 @Tag(name = "Auth", description = "인증 API")
 public class AuthRestController {
     private final AuthService authService;
