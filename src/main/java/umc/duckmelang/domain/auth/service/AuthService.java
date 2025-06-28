@@ -79,4 +79,8 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
+
+    public boolean isDuplicateLoginId(String loginId){
+        return memberRepository.existsByLoginId(loginId);
+    }
 }
