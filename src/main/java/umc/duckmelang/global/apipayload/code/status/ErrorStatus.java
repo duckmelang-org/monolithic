@@ -20,7 +20,7 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "존재하지 않는 회원입니다."),
     MEMBER_EMPTY_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 공란으로 비워둘 수 없습니다."),
     MEMBER_EMPTY_INTRODUCTION(HttpStatus.BAD_REQUEST, "MEMBER4003", "자기소개는 공란으로 비워둘 수 없습니다."),
-    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER4004", "이미 존재하는 이메일입니다."),
+    DUPLICATE_LOGINID(HttpStatus.BAD_REQUEST, "MEMBER4004", "이미 존재하는 아이디입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4005", "이미 존재하는 닉네임입니다."),
     UNAUTHORIZED_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER4006", "잘못된 인증입니다. 해당 작업에 대한 권한이 없습니다."),
     ALREADY_DELETED_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER4007", "이미 탈퇴된 사용자입니다."),

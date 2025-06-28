@@ -20,7 +20,7 @@ public class MemberConverter {
 
     public static Member toMember(MemberSignUpDto.SignupDto request, String encodedPassword) {
         return Member.builder()
-                .email(request.getEmail())
+                .loginId(request.getLoginId())
                 .password(encodedPassword)
                 .memberStatus(MemberStatus.ACTIVE)
                 .isProfileComplete(false)

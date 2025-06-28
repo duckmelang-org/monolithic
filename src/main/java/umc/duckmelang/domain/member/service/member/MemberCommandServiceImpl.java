@@ -48,8 +48,8 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     @Transactional
     public Member signupMember(MemberSignUpDto.SignupDto request){
-        if(memberRepository.existsByEmail(request.getEmail())){
-            throw new MemberException(ErrorStatus.DUPLICATE_EMAIL);
+        if(memberRepository.existsByLoginId(request.getLoginId())){
+            throw new MemberException(ErrorStatus.DUPLICATE_LOGINID);
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
