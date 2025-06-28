@@ -34,7 +34,7 @@ public class AuthRestController {
 
     @Operation(summary = "아이디 중복 확인 API", description = "중복일 경우, true를 반환하고 중복되지 않을 경우 false를 반환합니다.")
     @GetMapping("/nickname")
-    public ApiResponse<CheckIdResponse> checkNickname(@RequestParam String loginId) {
+    public ApiResponse<CheckIdResponse> checkLoginId(@RequestParam String loginId) {
         boolean isDuplicate = authService.isDuplicateLoginId(loginId);
         return ApiResponse.onSuccess(new CheckIdResponse(isDuplicate));
     }
