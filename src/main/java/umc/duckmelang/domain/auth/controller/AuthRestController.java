@@ -43,7 +43,7 @@ public class AuthRestController {
         return ApiResponse.onSuccess(new CheckIdResponse(isDuplicate));
     }
 
-    @Operation(summary = "전화번호 중복 확인 API", description = "중복일 경우, true를 반환하고 중복되지 않을 경우 false를 반환합니다.")
+    @Operation(summary = "전화번호 중복 확인 API", description = "전화번호는 숫자만 입력합니다. 중복일 경우, true를 반환하고 중복되지 않을 경우 false를 반환합니다.")
     @GetMapping("/phone")
     public ApiResponse<CheckIdResponse> checkPhoneNum(@RequestParam String phoneNum) {
         boolean isDuplicate = authService.isDuplicatePhoneNum(phoneNum);
