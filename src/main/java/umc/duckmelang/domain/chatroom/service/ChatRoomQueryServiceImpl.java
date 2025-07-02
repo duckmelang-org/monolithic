@@ -120,6 +120,11 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
                 .build();
     }
 
+    @Override
+    public Optional<ChatRoom> findChatRoom(Long chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId);
+    }
+
     public List<ChatRoomResponseDto.ChatRoomItemDto> getChatRoomItemDtoList(Page<ChatRoom> chatRooms, Long memberId){
 
         // 채팅방 ID 리스트 추출

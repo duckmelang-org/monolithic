@@ -4,6 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.report.domain.enums.ReportType;
 import umc.duckmelang.domain.review.domain.Review;
 
@@ -11,7 +12,7 @@ import umc.duckmelang.domain.review.domain.Review;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @DiscriminatorValue(ReportType.Values.REVIEW)
 public class ReviewReport extends Report{
     @OneToOne
