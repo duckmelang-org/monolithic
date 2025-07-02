@@ -116,7 +116,7 @@ public class PostConverter {
                         .post(post)
                         .idolCategory(idolCategory)
                         .build())
-                .toList();
+                .collect(Collectors.toUnmodifiableList());
 
         if (post.getPostIdolList() == null) {
             post.setPostIdolList(new ArrayList<>());

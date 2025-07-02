@@ -13,16 +13,19 @@ import umc.duckmelang.domain.report.domain.*;
 import umc.duckmelang.domain.report.domain.enums.ReportStatus;
 import umc.duckmelang.domain.report.domain.enums.ReportType;
 import umc.duckmelang.domain.report.dto.ReportRequestDto;
-import umc.duckmelang.domain.report.repository.ReportRepository;
+import umc.duckmelang.domain.report.repository.*;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.validation.annotation.ExistsMember;
+
+import java.util.Objects;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ReportCommandServiceImpl implements ReportCommandService {
     private final ReportRepository reportRepository;
+
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final PostRepository postRepository;
@@ -46,7 +49,7 @@ public class ReportCommandServiceImpl implements ReportCommandService {
         ChatReport chatReport = ChatReport.builder()
                 .chatRoom(chatRoom)
                 .sender(sender)
-                .receiver((sender.getId() != one.getId())?one : chatRoom.getOtherMember())
+                .receiver((!Objects.equals(sender.getId(), one.getId()))?one : chatRoom.getOtherMember())
                 .reportStatus(ReportStatus.INTACT)
                 .reason(dto.getReason())
                 .build();

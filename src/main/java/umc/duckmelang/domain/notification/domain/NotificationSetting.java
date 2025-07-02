@@ -2,13 +2,13 @@ package umc.duckmelang.domain.notification.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.global.common.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@SuperBuilder
 public class NotificationSetting extends BaseEntity {
 
     @Id

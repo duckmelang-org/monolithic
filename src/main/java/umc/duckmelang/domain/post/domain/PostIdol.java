@@ -2,6 +2,7 @@ package umc.duckmelang.domain.post.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.global.common.BaseEntity;
 
@@ -10,7 +11,7 @@ import umc.duckmelang.global.common.BaseEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class PostIdol extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

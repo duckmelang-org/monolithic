@@ -2,6 +2,7 @@ package umc.duckmelang.domain.chatroom.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.config.core.userdetails.UserDetailsMapFactoryBean;
 import umc.duckmelang.domain.chatroom.domain.enums.ChatRoomStatus;
 import umc.duckmelang.domain.member.domain.Member;
@@ -15,7 +16,7 @@ import java.time.chrono.ChronoLocalDate;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ChatRoom extends BaseEntity {

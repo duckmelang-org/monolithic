@@ -10,11 +10,10 @@ import umc.duckmelang.global.common.BaseEntity;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
+@NoArgsConstructor
 public class Report extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +35,4 @@ public class Report extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReportStatus reportStatus;
-
 }
