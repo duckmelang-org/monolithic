@@ -6,6 +6,7 @@ import lombok.Setter;
 import umc.duckmelang.domain.report.domain.enums.Reason;
 import umc.duckmelang.domain.report.domain.enums.ReportStatus;
 import umc.duckmelang.domain.report.domain.enums.ReportType;
+import java.util.List;
 
 public class ReportRequestDto {
     @Getter
@@ -18,5 +19,13 @@ public class ReportRequestDto {
         private Reason reason;
         @NotNull
         private String dType;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class deleteRequestDto {
+        @NotNull
+        private List<Long> reportIdList;
     }
 }

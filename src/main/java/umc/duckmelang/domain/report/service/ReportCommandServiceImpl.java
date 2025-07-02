@@ -18,7 +18,7 @@ import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.validation.annotation.ExistsMember;
 
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Transactional
@@ -39,6 +39,15 @@ public class ReportCommandServiceImpl implements ReportCommandService {
             case ReportType.Values.POST: reportPost(member, dto); break;
             case ReportType.Values.PROFILE : reportProfile(member, dto); break;
             case ReportType.Values.REVIEW: reportReview(member,dto); break;
+        }
+    }
+
+    @Override
+    public void delete(ReportRequestDto.deleteRequestDto dto) {
+        List<Report> list = reportRepository.findAllById(dto.getReportIdList());
+
+        for (Long id : dto.getReportIdList()){
+            reportRepository.deleteAll(list);
         }
     }
 

@@ -7,32 +7,41 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
+import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.report.dto.ReportRequestDto;
 import umc.duckmelang.domain.report.service.ReportCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
-import umc.duckmelang.global.validation.annotation.ExistPost;
-import umc.duckmelang.global.validation.annotation.ExistsChatRoom;
-import umc.duckmelang.global.validation.annotation.ExistsMember;
-import umc.duckmelang.global.validation.annotation.ExistsReview;
+import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.MemberException;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reports")
 @Tag(name = "Reports", description = "신고 관련 API")
 @Validated
-public class ReportController {
+public class ReportRestController {
     private final ReportCommandService reportCommandService;
-    @PostMapping("/reports/members")
-    @Operation(summary = "프로필 신고 API", description = "신고 대상의 memberId를 넘겨주세요\n reason은 INAPPR(\"INAPPROPRIATE\"),\n" +
-            "    INSULT(\"INSULT\"),\n" +
-            "    SEXUAL(\"SEXUAL HARRASMENT\"),\n" +
-            "    ADVERT(\"ADVERTISEMENT\"),\n" +
-            "    FRAUD(\"FRAUD\"),\n" +
-            "    ETC(\"ETC\")")
+    @PostMapping("")
+    @Operation(summary = "신고 API", description = "신고 대상의 memberId를 넘겨주세요 / reason: INAPPR(\"INAPPROPRIATE\")," +
+            "INSULT, SEXUAL(\"SEXUAL HARRASMENT\"), ADVERT(\"ADVERTISEMENT\"), FRAUD, ETC / " +
+            "dtype: CHAT,PROFILE,POST,REVIEW")
     public ApiResponse<String> reportProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @RequestBody ReportRequestDto.reportDto request) {
         Long reporterId = userDetails.getMemberId();
         reportCommandService.report(reporterId, request);
         return ApiResponse.onSuccess("신고 완료");
+    }
+
+    @DeleteMapping("")
+    @Operation(summary = "신고 삭제 API", description = "삭제하고자 하는 신고 id를 배열로 넘겨주세요")
+    public ApiResponse<String> deleteReport(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @RequestBody ReportRequestDto.deleteRequestDto request) {
+        if(userDetails.getRole() != Role.ADMIN)
+            throw new MemberException(ErrorStatus._FORBIDDEN);
+
+        reportCommandService.delete(request);
+
+        return ApiResponse.onSuccess("신고 삭제");
     }
 }
