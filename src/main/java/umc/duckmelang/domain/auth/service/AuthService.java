@@ -5,15 +5,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
-import umc.duckmelang.domain.auth.service.strategy.SocialLoginStrategy;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.domain.enums.LoginType;
-import umc.duckmelang.domain.member.domain.enums.MemberStatus;
-import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.TokenException;
@@ -32,7 +29,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenService;
     private final MemberRepository memberRepository;
-    private final Map<String, SocialLoginStrategy> loginStrategyMap;
+    private final PasswordEncoder passwordEncoder;
 
     // 자체 로그인
     @Transactional
@@ -58,16 +55,6 @@ public class AuthService {
         }
     }
 
-    // 소셜 로그인 처리
-    @Transactional
-    public LoginResponse socialLogin(LoginType loginType, String accessToken){
-        SocialLoginStrategy strategy = loginStrategyMap.get(loginType.name());
-        if(strategy == null){
-            throw new AuthException(ErrorStatus.AUTH_INVALID_CREDENTIALS);
-        }
-        return strategy.login(accessToken);
-    }
-
     // 토큰 재발급
     @Transactional
     public LoginResponse reissue(String refreshToken) {
@@ -89,16 +76,36 @@ public class AuthService {
         return new LoginResponse(memberId, newAccessToken, newRefreshToken, member.isProfileComplete());
     }
 
-//    // 사용자 로그아웃 - RefreshToken 삭제
-//    @Transactional
-//    public void logout(Long memberId) {
-//        // redis 에서 RefreshToken 삭제
-//        refreshTokenService.removeRefreshToken(memberId);
-//    }
-
     // 이메일/비밀번호 기반 사용자 인증
     private Authentication authenticate(String email, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
+    }
+
+    public boolean isDuplicateLoginId(String loginId){
+        return memberRepository.existsByLoginId(loginId);
+    }
+
+    public boolean isDuplicatePhoneNum(String phoneNum){
+        return memberRepository.existsByPhoneNum(phoneNum);
+    }
+
+    public String findLoginIdByPhoneNum(String phoneNum){
+        Member member = memberRepository.findByPhoneNum(phoneNum)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        return member.getLoginId();
+    }
+
+    @Transactional
+    public void addPhoneNum(String phoneNum, Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        member.updatePhoneNum(phoneNum);
+    }
+
+    @Transactional
+    public void resetPassword(String loginId, String newPassword){
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        member.updatePassword(passwordEncoder.encode(newPassword));
     }
 }

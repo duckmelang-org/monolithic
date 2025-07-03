@@ -10,10 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByEmail(String email);
-    boolean existsByEmail(String email);
+    Optional<Member> findByLoginId(String loginId);
+    Optional<Member> findByPhoneNum(String phoneNum);
+    boolean existsByLoginId(String loginId);
     boolean existsByNickname(String nickname);
-
+    boolean existsByPhoneNum(String phoneNum);
 
     @Query("SELECT n from Member m JOIN m.notificationSetting n where m.id = :memberId")
     Optional<NotificationSetting> findNotificationSettingByMemberId(Long memberId);
