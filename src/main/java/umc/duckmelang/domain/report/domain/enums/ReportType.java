@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.report.domain.enums;
 
 public enum ReportType {
+    TOTAL(Values.TOTAL),
     CHAT(Values.CHAT),
     PROFILE(Values.PROFILE),
     POST(Values.POST),
@@ -14,6 +15,7 @@ public enum ReportType {
     }
 
     public static class Values {
+        public static final String TOTAL = "TOTAL";
         public static final String CHAT = "CHAT";
         public static final String PROFILE = "PROFILE";
         public static final String POST = "POST";
