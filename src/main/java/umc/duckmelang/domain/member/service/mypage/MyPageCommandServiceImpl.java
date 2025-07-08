@@ -20,8 +20,7 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Override
     @Transactional
     public Member updateMemberProfile(Long memberId, MyPageRequestDto.UpdateMemberProfileDto request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = findMemberOrThrow(memberId);
 
         if(!member.getNickname().equals(request.getNickname())){
             if(memberRepository.existsByNickname(request.getNickname())){
@@ -35,9 +34,12 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Override
     @Transactional
     public MemberFilterDto.FilterResponseDto setFilter(Long memberId, MemberFilterDto.FilterRequestDto request){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = findMemberOrThrow(memberId);
         MemberFilterConverter.applyFilterRequest(member, request);
         return MemberFilterConverter.toFilterResponseDto(member);
+    }
+
+    private Member findMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 }
