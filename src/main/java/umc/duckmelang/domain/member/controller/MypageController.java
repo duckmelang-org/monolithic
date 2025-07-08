@@ -77,7 +77,7 @@ public class MypageController {
         return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
     }
 
-    @Operation(summary = "내 프로필 수정 - 기존 프로필 정보 조회 API", description = "피그마 상에서는 기존 프로필 사진만 조회하게 되어있는데 혹시 닉네임도 필요하실까 해서 일단 넣어놓았습니다.")
+    @Operation(summary = "내 프로필 수정 - 기존 프로필 정보 조회 API", description = "기존 프로필 사진, 기존 자기소개, 기존 닉네임을 반환합니다.")
     @GetMapping("/profile/edit")
     public ApiResponse<MyPageResponseDto.MyPageProfileEditBeforeDto> getMyPageMemberProfileImage(@AuthenticationPrincipal CustomUserDetails userDetails){
         return ApiResponse.onSuccess(myPageQueryService.getMemberProfileBeforeEdit(userDetails.getMemberId()));

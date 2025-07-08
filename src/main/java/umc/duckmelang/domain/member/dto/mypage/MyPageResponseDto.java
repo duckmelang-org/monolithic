@@ -42,6 +42,7 @@ public class MyPageResponseDto {
     public static class MyPageProfileEditBeforeDto {
         private String nickname;
         private String latestPublicMemberProfileImage;
+        private String introduction;
     }
 
     @Builder
