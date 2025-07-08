@@ -57,7 +57,7 @@ public class AuthRestController {
         return ApiResponse.onSuccess(new LoginIdResponse(email));
     }
 
-    @Operation(summary = "전화번호 등록 API (IOS 연결 X)", description = "Firebase Auth 사용하지 않고 db에 전화번호를 등록하는 API입니다.")
+    @Operation(summary = "전화번호 등록 API", description = "db에 전화번호를 등록하는 API입니다.")
     @PostMapping("/phone")
     public ApiResponse<PhoneNumResponse> addPhoneNum(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String phoneNum){
         authService.addPhoneNum(phoneNum, userDetails.getMemberId());
