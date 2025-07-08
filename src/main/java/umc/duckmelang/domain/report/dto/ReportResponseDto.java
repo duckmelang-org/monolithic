@@ -27,7 +27,7 @@ public class ReportResponseDto {
         @NotNull
         private Integer count;
         @NotNull
-        private LocalDateTime time;
+        private LocalDateTime latestDate;
         @NotNull
         private String reportStatus;
     }
@@ -68,7 +68,7 @@ public class ReportResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ReportResponseListDto{
-        List<CommonReportResponseDto> list;
+        List<? extends CommonReportResponseDto> list;
 
         Integer listSize;
         Integer totalPage;

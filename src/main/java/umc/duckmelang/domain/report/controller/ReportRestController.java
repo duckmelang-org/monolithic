@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.member.domain.enums.Role;
+import umc.duckmelang.domain.report.domain.enums.QueryOrder;
+import umc.duckmelang.domain.report.domain.enums.ReportStatus;
 import umc.duckmelang.domain.report.domain.enums.ReportType;
 import umc.duckmelang.domain.report.dto.ReportRequestDto;
 import umc.duckmelang.domain.report.dto.ReportResponseDto;
@@ -53,13 +55,15 @@ public class ReportRestController {
 
     @GetMapping("/")
     @Operation(summary = "신고 목록 조회 API", description = "입력된 타입에 따라 다른 report 목록을 조회할 수 있습니다. 숫자값으로 페이지를 넘겨받습니다.")
-    public ApiResponse<ReportResponseDto.ReportResponseListDto> findMemberReportList(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                                     @RequestParam("type")ReportType type,
+    public ApiResponse<ReportResponseDto.ReportResponseListDto> findReportList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                                     @RequestParam("type") ReportType type,
+                                                                                     @RequestParam ReportStatus status,
+                                                                                     @RequestParam QueryOrder order,
                                                                                      @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         if(userDetails.getRole() != Role.ADMIN)
             throw new MemberException(ErrorStatus._FORBIDDEN);
 
-        ReportResponseDto.ReportResponseListDto list = reportQueryService.getReportResponseList(type, page);
+        ReportResponseDto.ReportResponseListDto list = reportQueryService.getReportResponseList(type, status, order, page);
 
         return ApiResponse.onSuccess(list);
     }
