@@ -21,7 +21,6 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Transactional
     public Member updateMemberProfile(Long memberId, MyPageRequestDto.UpdateMemberProfileDto request) {
         Member member = findMemberOrThrow(memberId);
-
         if(!member.getNickname().equals(request.getNickname())){
             if(memberRepository.existsByNickname(request.getNickname())){
                 throw new MemberException(ErrorStatus.DUPLICATE_NICKNAME);
