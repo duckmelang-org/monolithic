@@ -40,18 +40,4 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
         MemberFilterConverter.applyFilterRequest(member, request);
         return MemberFilterConverter.toFilterResponseDto(member);
     }
-
-    @Override
-    @Transactional
-    public void deleteMember(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                        .orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        if (member.getMemberStatus() == MemberStatus.DELETED){
-            throw new MemberException(ErrorStatus.ALREADY_DELETED_MEMBER);
-        }
-
-        member.deleteMember();
-        memberRepository.save(member);
-    }
 }
