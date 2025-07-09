@@ -26,12 +26,18 @@ public class AdminCommandServiceImpl implements AdminCommandService {
     }
 
     @Override
-    public Member deleteAdmin(Long userId) {
-        Member member = memberRepository.findById(userId)
+    public Member deleteAdmin(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.switchRole(Role.USER);
         return member;
+    }
 
+    @Override
+    public void deleteOtherMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        member.deleteMember();
     }
 }
 
