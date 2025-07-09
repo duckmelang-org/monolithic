@@ -5,7 +5,6 @@ import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
 import umc.duckmelang.domain.landmine.domain.Landmine;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.dto.member.MemberResponseDto;
 import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
@@ -15,21 +14,17 @@ import umc.duckmelang.domain.member.domain.MemberIdol;
 import umc.duckmelang.domain.member.domain.MemberProfileImage;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import java.util.ArrayList;
 
 @Component
 public class MemberConverter {
 
     public static Member toMember(MemberSignUpDto.SignupDto request, String encodedPassword) {
         return Member.builder()
-                .email(request.getEmail())
+                .loginId(request.getLoginId())
                 .password(encodedPassword)
                 .memberStatus(MemberStatus.ACTIVE)
                 .isProfileComplete(false)
                 .role(Role.USER)
-                .loginType(LoginType.BASIC)
                 .build();
     }
 

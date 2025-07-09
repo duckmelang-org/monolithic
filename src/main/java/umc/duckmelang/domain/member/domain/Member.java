@@ -6,7 +6,6 @@ import lombok.*;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
-import umc.duckmelang.domain.member.domain.enums.LoginType;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.notification.domain.NotificationSetting;
@@ -47,18 +46,20 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(unique = true, columnDefinition = "TINYTEXT")
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "loginId", unique = true)
+    private String loginId;
+
+    @Column(name = "phone_num", unique = true)
+    private String phoneNum;
 
     @Column(nullable = true, length = 100)
     private String password; // 소셜 로그인은 null 가능
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoginType loginType; // BASIC, KAKAO, GOOGLE, NAVER
 
     private boolean isProfileComplete = false;
 
@@ -139,6 +140,14 @@ public class Member extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void updatePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     public void switchRole(Role role){
         this.role = role;
     }
@@ -146,7 +155,6 @@ public class Member extends BaseEntity {
     public Member(Member other) {
         this.introduction = other.introduction;
     }
-
 
     // 회원의 만 나이를 계산하는 메서드
     public int calculateAge(){

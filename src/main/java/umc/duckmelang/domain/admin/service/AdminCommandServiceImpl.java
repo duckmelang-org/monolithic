@@ -18,16 +18,16 @@ public class AdminCommandServiceImpl implements AdminCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member joinAdmin(String email) {
-        Member member = memberRepository.findByEmail(email)
+    public Member joinAdmin(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.switchRole(Role.ADMIN);
         return member;
     }
 
     @Override
-    public Member deleteAdmin(String email) {
-        Member member = memberRepository.findByEmail(email)
+    public Member deleteAdmin(Long userId) {
+        Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.switchRole(Role.USER);
         return member;
