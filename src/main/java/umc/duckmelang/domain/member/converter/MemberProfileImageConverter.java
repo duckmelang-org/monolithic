@@ -31,6 +31,7 @@ public class MemberProfileImageConverter {
 
     public static MemberProfileImageResponseDto.MemberProfileImageDto toMemberProfileImageDto(MemberProfileImage memberProfileImage){
         return MemberProfileImageResponseDto.MemberProfileImageDto.builder()
+                .memberProfileImageId(memberProfileImage.getId())
                 .memberProfileImageUrl(memberProfileImage.getMemberImage())
                 .createdAt(memberProfileImage.getCreatedAt())
                 .build();
@@ -51,6 +52,7 @@ public class MemberProfileImageConverter {
             changedStatus ="PRIVATE";
         }
         return MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto.builder()
+                .memberProfileImageId(updatedMemberProfileImage.getId())
                 .changedStatus(changedStatus)
                 .build();
     }

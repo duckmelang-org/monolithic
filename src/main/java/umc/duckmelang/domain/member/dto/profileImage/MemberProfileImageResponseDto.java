@@ -29,6 +29,7 @@ public class MemberProfileImageResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MemberProfileImageDto{
+        Long memberProfileImageId;
         String memberProfileImageUrl;
         LocalDateTime createdAt;
     }
@@ -46,6 +47,7 @@ public class MemberProfileImageResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateProfileImageStatusResultDto {
+        private Long memberProfileImageId;
         private String changedStatus;
     }
 }
