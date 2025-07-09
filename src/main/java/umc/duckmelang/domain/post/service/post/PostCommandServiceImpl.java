@@ -17,10 +17,7 @@ import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.domain.post.repository.PostIdolRepository;
-import umc.duckmelang.domain.post.converter.PostImageConverter;
 import umc.duckmelang.domain.post.repository.PostImageRepository;
-import umc.duckmelang.domain.uuid.domain.Uuid;
-import umc.duckmelang.domain.uuid.repository.UuidRepository;
 import umc.duckmelang.domain.uuid.service.UuidService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.EventCategoryException;
@@ -31,7 +28,6 @@ import umc.duckmelang.global.aws.AmazonS3Manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
