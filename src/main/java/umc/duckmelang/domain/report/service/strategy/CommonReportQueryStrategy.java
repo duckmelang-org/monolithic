@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import umc.duckmelang.domain.report.converter.ReportConverter;
 import umc.duckmelang.domain.report.domain.Report;
 import umc.duckmelang.domain.report.domain.enums.ReportStatus;
 import umc.duckmelang.domain.report.domain.enums.ReportType;
@@ -48,7 +49,9 @@ public class CommonReportQueryStrategy implements ReportQueryStrategy <Report>{
 
     @Override
     public ReportResponseDto.ReportResponseListDto convertToResponseList(Page<Report> page, Map<Long, ReportSummaryDto> summaryDtoMap) {
-        return null;
+        return ReportConverter.reportResponseListDto(
+                page.map(
+                        report -> ReportConverter.commonReportResponseDto(report, summaryDtoMap.get(report.getId()))));
     }
 
     @Override

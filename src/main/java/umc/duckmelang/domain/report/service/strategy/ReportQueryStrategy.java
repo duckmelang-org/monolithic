@@ -10,6 +10,8 @@ import umc.duckmelang.domain.report.dto.ReportResponseDto;
 import umc.duckmelang.domain.report.dto.ReportSummaryDto;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface ReportQueryStrategy<T extends Report> {
     Page<T> queryByDateOrder(ReportStatus status, Pageable page);
@@ -27,5 +29,17 @@ public interface ReportQueryStrategy<T extends Report> {
             case DATE -> queryByDateOrder(status, page);
             case COUNT -> queryByCountOrder(status, page);
         };
+    }
+
+    default ReportResponseDto.ReportResponseListDto getReportResponseList(
+            ReportStatus status, QueryOrder order, Pageable page) {
+        //type에 따라 다른 Repository에서 조회하는데,
+        //page, status는 jpa 변수로 넘겨주고
+        //order에 따라 다른 레포지토리 함수
+        Page<T> reportPage = queryReports(status, order, page);
+        List<ReportSummaryDto> list = getReportSummaryDtoList(reportPage);
+        Map<Long, ReportSummaryDto> reportSummaryMap = list.stream()
+                .collect(Collectors.toMap(ReportSummaryDto::getReportId, Function.identity()));
+        return convertToResponseList(reportPage, reportSummaryMap);
     }
 }

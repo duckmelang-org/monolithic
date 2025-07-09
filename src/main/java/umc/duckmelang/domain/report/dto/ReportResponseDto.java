@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import net.bytebuddy.implementation.bind.annotation.Super;
+import umc.duckmelang.domain.report.domain.enums.ReportStatus;
 
-import java.util.HashMap;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -23,13 +22,13 @@ public class ReportResponseDto {
         @NotNull
         private String memberNickname;
         @NotNull
-        private HashMap<String, Integer> reasons;
+        private String[] reasons;
         @NotNull
         private Integer count;
         @NotNull
         private LocalDateTime latestDate;
         @NotNull
-        private String reportStatus;
+        private ReportStatus reportStatus;
     }
 
     @SuperBuilder
@@ -58,9 +57,21 @@ public class ReportResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReivewReportResponseDto extends CommonReportResponseDto {
+    public static class ReviewReportResponseDto extends CommonReportResponseDto {
         @NotNull
         private Long reviewId;
+    }
+
+    @SuperBuilder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileReportResponseDto extends CommonReportResponseDto {
+        @NotNull
+        private String savedNickname;
+
+        @NotNull
+        private String savedIntroduction;
     }
 
     @Builder

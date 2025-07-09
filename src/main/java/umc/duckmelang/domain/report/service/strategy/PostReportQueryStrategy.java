@@ -35,7 +35,7 @@ public class PostReportQueryStrategy implements ReportQueryStrategy<PostReport> 
 
     @Override
     public List<ReportSummaryDto> getReportSummaryDtoList(Page<? extends Report> page) {
-        List<Long> idList = page.stream().map(PostReport::getId).toList();
+        List<Long> idList = page.stream().map(report-> report.getId()).toList();
         List<Object[]> results = repository.findReportSummaryByIds(idList);
 
         return results.stream()
@@ -50,6 +50,7 @@ public class PostReportQueryStrategy implements ReportQueryStrategy<PostReport> 
 
     @Override
     public ReportResponseDto.ReportResponseListDto convertToResponseList(Page<PostReport> page, Map<Long, ReportSummaryDto> summaryDtoMap) {
+
         Page<ReportResponseDto.PostReportResponseDto> dtoPage = page
                 .map(report -> ReportConverter.postReportResponseDto(report, summaryDtoMap.get(report.getId())));
 

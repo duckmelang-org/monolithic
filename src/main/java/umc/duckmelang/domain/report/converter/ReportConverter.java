@@ -3,35 +3,72 @@ package umc.duckmelang.domain.report.converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.report.domain.ChatReport;
-import umc.duckmelang.domain.report.domain.enums.ReportStatus;
+import umc.duckmelang.domain.report.domain.*;
 import umc.duckmelang.domain.report.dto.ReportResponseDto;
 import umc.duckmelang.domain.report.dto.ReportSummaryDto;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class ReportConverter {
-    public static ReportResponseDto.CommonReportResponseDto commonReportResponseDto(Member member, HashMap<String, Integer> reasons, int count, LocalDateTime time, ReportStatus status) {
+    public static ReportResponseDto.CommonReportResponseDto commonReportResponseDto(Report report, ReportSummaryDto summaryDto) {
         return ReportResponseDto.CommonReportResponseDto.builder()
-                .memberId(member.getId())
-                .memberNickname(member.getNickname())
-                .reasons(reasons)
-                .latestDate(time)
-                .reportStatus(status.name())
+                .memberId(report.getReceiver().getId())
+                .memberNickname(report.getReceiver().getNickname())
+                .reasons(summaryDto.getReasons())
+                .latestDate(summaryDto.getLatestDate())
+                .reportStatus(report.getReportStatus())
                 .build();
     }
 
-    public static ReportResponseDto.PostReportResponseDto postReportResponseDto(){
-        return ReportResponseDto.PostReportResponseDto.builder().build();
+    public static ReportResponseDto.PostReportResponseDto postReportResponseDto(PostReport report, ReportSummaryDto summaryDto){
+        return ReportResponseDto.PostReportResponseDto.builder()
+                .memberId(report.getReceiver().getId())
+                .memberNickname(report.getReceiver().getNickname())
+                .reasons(summaryDto.getReasons())
+                .latestDate(summaryDto.getLatestDate())
+                .reportStatus(report.getReportStatus())
+                .postId(report.getPost().getId())
+                .postTitle(report.getPost().getTitle())
+                .postContent(report.getPost().getContent())
+                .createdAt(report.getCreatedAt())
+                .build();
     }
 
-    public static ReportResponseDto.ReivewReportResponseDto reivewReportResponseDto(){
-        return ReportResponseDto.ReivewReportResponseDto.builder().build();
+    public static ReportResponseDto.ChatRoomReportResponseDto chatRoomReportResponseDto(ChatReport report, ReportSummaryDto summaryDto) {
+        return ReportResponseDto.ChatRoomReportResponseDto.builder()
+                .memberId(report.getReceiver().getId())
+                .memberNickname(report.getReceiver().getNickname())
+                .reasons(summaryDto.getReasons())
+                .latestDate(summaryDto.getLatestDate())
+                .reportStatus(report.getReportStatus())
+                .chatRoomId(report.getChatRoom().getId())
+                .build();
+    }
+
+    public static ReportResponseDto.ReviewReportResponseDto reviewReportResponseDto(ReviewReport report, ReportSummaryDto summaryDto){
+        return ReportResponseDto.ReviewReportResponseDto.builder()
+                .memberId(report.getReceiver().getId())
+                .memberNickname(report.getReceiver().getNickname())
+                .reasons(summaryDto.getReasons())
+                .latestDate(summaryDto.getLatestDate())
+                .reportStatus(report.getReportStatus())
+                .reviewId(report.getReview().getId())
+                .build();
+    }
+
+    public static ReportResponseDto.ProfileReportResponseDto profileReportResponseDto(ProfileReport report, ReportSummaryDto summaryDto) {
+        return ReportResponseDto.ProfileReportResponseDto.builder()
+                .memberId(report.getReceiver().getId())
+                .memberNickname(report.getReceiver().getNickname())
+                .reasons(summaryDto.getReasons())
+                .latestDate(summaryDto.getLatestDate())
+                .reportStatus(report.getReportStatus())
+                .savedIntroduction(report.getIntroduction())
+                .savedNickname(report.getNickname())
+                .build();
     }
 
     public static ReportResponseDto.ReportResponseListDto reportResponseListDto(Page<? extends ReportResponseDto.CommonReportResponseDto> page){
@@ -47,6 +84,5 @@ public class ReportConverter {
                 .build();
     }
 
-    public static ReportResponseDto.ChatRoomReportResponseDto chatRoomReportResponseDto(ChatReport report, ReportSummaryDto reportSummaryDto) {
-    }
+
 }

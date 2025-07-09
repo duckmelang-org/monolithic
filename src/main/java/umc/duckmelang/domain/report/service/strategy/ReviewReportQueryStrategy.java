@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import umc.duckmelang.domain.report.converter.ReportConverter;
 import umc.duckmelang.domain.report.domain.Report;
 import umc.duckmelang.domain.report.domain.ReviewReport;
 import umc.duckmelang.domain.report.domain.enums.ReportStatus;
@@ -36,7 +37,7 @@ public class ReviewReportQueryStrategy implements ReportQueryStrategy<ReviewRepo
 
     @Override
     public List<ReportSummaryDto> getReportSummaryDtoList(Page<? extends Report> page) {
-        List<Long> idList = page.stream().map(ReviewReport::getId).toList();
+        List<Long> idList = page.stream().map(report-> report.getId()).toList();
         List<Object[]> results = repository.findReportSummaryByIds(idList);
 
         return results.stream()
@@ -51,7 +52,11 @@ public class ReviewReportQueryStrategy implements ReportQueryStrategy<ReviewRepo
 
     @Override
     public ReportResponseDto.ReportResponseListDto convertToResponseList(Page<ReviewReport> page, Map<Long, ReportSummaryDto> summaryDtoMap) {
-        return null;
+        return ReportConverter.reportResponseListDto(
+                page.map(report -> ReportConverter.reviewReportResponseDto(
+                        report, summaryDtoMap.get(report.getId())
+                ))
+        );
     }
 
     @Override

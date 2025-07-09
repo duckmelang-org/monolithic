@@ -35,7 +35,7 @@ public class ChatReportQueryStrategy implements ReportQueryStrategy<ChatReport> 
 
     @Override
     public List<ReportSummaryDto> getReportSummaryDtoList(Page<? extends Report> page) {
-        List<Long> idList = page.stream().map(ChatReport::getId).toList();
+        List<Long> idList = page.stream().map(report -> report.getId()).toList();
         List<Object[]> results = repository.findReportSummaryByIds(idList);
 
         return results.stream()
