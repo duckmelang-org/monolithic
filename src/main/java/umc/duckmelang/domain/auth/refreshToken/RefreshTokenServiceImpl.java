@@ -39,11 +39,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return memberId;
     }
 
-    @Override
-    public void removeRefreshToken(Long memberId){
-        redisTemplate.delete(getKey(memberId));
-    }
-
     private String getKey(Long memberId) {
         return "refresh_token:" + memberId;
     }
