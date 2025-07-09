@@ -139,9 +139,14 @@ public class Member extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void switchRole(Role role){
+        this.role = role;
+    }
+
     public Member(Member other) {
         this.introduction = other.introduction;
     }
+
 
     // 회원의 만 나이를 계산하는 메서드
     public int calculateAge(){
