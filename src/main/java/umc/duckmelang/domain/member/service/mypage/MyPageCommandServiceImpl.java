@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.member.converter.MemberFilterConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.dto.mypage.MyPageRequestDto;
 import umc.duckmelang.domain.member.repository.MemberRepository;
@@ -34,7 +33,7 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Transactional
     public MemberFilterDto.FilterResponseDto setFilter(Long memberId, MemberFilterDto.FilterRequestDto request){
         Member member = findMemberOrThrow(memberId);
-        MemberFilterConverter.applyFilterRequest(member, request);
+        member.updateFilter(request.getGender(), request.getMinAge(), request.getMaxAge());
         return MemberFilterConverter.toFilterResponseDto(member);
     }
 

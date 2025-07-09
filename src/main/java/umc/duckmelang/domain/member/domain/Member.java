@@ -135,11 +135,6 @@ public class Member extends BaseEntity {
         this.filterMaxAge = maxAge;
     }
 
-    public void deleteMember(){
-        this.memberStatus = MemberStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
-    }
-
     public void updatePhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }

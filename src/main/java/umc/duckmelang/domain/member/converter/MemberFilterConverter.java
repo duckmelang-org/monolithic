@@ -14,8 +14,4 @@ public class MemberFilterConverter {
                 member.getFilterMaxAge()
         );
     }
-
-    public static void applyFilterRequest(Member member, MemberFilterDto.FilterRequestDto request){
-        member.updateFilter(request.getGender(), request.getMinAge(), request.getMaxAge());
-    }
 }
