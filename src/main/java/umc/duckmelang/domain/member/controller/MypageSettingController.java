@@ -55,7 +55,7 @@ public class MypageSettingController {
         return ApiResponse.onSuccess(MemberIdolConverter.toIdolDto(memberIdolCommandService.addMemberIdol(userDetails.getMemberId(), idolId)));
     }
 
-    @Operation(summary = "관심 아이돌 삭제 API", description = "관심 아이돌 목록에서 관심 아이돌을 삭제하는 API입니다.")
+    @Operation(summary = "관심 아이돌 삭제 API", description = "관심 아이돌을 삭제하는 API입니다.")
     @DeleteMapping("/idols/{idolId}")
     public ApiResponse<String> deleteMemberIdol(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("idolId") Long idolId){
         memberIdolCommandService.deleteMemberIdol(userDetails.getMemberId(), idolId);
