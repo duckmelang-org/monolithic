@@ -35,9 +35,9 @@ public class ProfileImageController {
 
     @Operation(summary = "내 프로필 사진 삭제", description = "본인의 프로필 사진 중 하나를 삭제하는 API입니다.")
     @DeleteMapping("/{imageId}")
-    public ApiResponse<MemberProfileImageResponseDto.DeleteProfileImageResultDto> deleteProfileImage(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("imageId") Long imageId) {
+    public ApiResponse<String> deleteProfileImage(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("imageId") Long imageId) {
         memberProfileImageCommandService.deleteProfileImage(userDetails.getMemberId(), imageId);
-        return ApiResponse.onSuccess(MemberProfileImageConverter.toDeleteProfileImageResultDto());
+        return ApiResponse.onSuccess("프로필 사진을 성공적으로 삭제하였습니다.");
     }
 
     @Operation(summary = "내 프로필 사진 공개 범위 전환", description = "본인의 프로필 사진 중 하나를 공개로 전환하거나 비공개로 전환하는 API입니다. false를 입력하여 비공개로 변경하고 true를 입력하여 public으로 변환합니다.")

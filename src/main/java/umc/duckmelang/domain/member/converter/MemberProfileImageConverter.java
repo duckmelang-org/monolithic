@@ -37,12 +37,6 @@ public class MemberProfileImageConverter {
                 .build();
     }
 
-    public static MemberProfileImageResponseDto.DeleteProfileImageResultDto toDeleteProfileImageResultDto() {
-        return MemberProfileImageResponseDto.DeleteProfileImageResultDto.builder()
-                .succeedMessage("프로필 사진이 성공적으로 삭제되었습니다.")
-                .build();
-    }
-
     public static MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto toUpdateProfileImageStatusResultDto(MemberProfileImage updatedMemberProfileImage) {
         String changedStatus;
 
