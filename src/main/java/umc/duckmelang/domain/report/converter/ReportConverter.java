@@ -71,15 +71,19 @@ public class ReportConverter {
                 .build();
     }
 
-    public static ReportResponseDto.ReportResponseListDto reportResponseListDto(Page<? extends ReportResponseDto.CommonReportResponseDto> page){
-        List<ReportResponseDto.CommonReportResponseDto> commonReportResponseDtoList = page.stream()
-                .collect(Collectors.toList());
-        return ReportResponseDto.ReportResponseListDto.builder()
+    // Converter 수정
+    public static <T extends ReportResponseDto.CommonReportResponseDto>
+    ReportResponseDto.ReportResponseListDto<T> reportResponseListDto(Page<T> page) {
+
+        List<T> reportResponseDtoList = page.getContent();
+
+        return ReportResponseDto.ReportResponseListDto.<T>builder()
+                .list(reportResponseDtoList)
                 .isLast(page.isLast())
                 .isFirst(page.isFirst())
                 .totalPage(page.getTotalPages())
                 .totalElements(page.getTotalElements())
-                .listSize(commonReportResponseDtoList.size())
+                .listSize(reportResponseDtoList.size())
                 .currentPage(page.getNumber())
                 .build();
     }

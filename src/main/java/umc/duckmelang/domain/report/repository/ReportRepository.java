@@ -22,14 +22,13 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
                                               Pageable pageable);
 
     @Query(value = "SELECT " +
-            "r.id, " +
-            "COUNT(r.id), " +
-            "MAX(r.createdAt), " +
-            "GROUP_CONCAT(DISTINCT r.reason SEPARATOR ',')" +
-            ")" +
+            "r.report_id, " +
+            "COUNT(r.report_id), " +
+            "CAST(MAX(r.created_at) AS DATETIME), " +
+            "GROUP_CONCAT(DISTINCT r.reason SEPARATOR ',') " +
             "FROM report r " +
-            "WHERE r.id IN :idList " +
-            "GROUP BY r.id",
+            "WHERE r.report_id IN :idList " +
+            "GROUP BY r.report_id",
             nativeQuery = true
     )
     List<Object[]> findReportSummaryByIds(@Param("idList") List<Long> idList);

@@ -11,6 +11,9 @@ import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.eventcategory.domain.EventCategory;
 import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.report.domain.PostReport;
+import umc.duckmelang.domain.report.domain.Report;
+import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.PostException;
 import umc.duckmelang.global.common.BaseEntity;
@@ -62,6 +65,10 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> postImageList = new ArrayList<>();
+
+    //Report
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostReport> reportList = new ArrayList<>();
 
     //n:1 단방향 고려
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

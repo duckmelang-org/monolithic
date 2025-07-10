@@ -1,5 +1,7 @@
 package umc.duckmelang.domain.report.dto;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -78,8 +80,15 @@ public class ReportResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReportResponseListDto{
-        List<? extends CommonReportResponseDto> list;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = PostReportResponseDto.class, name = "POST"),
+            @JsonSubTypes.Type(value = ChatRoomReportResponseDto.class, name = "CHATROOM"),
+            @JsonSubTypes.Type(value = ReviewReportResponseDto.class, name = "REVIEW"),
+            @JsonSubTypes.Type(value = ProfileReportResponseDto.class, name = "PROFILE")
+    })
+    public static class ReportResponseListDto<T extends CommonReportResponseDto> {
+        List<T> list;
 
         Integer listSize;
         Integer totalPage;

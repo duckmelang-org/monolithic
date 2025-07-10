@@ -21,15 +21,15 @@ public interface ProfileReportRepository extends JpaRepository<ProfileReport, Lo
             "r.createdAt DESC")
     Page<ProfileReport> findByStatusAndPageWithCount(@Param("status") ReportStatus status,
                                               Pageable pageable);
+
     @Query(value = "SELECT " +
-            "r.id, " +
-            "COUNT(r.id), " +
-            "MAX(r.createdAt), " +
-            "GROUP_CONCAT(DISTINCT r.reason SEPARATOR ',')" +
-            ")" +
-            "FROM profile_report r " +
-            "WHERE r.id IN :idList " +
-            "GROUP BY r.id",
+            "r.report_id, " +
+            "COUNT(r.report_id), " +
+            "CAST(MAX(r2.created_at) AS DATETIME), " +
+            "GROUP_CONCAT(DISTINCT r2.reason SEPARATOR ',') " +
+            "FROM profile_report r JOIN report r2 USING (report_id) " +
+            "WHERE r.report_id IN :idList " +
+            "GROUP BY r.report_id",
             nativeQuery = true
     )
     List<Object[]> findReportSummaryByIds(@Param("idList") List<Long> idList);

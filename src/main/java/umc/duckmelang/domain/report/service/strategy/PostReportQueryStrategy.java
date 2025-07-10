@@ -13,6 +13,7 @@ import umc.duckmelang.domain.report.dto.ReportResponseDto;
 import umc.duckmelang.domain.report.dto.ReportSummaryDto;
 import umc.duckmelang.domain.report.repository.PostReportRepository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class PostReportQueryStrategy implements ReportQueryStrategy<PostReport> 
                 .map(row -> ReportSummaryDto.builder()
                         .reportId(((Number)row[0]).longValue())
                         .count(((Number)row[1]).intValue())
-                        .latestDate((LocalDateTime) row[2])
+                        .latestDate(((Timestamp) row[2]).toLocalDateTime())  // 직접 변환
                         .reasons(((String) row[3]).split(","))
                         .build())
                 .collect(Collectors.toUnmodifiableList());

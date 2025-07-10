@@ -31,7 +31,7 @@ public class ReportRestController {
     private final ReportQueryService reportQueryService;
 
     @PostMapping("")
-    @Operation(summary = "신고 API", description = "신고 대상의 memberId를 넘겨주세요 / reason: INAPPR(\"INAPPROPRIATE\")," +
+    @Operation(summary = "신고 API", description = "신고 대상의 Id를 넘겨주세요 / reason: INAPPR(\"INAPPROPRIATE\")," +
             "INSULT, SEXUAL(\"SEXUAL HARRASMENT\"), ADVERT(\"ADVERTISEMENT\"), FRAUD, ETC / " +
             "dtype: CHAT,PROFILE,POST,REVIEW")
     public ApiResponse<String> reportProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
