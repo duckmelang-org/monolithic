@@ -148,6 +148,10 @@ public class Member extends BaseEntity {
         this.password = encodedPassword;
     }
 
+    public void switchRole(Role role){
+        this.role = role;
+    }
+
     public Member(Member other) {
         this.introduction = other.introduction;
     }
