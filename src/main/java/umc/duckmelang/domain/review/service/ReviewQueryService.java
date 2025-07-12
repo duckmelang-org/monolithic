@@ -14,4 +14,5 @@ public interface ReviewQueryService {
     List<Application> getReviewInformation(Long myId, Long memberId);
     Optional<Application> getReviewInformationByPost(Long myId, Long memberId, Long postId);
     double calculateAverageScore(List<Review> reviewList);
+    Optional<Review> findReview(Long reviewId);
 }

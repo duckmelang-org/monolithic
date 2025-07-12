@@ -28,6 +28,8 @@ import umc.duckmelang.global.aws.AmazonS3Manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -132,7 +134,7 @@ public class PostCommandServiceImpl implements PostCommandService {
                         .post(post)
                         .idolCategory(idolCategory)
                         .build())
-                .toList();
+                .collect(Collectors.toUnmodifiableList());
 
         post.getPostIdolList().addAll(updatedPostIdols);
 
