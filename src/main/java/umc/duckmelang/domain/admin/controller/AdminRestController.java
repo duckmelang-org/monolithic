@@ -11,7 +11,6 @@ import umc.duckmelang.domain.admin.converter.AdminConverter;
 import umc.duckmelang.domain.admin.dto.AdminResponseDto;
 import umc.duckmelang.domain.admin.service.AdminCommandService;
 import umc.duckmelang.domain.admin.service.AdminQueryService;
-import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.member.converter.MemberProfileConverter;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.mypage.MyPageRequestDto;
@@ -42,11 +41,11 @@ public class AdminRestController {
         return ApiResponse.onSuccess(AdminConverter.adminManagerDto(member));
     }
 
-    @PatchMapping("/managers/delete/{loginId}")
-    @Operation(summary = "타 계정 관리자 삭제 API", description = "관리자 권한을 삭제할 member의 userId를 입력해주세요")
+    @PatchMapping("/managers/delete/{memberId}")
+    @Operation(summary = "타 계정 관리자 삭제 API", description = "관리자 권한을 삭제할 member의 memberId를 입력해주세요")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<AdminResponseDto.AdminManagerDto> deleteAdmin(@PathVariable(name="loginId") Long userId) {
-        Member member = adminCommandService.deleteAdmin(userId);
+    public ApiResponse<AdminResponseDto.AdminManagerDto> deleteAdmin(@PathVariable(name="memberId") Long memberId) {
+        Member member = adminCommandService.deleteAdmin(memberId);
         return ApiResponse.onSuccess(AdminConverter.adminManagerDto(member));
     }
 
