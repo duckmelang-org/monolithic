@@ -2,6 +2,7 @@ package umc.duckmelang.domain.idolcategory.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.member.domain.MemberIdol;
 import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.domain.uuid.domain.Uuid;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class IdolCategory extends BaseEntity {

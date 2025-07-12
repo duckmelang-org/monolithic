@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.eventcategory.domain.EventCategory;
 import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.report.domain.PostReport;
+import umc.duckmelang.domain.report.domain.Report;
+import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.PostException;
 import umc.duckmelang.global.common.BaseEntity;
@@ -22,7 +26,7 @@ import java.util.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +65,10 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> postImageList = new ArrayList<>();
+
+    //Report
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostReport> reportList = new ArrayList<>();
 
     //n:1 단방향 고려
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

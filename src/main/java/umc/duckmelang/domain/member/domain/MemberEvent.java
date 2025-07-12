@@ -2,6 +2,7 @@ package umc.duckmelang.domain.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.eventcategory.domain.EventCategory;
 import umc.duckmelang.global.common.BaseEntity;
 
@@ -9,7 +10,7 @@ import umc.duckmelang.global.common.BaseEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class MemberEvent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

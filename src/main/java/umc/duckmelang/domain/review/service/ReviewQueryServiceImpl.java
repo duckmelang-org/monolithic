@@ -50,4 +50,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
                 .average()
                 .orElse(0) * 10) / 10.0;
     }
+
+    @Override
+    public Optional<Review> findReview(Long reviewId) {
+        return reviewRepository.findById(reviewId);
+    }
 }

@@ -3,6 +3,7 @@ package umc.duckmelang.domain.member.domain;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.chatroom.domain.ChatRoom;
 import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
@@ -10,6 +11,7 @@ import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.notification.domain.NotificationSetting;
 import umc.duckmelang.domain.post.domain.Post;
+import umc.duckmelang.domain.report.domain.Report;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.bookmark.domain.Bookmark;
@@ -24,7 +26,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member extends BaseEntity {
@@ -102,6 +104,13 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> receivedReviewList = new ArrayList<>();
+
+    //Report
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> sentReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> receivedReportList = new ArrayList<>();
 
     //mateRelationship
     @OneToMany(mappedBy = "firstMember", cascade = CascadeType.ALL, orphanRemoval = true)

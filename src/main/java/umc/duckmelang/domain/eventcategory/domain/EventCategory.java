@@ -2,6 +2,7 @@ package umc.duckmelang.domain.eventcategory.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import umc.duckmelang.domain.eventcategory.domain.enums.EventKind;
@@ -14,7 +15,7 @@ import java.util.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @DynamicUpdate
 @DynamicInsert
 public class EventCategory extends BaseEntity {
