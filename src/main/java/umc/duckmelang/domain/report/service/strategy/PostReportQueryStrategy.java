@@ -53,7 +53,7 @@ public class PostReportQueryStrategy implements ReportQueryStrategy<PostReport> 
     public ReportResponseDto.ReportResponseListDto convertToResponseList(Page<PostReport> page, Map<Long, ReportSummaryDto> summaryDtoMap) {
 
         Page<ReportResponseDto.PostReportResponseDto> dtoPage = page
-                .map(report -> ReportConverter.postReportResponseDto(report, summaryDtoMap.get(report.getId())));
+                .map(report -> ReportConverter.postReportResponseDto(report, summaryDtoMap.get(report.getPost().getId())));
 
         return ReportConverter.reportResponseListDto(dtoPage);
     }
