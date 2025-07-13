@@ -13,7 +13,6 @@ import umc.duckmelang.domain.report.dto.ReportSummaryDto;
 import umc.duckmelang.domain.report.repository.ReportRepository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,7 +56,7 @@ public class CommonReportQueryStrategy implements ReportQueryStrategy <Report>{
 
     @Override
     public ReportType getSupportedType() {
-        return ReportType.TOTAL;
+        return ReportType.COMMON;
     }
 
 }
