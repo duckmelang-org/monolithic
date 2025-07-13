@@ -22,13 +22,13 @@ public interface ReviewReportRepository extends JpaRepository<ReviewReport, Long
     Page<ReviewReport> findByStatusAndPageWithCount(@Param("status") ReportStatus status,
                                                   Pageable pageable);
     @Query(value = "SELECT " +
-            "r.report_id, " +
-            "COUNT(r.report_id), " +
+            "r.review_id, " +
+            "COUNT(r.review_id), " +
             "CAST(MAX(r2.created_at) AS DATETIME), " +
             "GROUP_CONCAT(DISTINCT r2.reason SEPARATOR ',') " +
             "FROM review_report r JOIN report r2 USING (report_id) " +
             "WHERE r.report_id IN :idList " +
-            "GROUP BY r.report_id",
+            "GROUP BY r.review_id",
             nativeQuery = true
     )
     List<Object[]> findReportSummaryByIds(@Param("idList") List<Long> idList);

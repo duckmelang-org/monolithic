@@ -39,7 +39,7 @@ public interface ReportQueryStrategy<T extends Report> {
         Page<T> reportPage = queryReports(status, order, page);
         List<ReportSummaryDto> list = getReportSummaryDtoList(reportPage);
         Map<Long, ReportSummaryDto> reportSummaryMap = list.stream()
-                .collect(Collectors.toMap(ReportSummaryDto::getReportId, Function.identity()));
+                .collect(Collectors.toMap(ReportSummaryDto::getKeyId, Function.identity()));
         return convertToResponseList(reportPage, reportSummaryMap);
     }
 }

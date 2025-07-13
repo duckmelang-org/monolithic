@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class ReportSummaryDto {
-        private final Long reportId;
+        private final Long keyId;
         private final Integer count;
         private final LocalDateTime latestDate;
         private final String[] reasons;
