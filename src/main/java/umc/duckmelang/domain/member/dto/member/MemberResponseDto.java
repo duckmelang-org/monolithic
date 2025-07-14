@@ -63,15 +63,6 @@ public class MemberResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateIntroductionResultDto {
-        private Long memberId;
-        private String introduction;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class CheckNicknameResponseDto{
         private boolean isAvailable;
         private String message;

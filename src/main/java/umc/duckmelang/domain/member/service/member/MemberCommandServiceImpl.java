@@ -147,20 +147,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Override
-    @Transactional
-    public Member createIntroduction(Long memberId, MemberRequestDto.CreateIntroductionDto request) {
-        Member member = getMemberOrThrow(memberId);
-
-        if (request.getIntroduction().trim().isEmpty()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_INTRODUCTION);
-        }
-
-        member.updateIntroduction(request.getIntroduction());
-
-        return memberRepository.save(member);
-    }
-
-    @Override
     public boolean isNicknameExists(String nickname){
         return memberRepository.existsByNickname(nickname);
     }

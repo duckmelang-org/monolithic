@@ -178,10 +178,6 @@ public class Member extends BaseEntity {
         return age;
     }
 
-    public void updateIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
-
     public void updateProfile(String nickname, String introduction) {
         this.nickname = nickname;
         this.introduction = introduction;
