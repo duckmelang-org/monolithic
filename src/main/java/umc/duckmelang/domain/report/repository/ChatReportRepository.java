@@ -24,13 +24,13 @@ public interface ChatReportRepository extends JpaRepository<ChatReport, Long> {
                                               Pageable pageable);
 
     @Query(value = "SELECT " +
-            "r.report_id, " +
-            "COUNT(r.report_id), " +
+            "r.chat_room_id, " +
+            "COUNT(r.chat_room_id), " +
             "CAST(MAX(r2.created_at) AS DATETIME), " +
             "GROUP_CONCAT(DISTINCT r2.reason SEPARATOR ',') " +
             "FROM chat_report r JOIN report r2 USING (report_id) " +
             "WHERE r.report_id IN :idList " +
-            "GROUP BY r.report_id",
+            "GROUP BY r.chat_room_id",
             nativeQuery = true
     )
     List<Object[]> findReportSummaryByIds(@Param("idList") List<Long> idList);

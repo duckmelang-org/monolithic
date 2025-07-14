@@ -37,8 +37,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 로그인 관련 응답
     AUTH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH4000", "인증 정보가 필요합니다."),
-    AUTH_INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH4001", "이메일 또는 비밀번호가 잘못되었습니다."),
-    AUTH_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH4004", "이메일과 일치하는 사용자가 없습니다."),
+    AUTH_INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH4001", "로그인아이디 또는 비밀번호가 잘못되었습니다."),
+    AUTH_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH4004", "로그인아이디와 일치하는 사용자가 없습니다."),
 
     //게시글 관련 에러
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST4001", "해당하는 게시글이 없습니다"),

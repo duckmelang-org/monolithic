@@ -18,6 +18,16 @@ public class ReportResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            property = "type")
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = PostReportResponseDto.class, name = "POST"),
+            @JsonSubTypes.Type(value = ChatRoomReportResponseDto.class, name = "CHATROOM"),
+            @JsonSubTypes.Type(value = ReviewReportResponseDto.class, name = "REVIEW"),
+            @JsonSubTypes.Type(value = ProfileReportResponseDto.class, name = "PROFILE"),
+            @JsonSubTypes.Type(value = CommonReportResponseDto.class, name = "COMMON")
+    })
     public static class CommonReportResponseDto{
         @NotNull
         private Long memberId;
@@ -80,13 +90,6 @@ public class ReportResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-    @JsonSubTypes({
-            @JsonSubTypes.Type(value = PostReportResponseDto.class, name = "POST"),
-            @JsonSubTypes.Type(value = ChatRoomReportResponseDto.class, name = "CHATROOM"),
-            @JsonSubTypes.Type(value = ReviewReportResponseDto.class, name = "REVIEW"),
-            @JsonSubTypes.Type(value = ProfileReportResponseDto.class, name = "PROFILE")
-    })
     public static class ReportResponseListDto<T extends CommonReportResponseDto> {
         List<T> list;
 

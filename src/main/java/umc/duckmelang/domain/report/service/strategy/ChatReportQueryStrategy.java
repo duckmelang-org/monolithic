@@ -14,7 +14,6 @@ import umc.duckmelang.domain.report.dto.ReportSummaryDto;
 import umc.duckmelang.domain.report.repository.ChatReportRepository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class ChatReportQueryStrategy implements ReportQueryStrategy<ChatReport> 
 
         return results.stream()
                 .map(row -> ReportSummaryDto.builder()
-                        .reportId(((Number)row[0]).longValue())
+                        .keyId(((Number)row[0]).longValue())
                         .count(((Number)row[1]).intValue())
                         .latestDate(((Timestamp) row[2]).toLocalDateTime())  // 직접 변환
                         .reasons(((String) row[3]).split(","))
@@ -52,7 +51,7 @@ public class ChatReportQueryStrategy implements ReportQueryStrategy<ChatReport> 
     @Override
     public ReportResponseDto.ReportResponseListDto convertToResponseList(Page<ChatReport> page, Map<Long, ReportSummaryDto> summaryDtoMap) {
         Page<ReportResponseDto.ChatRoomReportResponseDto> dtoPage = page
-                .map(report -> ReportConverter.chatRoomReportResponseDto(report,summaryDtoMap.get(report.getId())));
+                .map(report -> ReportConverter.chatRoomReportResponseDto(report,summaryDtoMap.get(report.getChatRoom().getId())));
 
         return ReportConverter.reportResponseListDto(dtoPage);
     }

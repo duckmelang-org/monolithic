@@ -5,7 +5,11 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.report.domain.ReviewReport;
 import umc.duckmelang.global.common.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +39,9 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", referencedColumnName = "application_id", nullable = false)
     private Application application;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewReport> reviewReportList = new ArrayList<>();
 
     // 연관관계 편의 메서드
     public void setApplication(Application application) {
