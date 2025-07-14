@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.dto.request.AuthRequestDto;
+import umc.duckmelang.domain.auth.dto.request.KakaoLoginRequest;
 import umc.duckmelang.domain.auth.dto.request.LoginRequest;
 import umc.duckmelang.domain.auth.dto.request.ResetPasswordRequest;
 import umc.duckmelang.domain.auth.dto.response.CheckIdResponse;
@@ -28,6 +29,12 @@ public class AuthRestController {
     @Operation(summary = "로그인 API", description = "RefreshToken과 AccessToken을 발급합니다.")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ApiResponse.onSuccess(authService.login(request.loginId(), request.password()));
+    }
+
+    @PostMapping("/kakao-login")
+    @Operation(summary = "카카오 로그인 API", description = "ios에서 받은 카카오 토큰으로 로그인/회원가입을 처리합니다.")
+    public ApiResponse<LoginResponse> kakaoLogin(@Valid @RequestBody KakaoLoginRequest request){
+        return ApiResponse.onSuccess(authService.kakaoLogin(request));
     }
 
     @PostMapping("/token/refresh")

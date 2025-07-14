@@ -7,8 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.duckmelang.domain.auth.dto.request.KakaoLoginRequest;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
+import umc.duckmelang.domain.auth.kakao.KakaoApiClient;
 import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.member.domain.enums.MemberStatus;
+import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.notification.repository.NotificationRepository;
 import umc.duckmelang.global.apipayload.exception.MemberException;
@@ -27,6 +31,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KakaoApiClient kakaoApiClient;
 
     // 자체 로그인
     @Transactional
@@ -42,6 +47,33 @@ public class AuthService {
         refreshTokenService.saveRefreshToken(refreshToken, memberId);
 
         return new LoginResponse(memberId, accessToken, refreshToken, member.isProfileComplete());
+    }
+
+    // 카카오 로그인
+    @Transactional
+    public LoginResponse kakaoLogin(KakaoLoginRequest request) {
+        String email = kakaoApiClient.getEmailFromAccessToken(request.accessToken());
+
+        Member member = memberRepository.findByLoginId(email)
+                .orElseGet(() -> registerKakaoMember(email));
+
+        String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getRole().name());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId(), member.getRole().name());
+        refreshTokenService.saveRefreshToken(refreshToken, member.getId());
+
+        return new LoginResponse(member.getId(), accessToken, refreshToken, member.isProfileComplete());
+    }
+
+    private Member registerKakaoMember(String email) {
+        return memberRepository.save(
+                Member.builder()
+                        .loginId(email)
+                        .password("") // 소셜 로그인은 비워둠
+                        .role(Role.USER)
+                        .memberStatus(MemberStatus.ACTIVE)
+                        .isProfileComplete(false)
+                        .build()
+        );
     }
 
     // 토큰 재발급
