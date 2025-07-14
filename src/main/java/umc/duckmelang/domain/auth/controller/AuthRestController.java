@@ -71,10 +71,10 @@ public class AuthRestController {
         return ApiResponse.onSuccess("비밀번호가 성공적으로 변경되었습니다.");
     }
 
-//    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
-//    @DeleteMapping("/account/delete")
-//    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
-//        myPageCommandService.deleteMember(userDetails.getMemberId());
-//        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
-//    }
+    @Operation(summary = "회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
+    @DeleteMapping("/me")
+    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
+        authService.deleteMember(userDetails.getMemberId());
+        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
+    }
 }

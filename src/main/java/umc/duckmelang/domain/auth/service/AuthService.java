@@ -99,4 +99,10 @@ public class AuthService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.updatePassword(passwordEncoder.encode(newPassword));
     }
+
+    @Transactional
+    public void deleteMember(Long memberId){
+        Member member = findMemberOrThrow(memberId);
+        member.deleteMember();
+    }
 }
