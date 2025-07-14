@@ -23,13 +23,13 @@ public interface ProfileReportRepository extends JpaRepository<ProfileReport, Lo
                                               Pageable pageable);
 
     @Query(value = "SELECT " +
-            "r.report_id, " +
-            "COUNT(r.report_id), " +
+            "receiver_id, " +
+            "COUNT(receiver_id), " +
             "CAST(MAX(r2.created_at) AS DATETIME), " +
             "GROUP_CONCAT(DISTINCT r2.reason SEPARATOR ',') " +
             "FROM profile_report r JOIN report r2 USING (report_id) " +
             "WHERE r.report_id IN :idList " +
-            "GROUP BY r.report_id",
+            "GROUP BY receiver_id",
             nativeQuery = true
     )
     List<Object[]> findReportSummaryByIds(@Param("idList") List<Long> idList);

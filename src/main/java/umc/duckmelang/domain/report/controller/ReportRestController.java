@@ -53,7 +53,7 @@ public class ReportRestController {
         return ApiResponse.onSuccess("신고 삭제");
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "신고 목록 조회 API", description = "입력된 타입에 따라 다른 report 목록을 조회할 수 있습니다. 숫자값으로 페이지를 넘겨받습니다.")
     public ApiResponse<ReportResponseDto.ReportResponseListDto> findReportList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                      @RequestParam("type") ReportType type,

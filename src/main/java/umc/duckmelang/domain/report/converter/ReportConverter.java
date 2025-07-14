@@ -20,6 +20,7 @@ public class ReportConverter {
                 .reasons(summaryDto.getReasons())
                 .latestDate(summaryDto.getLatestDate())
                 .reportStatus(report.getReportStatus())
+                .count(summaryDto.getCount())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class ReportConverter {
                 .postTitle(report.getPost().getTitle())
                 .postContent(report.getPost().getContent())
                 .createdAt(report.getCreatedAt())
+                .count(summaryDto.getCount())
                 .build();
     }
 
@@ -45,6 +47,7 @@ public class ReportConverter {
                 .latestDate(summaryDto.getLatestDate())
                 .reportStatus(report.getReportStatus())
                 .chatRoomId(report.getChatRoom().getId())
+                .count(summaryDto.getCount())
                 .build();
     }
 
@@ -56,6 +59,7 @@ public class ReportConverter {
                 .latestDate(summaryDto.getLatestDate())
                 .reportStatus(report.getReportStatus())
                 .reviewId(report.getReview().getId())
+                .count(summaryDto.getCount())
                 .build();
     }
 
@@ -68,6 +72,7 @@ public class ReportConverter {
                 .reportStatus(report.getReportStatus())
                 .savedIntroduction(report.getIntroduction())
                 .savedNickname(report.getNickname())
+                .count(summaryDto.getCount())
                 .build();
     }
 
