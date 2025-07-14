@@ -80,7 +80,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         }
 
         member.updateProfile(request.getNickname(), request.getBirth(), request.getGender());
-        return memberRepository.save(member);
+        return member;
     }
 
     @Override
