@@ -65,9 +65,9 @@ public class AuthRestController {
     }
 
     @Operation(summary = "전화번호 등록 API", description = "db에 전화번호를 등록하는 API입니다.")
-    @PostMapping("/phone")
-    public ApiResponse<PhoneNumResponse> addPhoneNum(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String phoneNum){
-        authService.addPhoneNum(phoneNum, userDetails.getMemberId());
+    @PostMapping("/{memberId}/phone")
+    public ApiResponse<PhoneNumResponse> addPhoneNum(@PathVariable(name = "memberId") Long memberId, @RequestParam String phoneNum){
+        authService.addPhoneNum(phoneNum, memberId);
         return ApiResponse.onSuccess(new PhoneNumResponse(phoneNum));
     }
 
