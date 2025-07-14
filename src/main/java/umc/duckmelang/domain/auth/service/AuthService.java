@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
+import umc.duckmelang.domain.notification.repository.NotificationRepository;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.TokenException;
 import umc.duckmelang.domain.auth.refreshToken.RefreshTokenServiceImpl;
@@ -24,6 +25,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenService;
     private final MemberRepository memberRepository;
+    private final NotificationRepository notificationRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 자체 로그인
@@ -104,5 +106,7 @@ public class AuthService {
     public void deleteMember(Long memberId){
         Member member = findMemberOrThrow(memberId);
         member.deleteMember();
+        notificationRepository.deleteAllBySender(member);
+        memberRepository.delete(member);
     }
 }
