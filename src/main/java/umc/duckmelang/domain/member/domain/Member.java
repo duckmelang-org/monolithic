@@ -161,10 +161,6 @@ public class Member extends BaseEntity {
         this.role = role;
     }
 
-    public Member(Member other) {
-        this.introduction = other.introduction;
-    }
-
     // 회원의 만 나이를 계산하는 메서드
     public int calculateAge(){
         // 생년월일 가져오기

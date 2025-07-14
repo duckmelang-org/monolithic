@@ -142,6 +142,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .map(content -> MemberConverter.toLandmine(member, content))
                 .collect(Collectors.toList());
 
+        member.completeProfile();
         return landmineRepository.saveAll(landmineList);
     }
 
@@ -155,7 +156,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         }
 
         member.updateIntroduction(request.getIntroduction());
-        member.completeProfile();
 
         return memberRepository.save(member);
     }
