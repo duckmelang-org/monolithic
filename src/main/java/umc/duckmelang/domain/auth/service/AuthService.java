@@ -89,7 +89,7 @@ public class AuthService {
 
     @Transactional
     public void addPhoneNum(String phoneNum, Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = findMemberOrThrow(memberId);
         member.updatePhoneNum(phoneNum);
     }
 
