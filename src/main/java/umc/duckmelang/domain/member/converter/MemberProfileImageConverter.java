@@ -32,6 +32,7 @@ public class MemberProfileImageConverter {
         return MemberProfileImageResponseDto.MemberProfileImageDto.builder()
                 .memberProfileImageId(memberProfileImage.getId())
                 .memberProfileImageUrl(memberProfileImage.getMemberImage())
+                .isPublic(memberProfileImage.isPublic())
                 .createdAt(memberProfileImage.getCreatedAt())
                 .build();
     }

@@ -31,6 +31,7 @@ public class MemberProfileImageResponseDto {
     public static class MemberProfileImageDto{
         Long memberProfileImageId;
         String memberProfileImageUrl;
+        boolean isPublic;
         LocalDateTime createdAt;
     }
 
