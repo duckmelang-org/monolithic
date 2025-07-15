@@ -15,6 +15,5 @@ public interface MemberCommandService {
     List<MemberIdol> selectIdols(Long memberId, MemberRequestDto.SelectIdolsDto request);
     List<MemberEvent> selectEvents(Long memberId, MemberRequestDto.SelectEventsDto request);
     List<Landmine> createLandmines(Long memberId, MemberRequestDto.CreateLandminesDto request);
-    Member createIntroduction(Long memberId, MemberRequestDto.CreateIntroductionDto request);
     boolean isNicknameExists(String nickname);
 }

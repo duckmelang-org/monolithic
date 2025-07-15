@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.member.converter.MemberFilterConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.dto.mypage.MyPageRequestDto;
 import umc.duckmelang.domain.member.repository.MemberRepository;
@@ -20,9 +19,7 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Override
     @Transactional
     public Member updateMemberProfile(Long memberId, MyPageRequestDto.UpdateMemberProfileDto request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
+        Member member = findMemberOrThrow(memberId);
         if(!member.getNickname().equals(request.getNickname())){
             if(memberRepository.existsByNickname(request.getNickname())){
                 throw new MemberException(ErrorStatus.DUPLICATE_NICKNAME);
@@ -35,23 +32,12 @@ public class MyPageCommandServiceImpl implements MyPageCommandService{
     @Override
     @Transactional
     public MemberFilterDto.FilterResponseDto setFilter(Long memberId, MemberFilterDto.FilterRequestDto request){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        MemberFilterConverter.applyFilterRequest(member, request);
+        Member member = findMemberOrThrow(memberId);
+        member.updateFilter(request.getGender(), request.getMinAge(), request.getMaxAge());
         return MemberFilterConverter.toFilterResponseDto(member);
     }
 
-    @Override
-    @Transactional
-    public void deleteMember(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                        .orElseThrow(()-> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        if (member.getMemberStatus() == MemberStatus.DELETED){
-            throw new MemberException(ErrorStatus.ALREADY_DELETED_MEMBER);
-        }
-
-        member.deleteMember();
-        memberRepository.save(member);
+    private Member findMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 }

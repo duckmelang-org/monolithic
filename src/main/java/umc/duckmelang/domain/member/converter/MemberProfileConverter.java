@@ -35,6 +35,7 @@ public class MemberProfileConverter {
         return MyPageResponseDto.MyPageProfileEditBeforeDto.builder()
                 .nickname(member.getNickname())
                 .latestPublicMemberProfileImage(profileImage != null ? profileImage.getMemberImage() : null)
+                .introduction(member.getIntroduction())
                 .build();
     }
 

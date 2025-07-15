@@ -134,6 +134,11 @@ public class Member extends BaseEntity {
         this.gender = gender;
     }
 
+    public void deleteMember(){
+        this.memberStatus = MemberStatus.DELETED;
+        this.deletedAt = LocalDateTime.now();
+    }
+
     public void completeProfile(){
         this.isProfileComplete = true;
     }
@@ -142,11 +147,6 @@ public class Member extends BaseEntity {
         this.filterGender = gender;
         this.filterMinAge = minAge;
         this.filterMaxAge = maxAge;
-    }
-
-    public void deleteMember(){
-        this.memberStatus = MemberStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
     }
 
     public void updatePhoneNum(String phoneNum) {
@@ -159,10 +159,6 @@ public class Member extends BaseEntity {
 
     public void switchRole(Role role){
         this.role = role;
-    }
-
-    public Member(Member other) {
-        this.introduction = other.introduction;
     }
 
     // 회원의 만 나이를 계산하는 메서드
@@ -180,10 +176,6 @@ public class Member extends BaseEntity {
             age--;
         }
         return age;
-    }
-
-    public void updateIntroduction(String introduction) {
-        this.introduction = introduction;
     }
 
     public void updateProfile(String nickname, String introduction) {

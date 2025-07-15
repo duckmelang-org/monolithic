@@ -42,6 +42,7 @@ public class MyPageResponseDto {
     public static class MyPageProfileEditBeforeDto {
         private String nickname;
         private String latestPublicMemberProfileImage;
+        private String introduction;
     }
 
     @Builder
@@ -52,16 +53,5 @@ public class MyPageResponseDto {
         private Long memberId;
         private String nickname;
         private String introduction;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class LoginInfoDto{
-        private String nickname;
-        private String email;
-        private boolean isKakaoLinked;
-        private boolean isGoogleLinked;
     }
 }

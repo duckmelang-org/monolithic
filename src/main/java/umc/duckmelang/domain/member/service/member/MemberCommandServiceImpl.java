@@ -80,7 +80,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         }
 
         member.updateProfile(request.getNickname(), request.getBirth(), request.getGender());
-        return memberRepository.save(member);
+        return member;
     }
 
     @Override
@@ -142,22 +142,8 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .map(content -> MemberConverter.toLandmine(member, content))
                 .collect(Collectors.toList());
 
-        return landmineRepository.saveAll(landmineList);
-    }
-
-    @Override
-    @Transactional
-    public Member createIntroduction(Long memberId, MemberRequestDto.CreateIntroductionDto request) {
-        Member member = getMemberOrThrow(memberId);
-
-        if (request.getIntroduction().trim().isEmpty()) {
-            throw new MemberException(ErrorStatus.MEMBER_EMPTY_INTRODUCTION);
-        }
-
-        member.updateIntroduction(request.getIntroduction());
         member.completeProfile();
-
-        return memberRepository.save(member);
+        return landmineRepository.saveAll(landmineList);
     }
 
     @Override

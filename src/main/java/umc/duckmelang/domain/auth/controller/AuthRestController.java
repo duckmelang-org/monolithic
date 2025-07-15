@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.dto.request.AuthRequestDto;
+import umc.duckmelang.domain.auth.dto.request.KakaoLoginRequest;
 import umc.duckmelang.domain.auth.dto.request.LoginRequest;
 import umc.duckmelang.domain.auth.dto.request.ResetPasswordRequest;
 import umc.duckmelang.domain.auth.dto.response.CheckIdResponse;
@@ -28,6 +29,12 @@ public class AuthRestController {
     @Operation(summary = "로그인 API", description = "RefreshToken과 AccessToken을 발급합니다.")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ApiResponse.onSuccess(authService.login(request.loginId(), request.password()));
+    }
+
+    @PostMapping("/kakao-login")
+    @Operation(summary = "카카오 로그인 API", description = "ios에서 받은 카카오 토큰으로 로그인/회원가입을 처리합니다.")
+    public ApiResponse<LoginResponse> kakaoLogin(@Valid @RequestBody KakaoLoginRequest request){
+        return ApiResponse.onSuccess(authService.kakaoLogin(request));
     }
 
     @PostMapping("/token/refresh")
@@ -57,10 +64,10 @@ public class AuthRestController {
         return ApiResponse.onSuccess(new LoginIdResponse(email));
     }
 
-    @Operation(summary = "전화번호 등록 API (IOS 연결 X)", description = "Firebase Auth 사용하지 않고 db에 전화번호를 등록하는 API입니다.")
-    @PostMapping("/phone")
-    public ApiResponse<PhoneNumResponse> addPhoneNum(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String phoneNum){
-        authService.addPhoneNum(phoneNum, userDetails.getMemberId());
+    @Operation(summary = "전화번호 등록 API", description = "db에 전화번호를 등록하는 API입니다.")
+    @PostMapping("/{memberId}/phone")
+    public ApiResponse<PhoneNumResponse> addPhoneNum(@PathVariable(name = "memberId") Long memberId, @RequestParam String phoneNum){
+        authService.addPhoneNum(phoneNum, memberId);
         return ApiResponse.onSuccess(new PhoneNumResponse(phoneNum));
     }
 
@@ -71,10 +78,10 @@ public class AuthRestController {
         return ApiResponse.onSuccess("비밀번호가 성공적으로 변경되었습니다.");
     }
 
-//    @Operation(summary = "설정 - 회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
-//    @DeleteMapping("/account/delete")
-//    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
-//        myPageCommandService.deleteMember(userDetails.getMemberId());
-//        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
-//    }
+    @Operation(summary = "회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
+    @DeleteMapping("/me")
+    public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
+        authService.deleteMember(userDetails.getMemberId());
+        return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
+    }
 }

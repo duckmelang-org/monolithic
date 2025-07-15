@@ -110,12 +110,4 @@ public class MemberConverter {
                 .isPublic(memberProfileImage.isPublic())
                 .build();
     }
-
-
-    public static MemberResponseDto.CreateIntroductionResultDto toCreateIntroductionResponseDto(Member member) {
-        return MemberResponseDto.CreateIntroductionResultDto.builder()
-                .memberId(member.getId())
-                .introduction(member.getIntroduction())
-                .build();
-    }
 }

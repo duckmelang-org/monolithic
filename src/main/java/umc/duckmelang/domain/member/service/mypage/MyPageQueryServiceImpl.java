@@ -21,16 +21,22 @@ public class MyPageQueryServiceImpl implements MyPageQueryService{
     private final MemberProfileImageQueryService memberProfileImageQueryService;
 
     public MyPageResponseDto.MyPageProfileEditBeforeDto getMemberProfileBeforeEdit(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        MemberProfileImage profileImage = memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
-                .orElseThrow(()-> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
+        Member member = findMemberOrThrow(memberId);
+        MemberProfileImage profileImage = getLatestProfileImageOrThrow(memberId);
         return MemberProfileConverter.toMemberProfileEditBeforeDto(member, profileImage);
     }
 
     public MemberFilterDto.FilterResponseDto getMemberFilter(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+        Member member = findMemberOrThrow(memberId);
         return MemberFilterConverter.toFilterResponseDto(member);
+    }
+
+    private Member findMemberOrThrow(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
+
+    private MemberProfileImage getLatestProfileImageOrThrow(Long memberId) {
+        return memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
+                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
     }
 }

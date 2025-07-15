@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import umc.duckmelang.domain.eventcategory.service.EventCategoryQueryService;
 import umc.duckmelang.domain.landmine.domain.Landmine;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,6 @@ import java.util.List;
 public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberProfileImageCommandService memberProfileImageCommandService;
-    private final EventCategoryQueryService eventCategoryQueryService;
 
     @Operation(summary = "회원가입 API", description = "사용자 정보를 받아 회원가입을 처리하는 API입니다.")
     @PostMapping("/signup")
@@ -77,13 +75,6 @@ public class MemberController {
             @RequestPart(required = false) MultipartFile profileImage) {
         MemberProfileImage updatedMemberProfileImage = memberProfileImageCommandService.createProfileImage(memberId, profileImage);
         return ApiResponse.onSuccess(MemberConverter.toCreateMemberProfileImageResponseDto(updatedMemberProfileImage));
-    }
-
-    @Operation(summary = "자기소개 문구 설정 API", description = "회원이 최초로 자기소개 문구를 설정하는 API입니다. 빈 문자열과 공백을 허용하지 않습니다. 최대 500자 작성 가능합니다.")
-    @PatchMapping("/{memberId}/introduction")
-    public ApiResponse<MemberResponseDto.CreateIntroductionResultDto> createIntroduction (@PathVariable(name = "memberId") Long memberId, @RequestBody @Valid MemberRequestDto.CreateIntroductionDto request) {
-        Member updatedmember = memberCommandService.createIntroduction(memberId, request);
-        return ApiResponse.onSuccess(MemberConverter.toCreateIntroductionResponseDto(updatedmember));
     }
 
     @Operation(summary = "닉네임 중복 확인 API" ,description = "사용자가 입력한 닉네임이 이미 존재하는지 확인하는 API입니다. 닉네임은 공백일 수도 없습니다.")

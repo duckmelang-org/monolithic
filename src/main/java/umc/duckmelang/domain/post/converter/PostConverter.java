@@ -12,6 +12,7 @@ import umc.duckmelang.domain.post.dto.PostRequestDto;
 import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.domain.post.domain.PostImage;
+import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -130,6 +131,14 @@ public class PostConverter {
                 .id(post.getId())
                 .title(post.getTitle())
                 .wanted(post.getWanted())
+                .build();
+    }
+
+    public static PostThumbnailResponseDto toPostThumbnailResponseDto(PostImage postImage){
+        return PostThumbnailResponseDto.builder()
+                .postId(postImage.getPost().getId())
+                .postImageUrl(postImage.getPostImageUrl())
+                .createdAt(postImage.getCreatedAt())
                 .build();
     }
 }

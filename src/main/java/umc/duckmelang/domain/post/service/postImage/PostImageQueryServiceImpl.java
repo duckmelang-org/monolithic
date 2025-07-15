@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.post.converter.PostImageConverter;
+import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.PostImage;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
 import umc.duckmelang.domain.post.repository.PostImageRepository;
@@ -28,7 +28,7 @@ public class PostImageQueryServiceImpl implements PostImageQueryService {
 
     @Override
     public PostThumbnailResponseDto getLatestPostImage(Long postId) {
-        return PostImageConverter.toPostThumbnailResponseDto(postImageRepository.findFirstByPostIdOrderByCreatedAtAsc(postId)
+        return PostConverter.toPostThumbnailResponseDto(postImageRepository.findFirstByPostIdOrderByCreatedAtAsc(postId)
                 .orElseThrow(() -> new PostImageException(ErrorStatus.POST_IMAGE_NOT_FOUND)));
     }
 
