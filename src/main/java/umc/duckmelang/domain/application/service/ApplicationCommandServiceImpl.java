@@ -54,7 +54,7 @@ public class ApplicationCommandServiceImpl implements ApplicationCommandService{
         if (post.getMember() == member)
             throw new ApplicationException(ErrorStatus.UNAVAILABLE_TO_APPLY_FOR_OWN_POST);
 
-        notificationHelper.sendNotification(memberId, post.getMember().getId(), REQUEST, member.getNickname() + " 님이 동행을 요청했어요");
+        notificationHelper.sendNotification(post.getMember().getId(), memberId, REQUEST, member.getNickname() + " 님이 동행을 요청했어요");
 
         Application application = Application.builder()
                 .post(post)
