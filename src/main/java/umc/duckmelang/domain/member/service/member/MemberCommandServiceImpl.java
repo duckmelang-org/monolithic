@@ -54,20 +54,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         Member newMember = MemberConverter.toMember(request, encodedPassword);
-        newMember = memberRepository.save(newMember);
 
-        // 알림 설정 자동 추가
-        NotificationSetting notificationSetting = NotificationSetting.builder()
-                .chatNotificationEnabled(true)  // 기본값을 true로 설정
-                .requestNotificationEnabled(true)
-                .reviewNotificationEnabled(true)
-                .bookmarkNotificationEnabled(true)
-                .build();
+        NotificationSetting defaultSetting = createDefaultNotificationSetting();
+        newMember.setNotificationSetting(defaultSetting);
 
-        notificationSettingRepository.save(notificationSetting);
-        newMember.setNotificationSetting(notificationSetting);
-
-        return newMember;
+        return memberRepository.save(newMember);
     }
 
     @Override
@@ -130,14 +121,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
             return Collections.emptyList();
         }
 
-        List<String> landmineContents = request.getLandmineContents();
-        Set<String> uniqueContents = new HashSet<>();
-        for (String content : landmineContents) {
-            if (!uniqueContents.add(content)) {
-                throw new LandmineException(ErrorStatus.DUPLICATE_LANDMINE);
-            }
-        }
-
         List<Landmine> landmineList = request.getLandmineContents().stream()
                 .map(content -> MemberConverter.toLandmine(member, content))
                 .collect(Collectors.toList());
@@ -154,5 +137,15 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private Member getMemberOrThrow(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
+
+    // 회원가입 시 알림 설정
+    private NotificationSetting createDefaultNotificationSetting() {
+        return NotificationSetting.builder()
+                .chatNotificationEnabled(true)
+                .requestNotificationEnabled(true)
+                .reviewNotificationEnabled(true)
+                .bookmarkNotificationEnabled(true)
+                .build();
     }
 }
