@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+    void deleteAllByMember(Member member);
 
     @EntityGraph(attributePaths = "post")
     @Query("SELECT b FROM Bookmark b WHERE b.member.id = :memberId")

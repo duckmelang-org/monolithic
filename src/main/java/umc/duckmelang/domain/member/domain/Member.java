@@ -137,6 +137,12 @@ public class Member extends BaseEntity {
     public void deleteMember(){
         this.memberStatus = MemberStatus.DELETED;
         this.deletedAt = LocalDateTime.now();
+        this.email = "deleted_email_" + UUID.randomUUID() + "@duckmelang.com";
+        this.nickname = "deleted_nickname_" + UUID.randomUUID().toString().substring(0, 8);;
+        this.loginId = "deleted_loginId_" + UUID.randomUUID().toString().substring(0, 8);;
+        this.phoneNum = null;
+        this.introduction = null;
+        this.notificationSetting = null;
     }
 
     public void completeProfile(){

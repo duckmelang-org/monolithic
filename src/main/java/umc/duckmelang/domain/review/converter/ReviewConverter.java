@@ -11,6 +11,8 @@ import umc.duckmelang.domain.review.dto.ReviewResponseDto;
 import java.util.Comparator;
 import java.util.List;
 
+import static umc.duckmelang.domain.member.util.NicknameUtil.getDisplayName;
+
 @Component
 public class ReviewConverter {
 
@@ -37,7 +39,7 @@ public class ReviewConverter {
     public static ReviewResponseDto.ReviewDto reviewDto(Review review) {
         return ReviewResponseDto.ReviewDto.builder()
                 .reviewId(review.getId())
-                .nickname(review.getSender().getNickname())
+                .nickname(getDisplayName(review.getSender()))
                 .gender(review.getSender().getGender())
                 .age(review.getSender().calculateAge())
                 .content(review.getContent())
@@ -64,7 +66,7 @@ public class ReviewConverter {
 
         return ReviewResponseDto.ReviewInformationDto.builder()
                 .applicationId(application.getId())
-                .name(application.getPost().getMember().getNickname())
+                .name(getDisplayName(application.getPost().getMember()))
                 .title(application.getPost().getTitle())
                 .eventCategory(application.getPost().getEventCategory().getName())
                 .date(application.getPost().getEventDate())

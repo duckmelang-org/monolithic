@@ -14,6 +14,9 @@ import umc.duckmelang.domain.post.domain.PostIdol;
 import umc.duckmelang.domain.post.domain.PostImage;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
 
+import static umc.duckmelang.domain.member.util.NicknameUtil.getDisplayName;
+
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,7 +38,7 @@ public class PostConverter {
                 .title(post.getTitle())
                 .category(post.getEventCategory().getName())
                 .date(post.getEventDate())
-                .nickname(post.getMember().getNickname())
+                .nickname(getDisplayName(post.getMember()))
                 .createdAt(post.getCreatedAt())
                 .postImageUrl(post.getPostImageList().isEmpty() ? null : post.getPostImageList().get(0).getPostImageUrl()) // 첫 번째 이미지 URL 가져오기
                 .latestPublicMemberProfileImage(latestImage != null ? latestImage.getMemberImage() : null)
@@ -70,7 +73,7 @@ public class PostConverter {
 
         return PostResponseDto.PostDetailDto.builder()
                 .memberId(post.getMember().getId())
-                .nickname(post.getMember().getNickname())
+                .nickname(getDisplayName(post.getMember()))
                 .age(post.getMember().calculateAge())
                 .gender(post.getMember().getGender())
                 .averageScore(averageScore)

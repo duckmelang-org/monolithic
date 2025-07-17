@@ -8,6 +8,8 @@ import umc.duckmelang.domain.application.domain.MateRelationship;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static umc.duckmelang.domain.member.util.NicknameUtil.getDisplayName;
+
 public class ApplicationConverter {
     public static ApplicationResponseDto.CommonApplicationResponseDto toApplicationStatusChangeResponseDto(Application application) {
         return ApplicationResponseDto.CommonApplicationResponseDto.builder()
@@ -39,7 +41,7 @@ public class ApplicationConverter {
         return ShowApplicationDto.builder()
                 .postId(application.getPost().getId())
                 .postTitle(application.getPost().getTitle())
-                .oppositeNickname(application.getMember().getNickname())
+                .oppositeNickname(getDisplayName(application.getMember()))
                 .applicationCreatedAt(application.getCreatedAt())
                 .applicationStatus(application.getStatus())
                 .build();
