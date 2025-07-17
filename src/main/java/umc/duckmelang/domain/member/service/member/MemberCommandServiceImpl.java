@@ -117,14 +117,14 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public List<Landmine> createLandmines(Long memberId, MemberRequestDto.CreateLandminesDto request) {
         Member member = getMemberOrThrow(memberId);
 
-        if (request.getLandmineContents() == null || request.getLandmineContents().isEmpty()) {
-            return Collections.emptyList();
+        List<Landmine> landmineList = Collections.emptyList();
+        if (request.getLandmineContents() != null && !request.getLandmineContents().isEmpty()) {
+            landmineList = request.getLandmineContents().stream()
+                    .map(content -> MemberConverter.toLandmine(member, content))
+                    .collect(Collectors.toList());
+
+            landmineRepository.saveAll(landmineList);
         }
-
-        List<Landmine> landmineList = request.getLandmineContents().stream()
-                .map(content -> MemberConverter.toLandmine(member, content))
-                .collect(Collectors.toList());
-
         member.completeProfile();
         return landmineRepository.saveAll(landmineList);
     }
