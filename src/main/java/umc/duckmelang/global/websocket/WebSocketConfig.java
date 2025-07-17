@@ -25,4 +25,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 // 추후 특정 도메인만 허용하도록 설정히야 한다.
                 .setAllowedOrigins("*");
     }
+
+
 }
