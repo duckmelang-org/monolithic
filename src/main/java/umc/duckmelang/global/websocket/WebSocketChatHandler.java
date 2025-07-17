@@ -36,13 +36,14 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     // WebSocket 연결에 성공하여 WebSocket을 사용할 준비가 되면 호출되는 메서드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // 성공했다는 로그 메세지를 출력한다.
-        log.info("WebSocket 연결에 성공했습니다. session Id: {}", session.getId());
 
         Long memberId = jwtTokenProvider.getMemberIdFromToken(jwtUtil.extractToken(session));
 
         // 해당 세션을 WebSocket 세션 관리 리스트에 추가한다.
         clientSessions.put(memberId, session);
+
+        // 성공했다는 로그 메세지를 출력한다.
+        log.info("WebSocket 연결에 성공했습니다. session Id: {}", memberId);
 
         // 연결 성공 메세지를 클라이언트에게도 전달한다.
         session.sendMessage(new TextMessage("WebSocket 연결 완료"));
@@ -74,12 +75,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         TextMessage responseMessage = ChatMessageConverter.toTextMessage(savedChatMessage);
 
         // 4. 클라이언트로 응답을 전송한다.
-            // 세션값들을 반복문으로 순회하고, 동일한 아이디가 아니면 메시지를 발신한다.
 
         WebSocketSession counterpart = clientSessions.get(savedChatMessage.getReceiverId());
         try {
             if (counterpart.isOpen()) {
-                session.sendMessage(responseMessage);
+                counterpart.sendMessage(responseMessage);
             } else {
             log.warn("세션이 닫혀 있습니다: receiver Id = {}", savedChatMessage.getReceiverId());
             }
