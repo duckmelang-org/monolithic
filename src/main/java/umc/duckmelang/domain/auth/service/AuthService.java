@@ -54,7 +54,7 @@ public class AuthService {
     public LoginResponse kakaoLogin(KakaoLoginRequest request) {
         String email = kakaoApiClient.getEmailFromAccessToken(request.accessToken());
 
-        Member member = memberRepository.findByLoginId(email)
+        Member member = memberRepository.findByEmail(email)
                 .orElseGet(() -> registerKakaoMember(email));
 
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getRole().name());
@@ -67,7 +67,7 @@ public class AuthService {
     private Member registerKakaoMember(String email) {
         return memberRepository.save(
                 Member.builder()
-                        .loginId(email)
+                        .email(email)
                         .password("") // 소셜 로그인은 비워둠
                         .role(Role.USER)
                         .memberStatus(MemberStatus.ACTIVE)
