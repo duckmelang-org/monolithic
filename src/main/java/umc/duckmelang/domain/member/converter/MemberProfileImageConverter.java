@@ -2,6 +2,7 @@ package umc.duckmelang.domain.member.converter;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.member.dto.profileImage.MemberProfileImageResponseDto;
 
@@ -10,6 +11,15 @@ import java.util.List;
 
 @Component
 public class MemberProfileImageConverter {
+
+    public static MemberProfileImage toMemberProfileImage(Member member, String uuid, String profileImageUrl) {
+        return MemberProfileImage.builder()
+                .member(member)
+                .uuid(uuid)
+                .memberImage(profileImageUrl)
+                .isPublic(true)
+                .build();
+    }
 
     public static MemberProfileImageResponseDto.MemberProfileImageListDto toMemberProfileImageListDto(Page<MemberProfileImage> page) {
 
@@ -32,22 +42,15 @@ public class MemberProfileImageConverter {
         return MemberProfileImageResponseDto.MemberProfileImageDto.builder()
                 .memberProfileImageId(memberProfileImage.getId())
                 .memberProfileImageUrl(memberProfileImage.getMemberImage())
-                .isPublic(memberProfileImage.isPublic())
+                .publicStatus(memberProfileImage.isPublic())
                 .createdAt(memberProfileImage.getCreatedAt())
                 .build();
     }
 
     public static MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto toUpdateProfileImageStatusResultDto(MemberProfileImage updatedMemberProfileImage) {
-        String changedStatus;
-
-        if (updatedMemberProfileImage.isPublic()) {
-            changedStatus = "PUBLIC";
-        } else {
-            changedStatus ="PRIVATE";
-        }
         return MemberProfileImageResponseDto.UpdateProfileImageStatusResultDto.builder()
                 .memberProfileImageId(updatedMemberProfileImage.getId())
-                .changedStatus(changedStatus)
+                .publicStatus(updatedMemberProfileImage.isPublic())
                 .build();
     }
 }
