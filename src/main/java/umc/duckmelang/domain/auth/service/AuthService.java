@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import umc.duckmelang.domain.auth.dto.request.KakaoLoginRequest;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.auth.kakao.KakaoApiClient;
+import umc.duckmelang.domain.bookmark.repository.BookmarkRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
@@ -28,10 +29,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenServiceImpl refreshTokenService;
-    private final MemberRepository memberRepository;
-    private final NotificationRepository notificationRepository;
     private final PasswordEncoder passwordEncoder;
     private final KakaoApiClient kakaoApiClient;
+
+    private final MemberRepository memberRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     // 자체 로그인
     @Transactional
@@ -135,10 +137,19 @@ public class AuthService {
     }
 
     @Transactional
-    public void deleteMember(Long memberId){
+    public void deleteMember(Long memberId) {
         Member member = findMemberOrThrow(memberId);
         member.deleteMember();
-        notificationRepository.deleteAllBySender(member);
-        memberRepository.delete(member);
+
+        // 프로필 이미지 삭제
+        member.getMemberProfileImageList().clear();
+
+        // 좋아하는 아이돌/행사/지뢰키워드 삭제
+        member.getMemberIdolList().clear();
+        member.getMemberEventList().clear();
+        member.getLandmineList().clear();
+
+        // 북마크 삭제
+        bookmarkRepository.deleteAllByMember(member);
     }
 }
