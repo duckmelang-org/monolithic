@@ -5,13 +5,15 @@ import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.mypage.MyPageResponseDto;
 import umc.duckmelang.domain.member.domain.MemberProfileImage;
 
+import static umc.duckmelang.domain.member.util.NicknameUtil.getDisplayName;
+
 @Component
 public class MemberProfileConverter {
 
     public static MyPageResponseDto.MyPagePreviewDto toGetMemberPreviewResponseDto(Member member, MemberProfileImage memberProfileImage) {
         return MyPageResponseDto.MyPagePreviewDto.builder()
                 .memberId(member.getId())
-                .nickname(member.getNickname())
+                .nickname(getDisplayName(member))
                 .gender(member.getGender())
                 .age(member.calculateAge())
                 .latestPublicMemberProfileImage(memberProfileImage.getMemberImage())
@@ -21,7 +23,7 @@ public class MemberProfileConverter {
     public static MyPageResponseDto.MyPageProfileDto toGetProfileResponseDto(Member member, MemberProfileImage memberProfileImage, long postCount, long matchCount) {
         return  MyPageResponseDto.MyPageProfileDto.builder()
                 .memberId(member.getId())
-                .nickname(member.getNickname())
+                .nickname(getDisplayName(member))
                 .gender(member.getGender())
                 .age(member.calculateAge())
                 .latestPublicMemberProfileImage(memberProfileImage.getMemberImage())
