@@ -15,7 +15,6 @@ import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.notification.repository.NotificationRepository;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.TokenException;
 import umc.duckmelang.domain.auth.refreshToken.RefreshTokenServiceImpl;
@@ -33,7 +32,6 @@ public class AuthService {
     private final KakaoApiClient kakaoApiClient;
 
     private final MemberRepository memberRepository;
-    private final BookmarkRepository bookmarkRepository;
 
     // 자체 로그인
     @Transactional
@@ -134,22 +132,5 @@ public class AuthService {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
         member.updatePassword(passwordEncoder.encode(newPassword));
-    }
-
-    @Transactional
-    public void deleteMember(Long memberId) {
-        Member member = findMemberOrThrow(memberId);
-        member.deleteMember();
-
-        // 프로필 이미지 삭제
-        member.getMemberProfileImageList().clear();
-
-        // 좋아하는 아이돌/행사/지뢰키워드 삭제
-        member.getMemberIdolList().clear();
-        member.getMemberEventList().clear();
-        member.getLandmineList().clear();
-
-        // 북마크 삭제
-        bookmarkRepository.deleteAllByMember(member);
     }
 }

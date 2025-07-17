@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import umc.duckmelang.domain.bookmark.repository.BookmarkRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.member.converter.MemberProfileImageConverter;
@@ -19,6 +20,7 @@ import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 import umc.duckmelang.global.aws.AmazonS3Manager;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,6 +28,8 @@ import java.util.UUID;
 public class MemberProfileImageCommandServiceImpl implements MemberProfileImageCommandService {
     private final MemberProfileImageRepository memberProfileImageRepository;
     private final MemberRepository memberRepository;
+    private final BookmarkRepository bookmarkRepository;
+
     private final UuidService uuidService;
     private final AmazonS3Manager s3Manager;
 
@@ -56,6 +60,25 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
         validateProfileImage(profileImage, memberId);
         profileImage.changeStatus(request.isPublicStatus());
         return memberProfileImageRepository.save(profileImage);
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member member = getMemberOrThrow(memberId);
+        member.deleteMember();
+
+        // 디폴트 이미지를 제외한 프로필 이미지 삭제
+        List<MemberProfileImage> toDelete = member.getMemberProfileImageList().stream()
+                .filter(image -> !defaultProfileImage.equals(image.getMemberImage()))
+                .toList();
+
+        toDelete.forEach(image -> memberProfileImageRepository.delete(image));
+
+        member.getMemberIdolList().clear();
+        member.getMemberEventList().clear();
+        member.getLandmineList().clear();
+
+        bookmarkRepository.deleteAllByMember(member);
     }
 
     private Member getMemberOrThrow(Long memberId) {

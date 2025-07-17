@@ -8,4 +8,5 @@ public interface MemberProfileImageCommandService {
     void deleteProfileImage(Long memberId, Long imageId);
     MemberProfileImage updateProfileImageStatus(Long memberId, Long imageId, MemberProfileImageRequestDto.UpdateProfileImageStatusDto request);
     MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage);
+    void deleteMember(Long memberId);
 }
