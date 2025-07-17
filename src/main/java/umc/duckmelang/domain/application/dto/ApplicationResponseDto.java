@@ -35,11 +35,12 @@ public class ApplicationResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ShowApplicationListDto {
-        List<ShowApplicationDto> applicationList;
-        Integer listSize;
-        Integer totalPage;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
+        private List<ShowApplicationDto> applicationList;
+        private Integer listSize;
+        private Integer totalPage;
+        private Long totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
+        private Integer currentPage;
     }
 }

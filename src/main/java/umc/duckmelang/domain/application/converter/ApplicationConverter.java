@@ -34,6 +34,7 @@ public class ApplicationConverter {
                 .totalElements(applications.getTotalElements())
                 .isFirst(applications.isFirst())
                 .isLast(applications.isLast())
+                .currentPage(applications.getNumber())
                 .build();
     }
 
