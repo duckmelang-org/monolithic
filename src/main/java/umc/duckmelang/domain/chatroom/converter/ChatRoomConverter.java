@@ -33,6 +33,7 @@ public class ChatRoomConverter {
                 .listSize(list.size())
                 .totalPage(chatRooms.getTotalPages())
                 .totalElements(chatRooms.getTotalElements())
+                .currentPage(chatRooms.getNumber())
                 .build();
     }
 }
