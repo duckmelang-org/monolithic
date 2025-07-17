@@ -17,10 +17,6 @@ public interface MemberProfileImageRepository extends JpaRepository<MemberProfil
     Page<MemberProfileImage> findAllByMemberIdOrderByCreatedAtDesc(Long memberId, Pageable pageable);
     Page<MemberProfileImage> findAllByIsPublicIsTrueAndMemberIdAndMemberImageNotOrderByCreatedAtDesc(Long memberId, String memberImage, Pageable pageable);
 
-    boolean existsByMemberId(Long memberId);
-    boolean existsByMemberIdAndIsPublicTrue(Long memberId);
-    boolean existsByMemberIdAndMemberImage(Long memberId, String imageUrl);
-
     @Query("SELECT mpi FROM MemberProfileImage mpi WHERE (mpi.member.id, mpi.createdAt) IN " +
             "(SELECT mp.member.id, MAX(mp.createdAt) FROM MemberProfileImage mp WHERE mp.isPublic = true and mp.member.id IN :memberIds GROUP BY mp.member.id)")
     List<MemberProfileImage> findFirstProfileImagesForMembers(@Param("memberIds") List<Long> memberIds);
