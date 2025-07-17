@@ -16,6 +16,8 @@ import umc.duckmelang.domain.auth.dto.response.LoginResponse;
 import umc.duckmelang.domain.auth.dto.response.PhoneNumResponse;
 import umc.duckmelang.domain.auth.service.AuthService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageCommandService;
+import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageCommandServiceImpl;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 @RestController
@@ -24,6 +26,7 @@ import umc.duckmelang.global.apipayload.ApiResponse;
 @Tag(name = "Auth", description = "인증 API")
 public class AuthRestController {
     private final AuthService authService;
+    private final MemberProfileImageCommandService memberProfileImageCommandService;
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "RefreshToken과 AccessToken을 발급합니다.")
@@ -81,7 +84,7 @@ public class AuthRestController {
     @Operation(summary = "회원 탈퇴 API", description = "회원 탈퇴를 처리합니다.")
     @DeleteMapping("/me")
     public ApiResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails){
-        authService.deleteMember(userDetails.getMemberId());
+        memberProfileImageCommandService.deleteMember(userDetails.getMemberId());
         return ApiResponse.onSuccess("성공적으로 탈퇴했습니다.");
     }
 }
