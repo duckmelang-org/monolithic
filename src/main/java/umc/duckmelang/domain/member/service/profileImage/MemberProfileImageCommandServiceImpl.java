@@ -47,6 +47,14 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
         MemberProfileImage profileImage = getProfileImageOrThrow(imageId);
         validateProfileImage(profileImage, memberId);
         memberProfileImageRepository.delete(profileImage);
+
+        boolean hasImages = memberProfileImageRepository.existsByMemberId(memberId);
+        if(!hasImages){
+            Member member = getMemberOrThrow(memberId);
+            String uuid = uuidService.generateUniqueUuidString();
+            MemberProfileImage defaultImage = MemberProfileImageConverter.toMemberProfileImage(member, uuid, defaultProfileImage);
+            memberProfileImageRepository.save(defaultImage);
+        }
     }
 
     @Override
