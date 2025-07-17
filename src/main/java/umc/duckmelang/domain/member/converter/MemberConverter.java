@@ -31,7 +31,6 @@ public class MemberConverter {
     public static MemberSignUpDto.SignupResultDto toSignupResultDto(Member member){
         return MemberSignUpDto.SignupResultDto.builder()
                 .memberId(member.getId())
-                .createdAt(member.getCreatedAt())
                 .profileComplete(member.isProfileComplete())
                 .build();
     }
@@ -71,9 +70,7 @@ public class MemberConverter {
     }
 
     public static MemberResponseDto.SelectEventsResultDto toSelectEventResponseDto(Long memberId, List<MemberEvent> memberEventList) {
-        List<Long> eventCategoryIds = (memberEventList == null || memberEventList.isEmpty())
-                ? List.of()
-                : memberEventList.stream()
+        List<Long> eventCategoryIds = memberEventList.stream()
                 .map(memberEvent -> memberEvent.getEventCategory().getId())
                 .toList();
 
@@ -91,9 +88,7 @@ public class MemberConverter {
     }
 
     public static MemberResponseDto.CreateLandmineResultDto toCreateLandmineResponseDto(Long memberId, List<Landmine> landmineList) {
-        List<String> landmineContents = (landmineList == null || landmineList.isEmpty())
-                ? List.of()
-                : landmineList.stream()
+        List<String> landmineContents = landmineList.stream()
                 .map(Landmine::getContent)
                 .toList();
 

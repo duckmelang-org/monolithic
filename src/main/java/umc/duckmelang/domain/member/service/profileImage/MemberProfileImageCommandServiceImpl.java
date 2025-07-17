@@ -36,31 +36,16 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     public MemberProfileImage createProfileImage(Long memberId, MultipartFile profileImage) {
         Member member = getMemberOrThrow(memberId);
         String uuid = uuidService.generateUniqueUuidString();
+        String profileImageUrl = resolveProfileImageUrl(profileImage, uuid);
 
-        // 프로필 사진을 선택하지 않은 경우, 기본 프로필 사진으로 설정
-        String profileImageUrl;
-        if (profileImage == null || profileImage.isEmpty())
-            profileImageUrl = defaultProfileImage;
-        else profileImageUrl = s3Manager.uploadFile(s3Manager.generateMemberProfileImageKeyName(uuid), profileImage);
-
-        return memberProfileImageRepository.save(
-                MemberProfileImage.builder()
-                        .memberImage(profileImageUrl)
-                        .member(member)
-                        .isPublic(true)
-                        .uuid(uuid)
-                        .build()
-        );
+        return memberProfileImageRepository.save(MemberProfileImageConverter.toMemberProfileImage(member,uuid, profileImageUrl));
     }
 
     @Override
     @Transactional
     public void deleteProfileImage(Long memberId, Long imageId) {
         MemberProfileImage profileImage = getProfileImageOrThrow(imageId);
-        validateMemberOwnership(profileImage, memberId);
-        if (isDefaultProfileImage(profileImage)) {
-            throw new MemberProfileImageException(ErrorStatus.CANNOT_UPDATE_DEFAULT_PROFILE_IMAGE);
-        }
+        validateProfileImage(profileImage, memberId);
         memberProfileImageRepository.delete(profileImage);
     }
 
@@ -68,10 +53,7 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
     @Transactional
     public MemberProfileImage updateProfileImageStatus(Long memberId, Long imageId, MemberProfileImageRequestDto.UpdateProfileImageStatusDto request) {
         MemberProfileImage profileImage = getProfileImageOrThrow(imageId);
-        validateMemberOwnership(profileImage, memberId);
-        if (isDefaultProfileImage(profileImage)) {
-            throw new MemberProfileImageException(ErrorStatus.CANNOT_UPDATE_DEFAULT_PROFILE_IMAGE);
-        }
+        validateProfileImage(profileImage, memberId);
         profileImage.changeStatus(request.isPublicStatus());
         return memberProfileImageRepository.save(profileImage);
     }
@@ -94,5 +76,22 @@ public class MemberProfileImageCommandServiceImpl implements MemberProfileImageC
 
     private boolean isDefaultProfileImage(MemberProfileImage profileImage) {
         return profileImage.getMemberImage().equals(defaultProfileImage);
+    }
+
+    private void validateProfileImage(MemberProfileImage profileImage, Long memberId){
+        validateMemberOwnership(profileImage, memberId);
+        if (isDefaultProfileImage(profileImage)) {
+            throw new MemberProfileImageException(ErrorStatus.CANNOT_UPDATE_DEFAULT_PROFILE_IMAGE);
+        }
+    }
+
+    private String resolveProfileImageUrl(MultipartFile profileImage, String uuid) {
+        if (profileImage == null || profileImage.isEmpty()) {
+            return defaultProfileImage;
+        }
+        return s3Manager.uploadFile(
+                s3Manager.generateMemberProfileImageKeyName(uuid),
+                profileImage
+        );
     }
 }

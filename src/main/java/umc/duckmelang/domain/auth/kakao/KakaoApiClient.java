@@ -1,4 +1,5 @@
 package umc.duckmelang.domain.auth.kakao;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,7 +20,11 @@ public class KakaoApiClient {
                 .block();
     }
 
-    private record KakaoEmailResponse(KakaoAccount kakaoAccount) {
-        private record KakaoAccount(String email) {}
+    private record KakaoEmailResponse(
+            @JsonProperty("kakao_account") KakaoAccount kakaoAccount
+    ) {
+        private record KakaoAccount(
+                String email
+        ) {}
     }
 }

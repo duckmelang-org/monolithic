@@ -12,6 +12,6 @@ public class MemberProfileImageRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UpdateProfileImageStatusDto{
-        private boolean publicStatus;
+        boolean publicStatus;
     }
 }
