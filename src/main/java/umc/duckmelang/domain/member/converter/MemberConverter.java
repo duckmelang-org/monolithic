@@ -31,6 +31,7 @@ public class MemberConverter {
     public static MemberSignUpDto.SignupResultDto toSignupResultDto(Member member){
         return MemberSignUpDto.SignupResultDto.builder()
                 .memberId(member.getId())
+                .createdAt(member.getCreatedAt())
                 .profileComplete(member.isProfileComplete())
                 .build();
     }
