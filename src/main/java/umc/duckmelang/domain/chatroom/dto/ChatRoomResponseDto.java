@@ -22,6 +22,7 @@ public class ChatRoomResponseDto {
         private Long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
+        private Integer currentPage;
     }
 
     @Getter

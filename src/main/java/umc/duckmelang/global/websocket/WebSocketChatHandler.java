@@ -9,6 +9,8 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import umc.duckmelang.domain.auth.jwt.JwtTokenProvider;
+import umc.duckmelang.domain.auth.jwt.JwtUtil;
 import umc.duckmelang.mongo.chatmessage.converter.ChatMessageConverter;
 import umc.duckmelang.mongo.chatmessage.domain.ChatMessage;
 import umc.duckmelang.mongo.chatmessage.dto.ChatMessageRequestDto;
@@ -24,19 +26,24 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
     private final ChatMessageCommandService chatMessageCommandService;
     private final ObjectMapper objectMapper;
+    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // WebSocket 세션 관리 리스트
-    private final ConcurrentHashMap<String, WebSocketSession> clientSessions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, WebSocketSession> clientSessions = new ConcurrentHashMap<>();
 
 
     // WebSocket 연결에 성공하여 WebSocket을 사용할 준비가 되면 호출되는 메서드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // 성공했다는 로그 메세지를 출력한다.
-        log.info("WebSocket 연결에 성공했습니다. session Id: {}", session.getId());
+
+        Long memberId = jwtTokenProvider.getMemberIdFromToken(jwtUtil.extractToken(session));
 
         // 해당 세션을 WebSocket 세션 관리 리스트에 추가한다.
-        clientSessions.put(session.getId(), session);  //session.getId()는 각 세션의 고유 ID를 출력한다.
+        clientSessions.put(memberId, session);
+
+        // 성공했다는 로그 메세지를 출력한다.
+        log.info("WebSocket 연결에 성공했습니다. session Id: {}", memberId);
 
         // 연결 성공 메세지를 클라이언트에게도 전달한다.
         session.sendMessage(new TextMessage("WebSocket 연결 완료"));
@@ -68,23 +75,18 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         TextMessage responseMessage = ChatMessageConverter.toTextMessage(savedChatMessage);
 
         // 4. 클라이언트로 응답을 전송한다.
-            // 세션값들을 반복문으로 순회하고, 동일한 아이디가 아니면 메시지를 발신한다.
-        clientSessions.forEach((key, value) -> {
-            log.info("key :: {}  value :: {}", key, value);       // key-value 확인용 로그
 
-            if (!key.equals(session.getId())) {  // 현재 세션과 다른 세션에만 메시지 전송 (현재 메시지를 보낸 클라이언트를 제외한 나머지 클라이언트들에게만 메시지를 전송)
-                try {
-                    // 세션이 열려 있는지 확인
-                    if (value.isOpen()) {
-                        value.sendMessage(message);
-                    } else {
-                        log.warn("세션이 닫혀 있습니다: session Id = {}", key);
-                    }
-                } catch (IOException e) {
-                    log.error("메시지 전송 오류: session Id = {}", key, e);
-                }
+        WebSocketSession counterpart = clientSessions.get(savedChatMessage.getReceiverId());
+        try {
+            if (counterpart.isOpen()) {
+                counterpart.sendMessage(responseMessage);
+            } else {
+            log.warn("세션이 닫혀 있습니다: receiver Id = {}", savedChatMessage.getReceiverId());
             }
-        });
+            }
+        catch (IOException e) {
+            log.error("메시지 전송 오류: sender Id = {}", savedChatMessage.getSenderId());
+        }
     }
 
 
@@ -92,10 +94,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         // 연결이 종료되었다는 로그 메세지를 출력한다.
-        log.info("WebSocket 연결이 종료되었습니다. session Id: {}", session.getId());
+        Long memberId = jwtTokenProvider.getMemberIdFromToken(jwtUtil.extractToken(session));
+        log.info("WebSocket 연결이 종료되었습니다. sender Id: {}", memberId);
 
         // 해당 세션을 WebSocket 세션 관리 리스트에서 제거한다.
-        clientSessions.remove(session.getId());
+        clientSessions.remove(memberId);
     }
 
 

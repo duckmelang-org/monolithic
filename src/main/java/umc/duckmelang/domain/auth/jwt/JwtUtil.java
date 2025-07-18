@@ -9,10 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.socket.WebSocketSession;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.TokenException;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.auth.user.CustomUserDetailsService;
+import java.util.List;
 
 /**
  * JWT를 검증하고 사용자 인증 객체 생성
@@ -49,6 +51,19 @@ public class JwtUtil {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    // 웹소켓 세션에서 Bearer 토큰 추출
+    public String extractToken(WebSocketSession session) {
+        List<String> authHeaders = session.getHandshakeHeaders().get("Authorization");
+
+        if (authHeaders != null && !authHeaders.isEmpty()) {
+            String bearerToken = authHeaders.get(0);
+            if (bearerToken.startsWith("Bearer ")) {
+                return bearerToken.substring(7);
+            }
         }
         return null;
     }
