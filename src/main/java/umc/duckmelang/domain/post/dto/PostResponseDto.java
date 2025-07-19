@@ -54,6 +54,7 @@ public class PostResponseDto {
         private Integer bookmarkCount;
         private Integer viewCount;
         private Integer chatCount;
+        private Long chatRoomId;
         private String title;
         private String content;
         private Short wanted;

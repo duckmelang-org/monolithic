@@ -66,8 +66,8 @@ public class PostRestController {
     @Operation(summary = "게시글 상세 - 조회 API", description = "홈화면에서 게시글 1개 클릭시 자세히 보여주는 API입니다. wanted가 0이면 종료, 1이면 진행 중입니다. 채팅수 조회 추가 완료")
     @GetMapping("/{postId}")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostDetailDto> getPostDetail (@ExistPost @PathVariable(name="postId") Long postId){
-        return ApiResponse.onSuccess(postFacadeService.getPostDetail(postId));
+    public ApiResponse<PostResponseDto.PostDetailDto> getPostDetail (@AuthenticationPrincipal CustomUserDetails userDetails, @ExistPost @PathVariable(name="postId") Long postId){
+        return ApiResponse.onSuccess(postFacadeService.getPostDetail(postId, userDetails.getMemberId()));
     }
 
     @Operation(summary = "게시글 작성 - API", description = "게시글 쓰기 API입니다. 최대 5개의 이미지 업로드 가능")
