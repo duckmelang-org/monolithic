@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.post.facade;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.bookmark.service.BookmarkQueryService;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class PostFacadeService {
     private final PostQueryService postQueryService;
     private final ReviewQueryService reviewQueryService;
@@ -36,8 +38,6 @@ public class PostFacadeService {
         Post post = postQueryService.getPostDetail(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다"));
 
-        Member member = memberRepository.findById(memberId).orElse(null);
-
         List<Review> reviewList = Optional.ofNullable(reviewQueryService.getReviewList(post.getMember().getId()))
                 .orElse(Collections.emptyList());
 
@@ -45,9 +45,12 @@ public class PostFacadeService {
         Integer bookmarkCount = bookmarkQueryService.getBookmarkCount(postId);
         Integer chatCount = chatRoomQueryService.getChatRoomCount(postId);
 
+        Member member = memberRepository.findById(memberId).orElse(null);
+
         ChatRoom chatRoom = null;
-        if (member != null && !Objects.equals(post.getMember(), member))
+        if (member != null && !Objects.equals(post.getMember().getId(), member.getId())) {
             chatRoom = chatRoomRepository.findByPostIdAndOtherMemberId(post.getId(), member.getId()).orElse(null);
+        }
 
         Long chatRoomId = chatRoom != null ? chatRoom.getId() : null;
 

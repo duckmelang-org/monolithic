@@ -95,10 +95,15 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
             review = reviewRepository.findSentReviewToSpecificApplication(memberId, application.getId()).orElse(null);
 
         Member member = null;
-        if (Objects.equals(chatRoom.getPost().getMember().getId(), memberId))
+        Member opposite = null;
+        if (Objects.equals(chatRoom.getPost().getMember().getId(), memberId)){
             member = chatRoom.getOtherMember();
-        else if (Objects.equals(chatRoom.getOtherMember().getId(), memberId))
+            opposite = chatRoom.getPost().getMember();
+        }
+        else if (Objects.equals(chatRoom.getOtherMember().getId(), memberId)){
+            opposite = chatRoom.getOtherMember();
             member = chatRoom.getPost().getMember();
+        }
         else throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
 
         MemberProfileImage memberProfileImage = memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(member.getId()).orElse(null);
@@ -106,13 +111,13 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
 
         return ChatRoomResponseDto.ChatRoomDetailDto.builder()
                 .myId(memberId)
-                .oppositeId(member.getId())
-                .oppositeNickname(member.getNickname())
+                .oppositeId(opposite.getId())
+                .oppositeNickname(opposite.getNickname())
                 .oppositeProfileImage(memberProfileImage != null ? memberProfileImage.getMemberImage() : "")
                 .postId(chatRoom.getPost().getId())
                 .postTitle(chatRoom.getPost().getTitle())
                 .postImage(postImage != null ? postImage.getPostImageUrl() : "")
-                .isPostOwner(member==chatRoom.getPost().getMember())
+                .isPostOwner(Objects.equals(memberId, chatRoom.getPost().getMember().getId()))
                 .chatRoomStatus(chatRoom.getChatRoomStatus())
                 .applicationStatus(application!=null ? application.getStatus() : null)
                 .applicationId(application != null ? application.getId() : -1)
