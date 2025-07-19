@@ -10,6 +10,7 @@ import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.uuid.service.UuidService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.ChatRoomException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,29 +36,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatMessageCommandServiceImpl implements ChatMessageCommandService {
 
-    private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomCommandService chatRoomCommandService;
-    private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
     private final AmazonS3Manager s3Manager;
     private final UuidService uuidService;
+    private final ChatRoomRepository chatRoomRepository;
 
 
     @Override
     @Transactional
     public ChatMessage processMessage(ChatMessageRequestDto.@Valid CreateChatMessageDto request){
         // 1. 채팅방이 있는지 조회하고, 없으면 생성한다.
-        Post post = postRepository.findById(request.getPostId()).orElseThrow(()->new PostException(ErrorStatus.POST_NOT_FOUND));
-        Member otherMember = memberRepository.findById(request.getReceiverId()).orElseThrow(()->new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-        Member member = memberRepository.findById(request.getSenderId()).orElseThrow(()->new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
-        ChatRoom chatRoom = chatRoomRepository.findByPostIdAndOtherMemberId(request.getPostId(), request.getReceiverId())
-                .or(() -> chatRoomRepository.findByPostIdAndOtherMemberId(request.getPostId(), request.getSenderId()))
-                .orElseGet(() -> {
-                    ChatRoom newChatRoom = ChatRoomConverter.toChatRoom(request, post, otherMember);
-                    return chatRoomRepository.save(newChatRoom); // 채팅방 생성 후 DB에 저장
-                });
+        ChatRoom chatRoom;
+        if (request.getChatRoomId()==null)
+            chatRoom = chatRoomCommandService.createChatRoom(request);
+        else chatRoom = chatRoomRepository.findById(request.getChatRoomId()).orElseThrow(()-> new ChatRoomException(ErrorStatus.CHATROOM_NOT_FOUND));
 
         // 2. 메세지 타입에 따라 로직 분기
         ChatMessage newChatMessage;
