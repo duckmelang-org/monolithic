@@ -61,7 +61,7 @@ public class ChatRoomRestController {
 
     @GetMapping("/{chatRoomId}")
     @CommonApiResponses
-    @Operation(summary = "채팅방 세부 내역 조회(채팅 메세지 조회 별도)",description = "채팅 메세지 조회 api : \"/chat/{chatRoomId}/messages\"\n chatRoomStatus, applicationStatus, hasReviewed, postOwner이 화면 플래그입니다")
+    @Operation(summary = "채팅방 세부 내역 조회(채팅 메세지 조회 별도)",description = "채팅 메세지 조회 api : \"/chat/{chatRoomId}/messages\"\n chatRoomStatus, applicationStatus, hasReviewed, postOwner이 화면 플래그입니다. 동행 요청을 하지 않은 상태라면 chatRoomStatus는 null입니다.")
     public ApiResponse<ChatRoomResponseDto.ChatRoomDetailDto> getChatRoomItemList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                     @RequestParam Long chatRoomId){
         return ApiResponse.onSuccess(chatRoomQueryService.findChatRoomDetail(userDetails.getMemberId(), chatRoomId));
