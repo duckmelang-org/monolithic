@@ -12,7 +12,6 @@ import umc.duckmelang.domain.notification.service.notification.NotificationComma
 import umc.duckmelang.domain.notification.service.notificationsetting.NotificationSettingQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 
 import java.util.Optional;
 
@@ -31,18 +30,18 @@ public class NotificationHelper {
             return; // 알림 설정이 꺼져 있으면 바로 종료
         }
 
-        // 프로필 이미지 가져오기
-        Optional<MemberProfileImage> profileImageOptional = memberProfileImageQueryService.getLatestPublicMemberProfileImage(senderId);
-        String profileImageUrl = profileImageOptional
-                .map(MemberProfileImage::getMemberImage)  // memberImage 필드를 가져옴
-                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
-
         // 발신자, 수신자 조회
         Member sender = memberRepository.findById(senderId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Member receiver = memberRepository.findById(receiverId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 프로필 이미지 가져오기
+        Optional<MemberProfileImage> profileImageOptional = memberProfileImageQueryService.getLatestPublicMemberProfileImage(senderId);
+        String profileImageUrl = profileImageOptional
+                .map(MemberProfileImage::getMemberImage)  // memberImage 필드를 가져옴
+                .orElse(MemberProfileImage.createDefault(sender).getMemberImage());
 
         notificationCommandService.send(receiver, sender, type, message, profileImageUrl);
 

@@ -10,8 +10,8 @@ import umc.duckmelang.domain.post.domain.PostImage;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
 import umc.duckmelang.domain.post.repository.PostImageRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.PostImageException;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
@@ -29,7 +29,10 @@ public class PostImageQueryServiceImpl implements PostImageQueryService {
     @Override
     public PostThumbnailResponseDto getLatestPostImage(Long postId) {
         return PostConverter.toPostThumbnailResponseDto(postImageRepository.findFirstByPostIdOrderByCreatedAtAsc(postId)
-                .orElseThrow(() -> new PostImageException(ErrorStatus.POST_IMAGE_NOT_FOUND)));
+                .orElseGet(() -> PostImage.builder()
+                        .postImageUrl(defaultImage)
+                        .createdAt(LocalDateTime.now())
+                        .build()));
     }
 
     //프로필에서 대표로 보일 이미지 조회

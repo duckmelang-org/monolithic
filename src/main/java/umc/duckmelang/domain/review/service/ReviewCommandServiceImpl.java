@@ -15,7 +15,6 @@ import umc.duckmelang.domain.review.repository.ReviewRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 import umc.duckmelang.global.apipayload.exception.ReviewException;
 
 import java.util.Optional;

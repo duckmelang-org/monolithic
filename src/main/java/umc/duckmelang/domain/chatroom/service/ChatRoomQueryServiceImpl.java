@@ -97,12 +97,12 @@ public class ChatRoomQueryServiceImpl implements ChatRoomQueryService {
         Member member = null;
         Member opposite = null;
         if (Objects.equals(chatRoom.getPost().getMember().getId(), memberId)){
-            member = chatRoom.getOtherMember();
-            opposite = chatRoom.getPost().getMember();
+            member = chatRoom.getPost().getMember();
+            opposite = chatRoom.getOtherMember();
         }
         else if (Objects.equals(chatRoom.getOtherMember().getId(), memberId)){
-            opposite = chatRoom.getOtherMember();
-            member = chatRoom.getPost().getMember();
+            member = chatRoom.getOtherMember();
+            opposite = chatRoom.getPost().getMember();
         }
         else throw new MemberException(ErrorStatus.UNAUTHORIZED_MEMBER);
 
