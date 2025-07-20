@@ -8,6 +8,7 @@ import umc.duckmelang.global.common.BaseEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @SuperBuilder
 public class NotificationSetting extends BaseEntity {
 
