@@ -79,11 +79,16 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     public List<MemberIdol> selectIdols(Long memberId, MemberRequestDto.SelectIdolsDto request) {
         Member member = getMemberOrThrow(memberId);
 
+        // 유효한 idolCategory 검증
         List<IdolCategory> idolCategoryList = idolCategoryRepository.findAllById(request.getIdolCategoryIds());
         if (idolCategoryList.size() != request.getIdolCategoryIds().size()) {
             throw new IdolCategoryException(ErrorStatus.INVALID_IDOL_CATEGORY);
         }
 
+        // 기존에 등록한 idolCategory 삭제
+        memberIdolRepository.deleteAllByMember(member);
+
+        // 새롭게 저장
         List<MemberIdol> memberIdolList = idolCategoryList.stream()
                 .map(idolCategory -> MemberConverter.toMemberIdol(member, idolCategory))
                 .toList();
