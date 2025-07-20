@@ -12,7 +12,6 @@ import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +21,8 @@ public class MyPageQueryServiceImpl implements MyPageQueryService{
 
     public MyPageResponseDto.MyPageProfileEditBeforeDto getMemberProfileBeforeEdit(Long memberId){
         Member member = findMemberOrThrow(memberId);
-        MemberProfileImage profileImage = getLatestProfileImageOrThrow(memberId);
+        MemberProfileImage profileImage = memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
+                .orElse(MemberProfileImage.createDefault(member));
         return MemberProfileConverter.toMemberProfileEditBeforeDto(member, profileImage);
     }
 
@@ -33,10 +33,5 @@ public class MyPageQueryServiceImpl implements MyPageQueryService{
 
     private Member findMemberOrThrow(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-    }
-
-    private MemberProfileImage getLatestProfileImageOrThrow(Long memberId) {
-        return memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
-                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
     }
 }

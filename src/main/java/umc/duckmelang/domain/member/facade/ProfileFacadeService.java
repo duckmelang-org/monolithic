@@ -13,7 +13,6 @@ import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQuery
 import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.apipayload.exception.MemberProfileImageException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,8 @@ public class ProfileFacadeService {
     @Transactional(readOnly = true)
     public MyPageResponseDto.MyPagePreviewDto getMyPageMemberPreview(Long memberId) {
         Member member = getMemberOrThrow(memberId);
-        MemberProfileImage profileImage = getLatestPublicProfileImageOrThrow(memberId);
+        MemberProfileImage profileImage = memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
+                .orElse(MemberProfileImage.createDefault(member));
 
         return MemberProfileConverter.toGetMemberPreviewResponseDto(member, profileImage);
     }
@@ -34,7 +34,8 @@ public class ProfileFacadeService {
     @Transactional(readOnly = true)
     public MyPageResponseDto.MyPageProfileDto getProfileByMemberId(Long memberId) {
         Member member = getMemberOrThrow(memberId);
-        MemberProfileImage profileImage = getLatestPublicProfileImageOrThrow(memberId);
+        MemberProfileImage profileImage = memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
+                .orElse(MemberProfileImage.createDefault(member));
 
         // 포스트 수 조회
         int postCount = postQueryService.getPostCount(memberId);
@@ -49,8 +50,4 @@ public class ProfileFacadeService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 
-    private MemberProfileImage getLatestPublicProfileImageOrThrow(Long memberId) {
-        return memberProfileImageQueryService.getLatestPublicMemberProfileImage(memberId)
-                .orElseThrow(() -> new MemberProfileImageException(ErrorStatus.MEMBER_PROFILE_IMAGE_NOT_FOUND));
-    }
 }
