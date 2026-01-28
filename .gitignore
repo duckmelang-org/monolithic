@@ -4,11 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-!**/src/test/java/umc/duckmelang/domain/review/*
-!**/src/test/java/umc/duckmelang/domain/member/*
-src/main/resources/application-local.yml
-src/main/resources/application-dev.yml
-src/main/resources/application-prod.yml
+
 ### STS ###
 .apt_generated
 .classpath

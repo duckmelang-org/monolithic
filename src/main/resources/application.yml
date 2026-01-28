@@ -17,6 +17,6 @@ spring:
       root: DEBUG
 
 jwt:
-  secret-key: "duckmelangduckmelangduckmelangduckmelangduckmelang"
-  access-expiration: 3600000     # 1시간
-  refresh-expiration: 604800000  # 7일
+  secret-key: ${SECRET_KEY}
+  access-expiration: ${ACCESS_EXPIRATION}
+  refresh-expiration: ${REFRESH_EXPIRATION}
