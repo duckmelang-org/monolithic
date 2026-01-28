@@ -3,10 +3,8 @@ package umc.duckmelang.domain.member.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import umc.duckmelang.domain.member.domain.enums.Role;
+import umc.duckmelang.domain.member.domain.type.Role;
 import umc.duckmelang.global.common.BaseEntity;
-
-import java.util.*;
 
 @Entity
 @Getter

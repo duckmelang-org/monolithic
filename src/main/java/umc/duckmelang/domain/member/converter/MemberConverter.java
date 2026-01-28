@@ -2,7 +2,7 @@ package umc.duckmelang.domain.member.converter;
 
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.domain.enums.Role;
+import umc.duckmelang.domain.member.domain.type.Role;
 import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
 
 @Component
