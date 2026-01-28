@@ -9,7 +9,6 @@ import umc.duckmelang.domain.application.domain.MateRelationship;
 import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.domain.enums.MemberStatus;
 import umc.duckmelang.domain.member.domain.enums.Role;
-import umc.duckmelang.domain.notification.domain.NotificationSetting;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.report.domain.Report;
 import umc.duckmelang.domain.review.domain.Review;
@@ -122,11 +121,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "otherMember", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
-    //notificationSetting
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "notification_setting_id")
-    private NotificationSetting notificationSetting;
-
     // === 도메인 메서드 === //
     public void updateProfile(String nickname, LocalDate birth, Gender gender){
         this.nickname = nickname;
@@ -142,7 +136,6 @@ public class Member extends BaseEntity {
         this.loginId = "deleted_loginId_" + UUID.randomUUID().toString().substring(0, 8);;
         this.phoneNum = null;
         this.introduction = null;
-        this.notificationSetting = null;
     }
 
     public void completeProfile(){

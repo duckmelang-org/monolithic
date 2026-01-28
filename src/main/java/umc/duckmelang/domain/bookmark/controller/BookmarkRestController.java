@@ -13,7 +13,6 @@ import umc.duckmelang.domain.bookmark.dto.BookmarkResponseDto;
 import umc.duckmelang.domain.bookmark.service.BookmarkCommandService;
 import umc.duckmelang.domain.bookmark.service.BookmarkQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
@@ -29,7 +28,7 @@ public class BookmarkRestController {
     @GetMapping("/bookmarks")
     @CommonApiResponses
     @Operation(summary = "나의 동행 페이지 - 스크랩 내역 조회 API", description = "개인 스크랩 내역 조회 API입니다. responseBody 형태가 바뀌었으니 확인 부탁드립니다")
-    public ApiResponse<BookmarkResponseDto.BookmarkPreviewListDto> getBookmarks(@AuthenticationPrincipal CustomUserDetails userDetails, @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
+    public ApiResponse<BookmarkResponseDto.BookmarkPreviewListDto> getBookmarks(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         Page<Bookmark> postList = bookmarkQueryService.getBookmarks(userDetails.getMemberId(), page);
         return ApiResponse.onSuccess(BookmarkConverter.bookmarkPreviewListDto(postList));
     }

@@ -15,7 +15,6 @@ import umc.duckmelang.domain.member.domain.enums.Gender;
 import umc.duckmelang.domain.member.dto.member.MemberFilterDto;
 import umc.duckmelang.domain.member.service.mypage.MyPageQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.global.validation.annotation.ExistIdol;
 import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostRequestDto;
@@ -23,8 +22,6 @@ import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.facade.PostFacadeService;
 import umc.duckmelang.domain.post.service.post.PostCommandService;
 import umc.duckmelang.domain.post.service.post.PostQueryService;
-import umc.duckmelang.global.validation.annotation.ExistPost;
-import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.global.apipayload.annotations.CommonApiResponses;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
@@ -45,7 +42,7 @@ public class PostRestController {
             "여기서 말하는 조건은 사용자가 설정하는 필터링 조건과 지뢰 설정에 해당합니다.")
     @GetMapping("")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostList (@ValidPageNumber @RequestParam(name = "page", defaultValue = "0") Integer page,
+    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostList ( @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                         @AuthenticationPrincipal CustomUserDetails userDetails){
         MemberFilterDto.FilterResponseDto userFilter = myPageQueryService.getMemberFilter(userDetails.getMemberId());
         return ApiResponse.onSuccess(postQueryService.getFilteredPostList(page, userFilter.getGender(), userFilter.getMinAge(), userFilter.getMaxAge(), userDetails.getMemberId()));
@@ -55,8 +52,8 @@ public class PostRestController {
             "사용자가 설정한 필터링 조건과 지뢰를 통해 게시글을 조회할 수 있도록 설정했습니다.")
     @GetMapping("/idols/{idolId}")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostListByIdol (@ExistIdol @PathVariable Long idolId,
-                                                                              @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page,
+    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostListByIdol ( @PathVariable Long idolId,
+                                                                               @RequestParam(name = "page",  defaultValue = "0") Integer page,
                                                                               @AuthenticationPrincipal CustomUserDetails userDetails){
         MemberFilterDto.FilterResponseDto userFilter = myPageQueryService.getMemberFilter(userDetails.getMemberId());
         Page<Post> postList = postQueryService.getFilteredPostListByIdol(idolId, userFilter.getGender(), userFilter.getMinAge(), userFilter.getMaxAge(), page, userDetails.getMemberId());
@@ -66,7 +63,7 @@ public class PostRestController {
     @Operation(summary = "게시글 상세 - 조회 API", description = "홈화면에서 게시글 1개 클릭시 자세히 보여주는 API입니다. wanted가 0이면 종료, 1이면 진행 중입니다. 채팅수 조회 추가 완료. chatroom id는 해당 게시글에 채팅 메시지를 보낸 적이 없는 사용자나, 게시글을 작성한 사용자의 경우 null입니다.")
     @GetMapping("/{postId}")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostDetailDto> getPostDetail (@AuthenticationPrincipal CustomUserDetails userDetails, @ExistPost @PathVariable(name="postId") Long postId){
+    public ApiResponse<PostResponseDto.PostDetailDto> getPostDetail (@AuthenticationPrincipal CustomUserDetails userDetails,  @PathVariable(name="postId") Long postId){
         return ApiResponse.onSuccess(postFacadeService.getPostDetail(postId, userDetails.getMemberId()));
     }
 
@@ -81,7 +78,7 @@ public class PostRestController {
     @Operation(summary = "게시글 수정 - API", description = "게시글 수정하는 API입니다.")
     @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostJoinResultDto> patchPost (@ExistPost @PathVariable(name="postId") Long postId, @RequestPart @Valid PostRequestDto.PostJoinDto request,
+    public ApiResponse<PostResponseDto.PostJoinResultDto> patchPost ( @PathVariable(name="postId") Long postId, @RequestPart @Valid PostRequestDto.PostJoinDto request,
                                                                      @RequestPart(value = "images", required = false) List<MultipartFile> images){
         Post post = postCommandService.patchPost(postId, request, images);
         return ApiResponse.onSuccess(PostConverter.postJoinResultDto(post));
@@ -90,7 +87,7 @@ public class PostRestController {
     @Operation(summary = "게시글 삭제 - API", description = "게시글을 삭제하는 API입니다. 기능은 피드 관리 - 피드 목록 삭제 API 와 같음. 게시글 상세에서 삭제하고 싶을까봐 만들어놓음(삭제해도 무방)")
     @DeleteMapping("/{postId}")
     @CommonApiResponses
-    public ApiResponse<String>deletePost(@ExistPost @PathVariable(name="postId") Long postId){
+    public ApiResponse<String>deletePost( @PathVariable(name="postId") Long postId){
         postCommandService.deleteMyPost(postId);
         return ApiResponse.onSuccess("게시글을 성공적으로 삭제했습니다.");
     }
@@ -100,7 +97,7 @@ public class PostRestController {
             "필터 값(gender, minAge, maxAge)은 각각 선택적으로 적용되며, 요청 시 지정하지 않으면 전체 검색이 가능합니다.")
     @GetMapping("/search")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostListByTitle (@ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page,
+    public ApiResponse<PostResponseDto.PostPreviewListDto> getPostListByTitle ( @RequestParam(name = "page",  defaultValue = "0") Integer page,
                                                                                @AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                @RequestParam(name="searchKeyword") String searchKeyword,
                                                                                @RequestParam(name="gender", required = false) Gender gender,
@@ -113,7 +110,7 @@ public class PostRestController {
     @Operation(summary = "게시글 상세 - 게시글 상태 변경 API", description = "모집 중은 wanted가 1, 모집 완료는 0입니다.")
     @PatchMapping("/{postId}/status")
     @CommonApiResponses
-    public ApiResponse<PostResponseDto.PostStatusDto> patchPostStatus(@ExistPost @PathVariable("postId") Long postId, @RequestParam("wanted") Short wanted){
+    public ApiResponse<PostResponseDto.PostStatusDto> patchPostStatus( @PathVariable("postId") Long postId, @RequestParam("wanted") Short wanted){
         Post post = postCommandService.patchPostStatus(postId, wanted);
         return ApiResponse.onSuccess(PostConverter.postStatusDto(post));
     }

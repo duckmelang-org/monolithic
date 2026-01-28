@@ -16,8 +16,6 @@ import umc.duckmelang.domain.report.dto.ReportRequestDto;
 import umc.duckmelang.domain.report.repository.*;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.repository.ReviewRepository;
-import umc.duckmelang.global.validation.annotation.ExistsMember;
-
 import java.util.*;
 
 @Service
@@ -32,7 +30,7 @@ public class ReportCommandServiceImpl implements ReportCommandService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public void report(@ExistsMember Long memberId, ReportRequestDto.reportDto dto) {
+    public void report( Long memberId, ReportRequestDto.reportDto dto) {
         Member member = memberRepository.findById(memberId).get();
         switch(dto.getDType()){
             case ReportType.Values.CHAT : reportChat(member,dto); break;

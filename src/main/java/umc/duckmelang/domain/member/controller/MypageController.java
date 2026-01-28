@@ -25,8 +25,6 @@ import umc.duckmelang.domain.post.dto.PostResponseDto;
 import umc.duckmelang.domain.post.service.post.PostCommandService;
 import umc.duckmelang.domain.post.service.post.PostQueryService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.global.validation.annotation.ExistPost;
-import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 import umc.duckmelang.domain.review.converter.ReviewConverter;
 import umc.duckmelang.domain.review.domain.Review;
 import umc.duckmelang.domain.review.dto.ReviewResponseDto;
@@ -72,7 +70,7 @@ public class MypageController {
 
     @GetMapping("/posts")
     @Operation(summary = "마이페이지 - 내가 업로드한 게시글들 조회 API & 피드 관리 - 내 피드 목록 조회", description = "내 프로필에서 '업로드한 게시글 조회'와 피드 관리에서 '내 피드 목록' 조회에 사용되는 API입니다.")
-    ApiResponse<PostResponseDto.PostPreviewListDto> getMyPostList(@AuthenticationPrincipal CustomUserDetails userDetails, @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
+    ApiResponse<PostResponseDto.PostPreviewListDto> getMyPostList(@AuthenticationPrincipal CustomUserDetails userDetails,  @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         Page<Post> postList = postQueryService.getPostListByMember(userDetails.getMemberId(), page);
         return ApiResponse.onSuccess(PostConverter.postPreviewListDto(postList));
     }
@@ -99,7 +97,7 @@ public class MypageController {
 
     @Operation(summary = "피드 관리 - 피드 목록 삭제 API", description = "내 피드 목록을 삭제하는 API입니다.")
     @DeleteMapping("/posts/{postId}")
-    public ApiResponse<String> deleteMyPost(@ExistPost @PathVariable("postId") Long postId){
+    public ApiResponse<String> deleteMyPost( @PathVariable("postId") Long postId){
         postCommandService.deleteMyPost(postId);
         return ApiResponse.onSuccess("피드를 성공적으로 삭제했습니다.");
     }

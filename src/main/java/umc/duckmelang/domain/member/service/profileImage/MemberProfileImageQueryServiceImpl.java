@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.global.validation.annotation.ExistsMember;
 import umc.duckmelang.domain.member.domain.MemberProfileImage;
 import umc.duckmelang.domain.member.repository.MemberProfileImageRepository;
 
@@ -30,18 +29,18 @@ public class MemberProfileImageQueryServiceImpl implements MemberProfileImageQue
      */
     @Override
     @Transactional
-    public Optional<MemberProfileImage> getLatestPublicMemberProfileImage(@ExistsMember Long memberId) {
+    public Optional<MemberProfileImage> getLatestPublicMemberProfileImage( Long memberId) {
         return memberProfileImageRepository.findFirstByMemberIdAndIsPublicTrueOrderByCreatedAtDesc(memberId);
     }
 
     @Override
     @Transactional
-    public Page<MemberProfileImage> getAllMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
+    public Page<MemberProfileImage> getAllMemberProfileImageByMemberId( Long memberId, Integer page) {
         return memberProfileImageRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId, PageRequest.of(page,10));
     }
 
     @Override
-    public Page<MemberProfileImage> getPublicMemberProfileImageByMemberId(@ExistsMember Long memberId, Integer page) {
+    public Page<MemberProfileImage> getPublicMemberProfileImageByMemberId( Long memberId, Integer page) {
         return memberProfileImageRepository.findAllByIsPublicIsTrueAndMemberIdAndMemberImageNotOrderByCreatedAtDesc(memberId, defaultProfileImage, PageRequest.of(page,10));
     }
 

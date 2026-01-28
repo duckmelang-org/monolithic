@@ -19,18 +19,13 @@ import umc.duckmelang.domain.member.domain.MemberEvent;
 import umc.duckmelang.domain.member.repository.MemberEventRepository;
 import umc.duckmelang.domain.member.domain.MemberIdol;
 import umc.duckmelang.domain.member.repository.MemberIdolRepository;
-import umc.duckmelang.domain.notification.domain.NotificationSetting;
-import umc.duckmelang.domain.notification.repository.NotificationSettingRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.EventCategoryException;
 import umc.duckmelang.global.apipayload.exception.IdolCategoryException;
-import umc.duckmelang.global.apipayload.exception.LandmineException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +38,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final EventCategoryRepository eventCategoryRepository;
     private final MemberEventRepository memberEventRepository;
     private final LandmineRepository landmineRepository;
-    private final NotificationSettingRepository notificationSettingRepository;
 
     @Override
     @Transactional
@@ -54,9 +48,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         Member newMember = MemberConverter.toMember(request, encodedPassword);
-
-        NotificationSetting defaultSetting = createDefaultNotificationSetting();
-        newMember.setNotificationSetting(defaultSetting);
 
         return memberRepository.save(newMember);
     }
@@ -142,15 +133,5 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private Member getMemberOrThrow(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-    }
-
-    // 회원가입 시 알림 설정
-    private NotificationSetting createDefaultNotificationSetting() {
-        return NotificationSetting.builder()
-                .chatNotificationEnabled(true)
-                .requestNotificationEnabled(true)
-                .reviewNotificationEnabled(true)
-                .bookmarkNotificationEnabled(true)
-                .build();
     }
 }

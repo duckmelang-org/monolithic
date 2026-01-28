@@ -18,8 +18,6 @@ import umc.duckmelang.domain.report.service.ReportQueryService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-import umc.duckmelang.global.validation.annotation.ValidPageNumber;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -59,7 +57,7 @@ public class ReportRestController {
                                                                                      @RequestParam("type") ReportType type,
                                                                                      @RequestParam ReportStatus status,
                                                                                      @RequestParam QueryOrder order,
-                                                                                     @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
+                                                                                      @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         if(userDetails.getRole() != Role.ADMIN)
             throw new MemberException(ErrorStatus._FORBIDDEN);
 

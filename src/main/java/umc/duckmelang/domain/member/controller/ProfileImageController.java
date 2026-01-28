@@ -15,7 +15,6 @@ import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageComma
 import umc.duckmelang.domain.member.service.profileImage.MemberProfileImageQueryService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.global.validation.annotation.ValidPageNumber;
 
 @RestController
 @Tag(name="Images", description = "내 프로필 사진 관련 API")
@@ -28,7 +27,7 @@ public class ProfileImageController {
     @Operation(summary = "내 프로필 사진 전체 조회", description = "본인의 프로필 사진을 모두 조회하는 API입니다. 디폴트 이미지, 비공개된 사진과 공개된 사진 모두 확인 가능합니다.")
     @GetMapping("")
     public ApiResponse<MemberProfileImageResponseDto.MemberProfileImageListDto> getAllProfileImages(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                                                    @ValidPageNumber @RequestParam(name = "page",  defaultValue = "0") Integer page) {
+                                                                                                     @RequestParam(name = "page",  defaultValue = "0") Integer page) {
         Page<MemberProfileImage> memberProfileImagePage = memberProfileImageQueryService.getAllMemberProfileImageByMemberId(userDetails.getMemberId(), page);
         return ApiResponse.onSuccess(MemberProfileImageConverter.toMemberProfileImageListDto(memberProfileImagePage));
     }

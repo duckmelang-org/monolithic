@@ -8,9 +8,6 @@ import umc.duckmelang.domain.bookmark.domain.Bookmark;
 import umc.duckmelang.domain.bookmark.repository.BookmarkRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.notification.service.notification.NotificationCommandService;
-import umc.duckmelang.domain.notification.domain.NotificationSetting;
-import umc.duckmelang.domain.notification.service.notificationsetting.NotificationSettingQueryService;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.domain.post.dto.PostThumbnailResponseDto;
@@ -20,8 +17,6 @@ import umc.duckmelang.global.apipayload.exception.*;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.global.apipayload.exception.PostException;
 
-import static umc.duckmelang.domain.notification.domain.enums.NotificationType.BOOKMARK;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,8 +25,6 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
     private final BookmarkRepository bookmarkRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    private final NotificationCommandService notificationCommandService;
-    private final NotificationSettingQueryService notificationSettingQueryService;
     private final PostImageQueryService postImageQueryService;
 
     @Override
@@ -46,13 +39,7 @@ public class BookmarkCommandServiceImpl implements BookmarkCommandService {
         String postImageUrl = (postThumbnail != null) ? postThumbnail.getPostImageUrl() : null;
 
         Bookmark bookmark = BookmarkConverter.toBookmark(member, post);
-        NotificationSetting notificationSetting = notificationSettingQueryService.findNotificationSetting(post.getMember().getId());
 
-        if(notificationSetting.getBookmarkNotificationEnabled()){
-            notificationCommandService.send(
-                    member, post.getMember(), BOOKMARK, "내 동행글이 스크랩되었어요", postImageUrl
-            );
-        }
         return bookmarkRepository.save(bookmark);
     }
 
