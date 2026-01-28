@@ -1,17 +1,17 @@
-version: "3.8"
 services:
-  postgres-db:
-    image: postgres:15-alpine
-    container_name: postgres_container
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-container
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "55432:5432"
+      - "13306:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
   redis-cache:
     image: redis:7-alpine
@@ -21,8 +21,8 @@ services:
       - "16379:6379"
 
   mongodb:
-    image: mongo:latest
-    container_name: mongo_container
+    image: mongo:7
+    container_name: mongo-container
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
@@ -32,7 +32,6 @@ services:
     volumes:
       - mongo_data:/data/db
 
-# 데이터 영속성을 위한 볼륨 정의
 volumes:
-  postgres_data:
+  mysql_data:
   mongo_data:
