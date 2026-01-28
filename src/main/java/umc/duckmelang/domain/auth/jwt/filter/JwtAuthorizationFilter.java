@@ -1,5 +1,6 @@
 package umc.duckmelang.domain.auth.jwt.filter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import umc.duckmelang.global.apipayload.exception.TokenException;
 import umc.duckmelang.domain.auth.jwt.JwtUtil;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 jwtUtil.validateToken(token);
                 Authentication authentication = jwtUtil.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch(TokenException e){
+            } catch(JwtException e){
                 throw new AuthenticationCredentialsNotFoundException(e.getMessage(), e);
             }
         }

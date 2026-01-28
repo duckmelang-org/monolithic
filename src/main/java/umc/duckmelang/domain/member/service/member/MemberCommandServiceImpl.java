@@ -4,40 +4,18 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.eventcategory.domain.EventCategory;
-import umc.duckmelang.domain.eventcategory.repository.EventCategoryRepository;
-import umc.duckmelang.domain.idolcategory.domain.IdolCategory;
-import umc.duckmelang.domain.idolcategory.repository.IdolCategoryRepository;
-import umc.duckmelang.domain.landmine.domain.Landmine;
-import umc.duckmelang.domain.landmine.repository.LandmineRepository;
 import umc.duckmelang.domain.member.converter.MemberConverter;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.dto.member.MemberRequestDto;
 import umc.duckmelang.domain.member.dto.member.MemberSignUpDto;
 import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.domain.member.domain.MemberEvent;
-import umc.duckmelang.domain.member.repository.MemberEventRepository;
-import umc.duckmelang.domain.member.domain.MemberIdol;
-import umc.duckmelang.domain.member.repository.MemberIdolRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.EventCategoryException;
-import umc.duckmelang.global.apipayload.exception.IdolCategoryException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final IdolCategoryRepository idolCategoryRepository;
-    private final MemberIdolRepository memberIdolRepository;
-    private final EventCategoryRepository eventCategoryRepository;
-    private final MemberEventRepository memberEventRepository;
-    private final LandmineRepository landmineRepository;
 
     @Override
     @Transactional
@@ -50,88 +28,5 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         Member newMember = MemberConverter.toMember(request, encodedPassword);
 
         return memberRepository.save(newMember);
-    }
-
-    @Override
-    @Transactional
-    public Member registerProfile(Long memberId, MemberRequestDto.ProfileRequestDto request){
-        Member member = getMemberOrThrow(memberId);
-
-        if(memberRepository.existsByNickname(request.getNickname())){
-            throw new MemberException(ErrorStatus.DUPLICATE_NICKNAME);
-        }
-
-        member.updateProfile(request.getNickname(), request.getBirth(), request.getGender());
-        return member;
-    }
-
-    @Override
-    @Transactional
-    public List<MemberIdol> selectIdols(Long memberId, MemberRequestDto.SelectIdolsDto request) {
-        Member member = getMemberOrThrow(memberId);
-
-        // 유효한 idolCategory 검증
-        List<IdolCategory> idolCategoryList = idolCategoryRepository.findAllById(request.getIdolCategoryIds());
-        if (idolCategoryList.size() != request.getIdolCategoryIds().size()) {
-            throw new IdolCategoryException(ErrorStatus.INVALID_IDOL_CATEGORY);
-        }
-
-        // 기존에 등록한 idolCategory 삭제
-        memberIdolRepository.deleteAllByMember(member);
-
-        // 새롭게 저장
-        List<MemberIdol> memberIdolList = idolCategoryList.stream()
-                .map(idolCategory -> MemberConverter.toMemberIdol(member, idolCategory))
-                .toList();
-
-        return memberIdolRepository.saveAll(memberIdolList);
-    }
-
-    @Override
-    @Transactional
-    public List<MemberEvent> selectEvents(Long memberId, MemberRequestDto.SelectEventsDto request) {
-        Member member = getMemberOrThrow(memberId);
-
-        if (request.getEventCategoryIds() == null || request.getEventCategoryIds().isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<EventCategory> eventCategoryList = eventCategoryRepository.findAllById(request.getEventCategoryIds());
-        if (eventCategoryList.size() != request.getEventCategoryIds().size()) {
-            throw new EventCategoryException(ErrorStatus.INVALID_EVENT_CATEGORY);
-        }
-
-        List<MemberEvent> memberEventList = eventCategoryList.stream()
-                .map(eventCategory -> MemberConverter.toMemberEvent(member, eventCategory))
-                .toList();
-
-        return memberEventRepository.saveAll(memberEventList);
-    }
-
-    @Override
-    @Transactional
-    public List<Landmine> createLandmines(Long memberId, MemberRequestDto.CreateLandminesDto request) {
-        Member member = getMemberOrThrow(memberId);
-
-        List<Landmine> landmineList = Collections.emptyList();
-        if (request.getLandmineContents() != null && !request.getLandmineContents().isEmpty()) {
-            landmineList = request.getLandmineContents().stream()
-                    .map(content -> MemberConverter.toLandmine(member, content))
-                    .collect(Collectors.toList());
-
-            landmineRepository.saveAll(landmineList);
-        }
-        member.completeProfile();
-        return landmineRepository.saveAll(landmineList);
-    }
-
-    @Override
-    public boolean isNicknameExists(String nickname){
-        return memberRepository.existsByNickname(nickname);
-    }
-
-    private Member getMemberOrThrow(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 }

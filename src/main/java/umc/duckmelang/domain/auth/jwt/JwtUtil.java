@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.WebSocketSession;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.TokenException;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.auth.user.CustomUserDetailsService;
 import java.util.List;
@@ -33,9 +32,7 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
-            throw new TokenException(ErrorStatus.TOKEN_EXPIRED);
-        } catch (JwtException e) {
-            throw new TokenException(ErrorStatus.INVALID_TOKEN);
+            throw e;
         }
     }
 

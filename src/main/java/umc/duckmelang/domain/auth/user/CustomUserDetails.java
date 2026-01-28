@@ -27,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword(){return member.getPassword();}
     @Override
-    public String getUsername(){return member.getEmail();}
+    public String getUsername(){return member.getNickname();}
     @Override
     public boolean isCredentialsNonExpired(){ return true; }
     @Override

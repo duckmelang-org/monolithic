@@ -3,8 +3,6 @@ spring:
     import: optional:file:.env[.properties]
   profiles:
     active: local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,35 +15,8 @@ spring:
         springframework:
           web: DEBUG
       root: DEBUG
-  data:
-    redis:
-      host: localhost
-      port: ${REDIS_PORT}
-      password: duckmelang
-    mongodb:
-      host: localhost
-      port: ${MONGO_PORT}
-      password: duckmelang
-  custom:
-    default:
-      profile-image: "https://duckmelang-develop-bucket.s3.ap-northeast-2.amazonaws.com/memberProfileImage/default.png"
 
 jwt:
   secret-key: "duckmelangduckmelangduckmelangduckmelangduckmelang"
   access-expiration: 3600000     # 1시간
   refresh-expiration: 604800000  # 7일
-
-cloud:
-  aws:
-    s3:
-      path:
-        memberProfileImage: memberProfileImage
-        postImage: postImage
-        chatMessageImage: chatMessageImage
-        chatMessageFile: chatMessageFile
-        idolCategoryImage: idolCategoryImage
-      bucket: duckmelang-develop-bucket
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
