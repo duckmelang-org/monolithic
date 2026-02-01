@@ -42,4 +42,11 @@ public class PostController {
         Page<Post> postList = postQueryService.getPostList(page, size);
         return ApiResponse.onSuccess(PostConverter.toPostListDto(postList));
     }
+
+    @Operation(summary = "게시글 단 건 조회 API", description = "게시글 하나를 조회하는 API입니다.")
+    @GetMapping("/{postId}")
+    public ApiResponse<PostDto.PostDetailDto> getPostItem(@PathVariable(name = "postId") Long postId){
+        Post post = postQueryService.getPost(postId);
+        return ApiResponse.onSuccess(PostConverter.toPostDetailDto(post));
+    }
 }

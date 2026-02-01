@@ -8,6 +8,8 @@ import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
+import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.MemberException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class PostCommandServiceImpl implements PostCommandService {
 
     public Post addPost(PostDto.PostAddDto request, Long memberId){
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalArgumentException("member not found"));
+                .orElseThrow(()->new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Post post = PostConverter.toPost(request, member);
 

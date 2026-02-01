@@ -6,4 +6,6 @@ import umc.duckmelang.domain.post.domain.Post;
 public interface PostQueryService {
 
     Page<Post> getPostList(int page, int size);
+
+    Post getPost(Long postId);
 }
