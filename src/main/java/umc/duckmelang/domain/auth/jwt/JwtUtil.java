@@ -1,7 +1,6 @@
 package umc.duckmelang.domain.auth.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.WebSocketSession;
-import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.auth.user.CustomUserDetailsService;
+
 import java.util.List;
 
 /**

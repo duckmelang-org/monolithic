@@ -1,18 +1,18 @@
 package umc.duckmelang.domain.auth.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.auth.dto.response.LoginResponse;
-import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.member.repository.MemberRepository;
-import umc.duckmelang.global.apipayload.exception.MemberException;
 import umc.duckmelang.domain.auth.jwt.JwtTokenProvider;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
+import umc.duckmelang.domain.member.domain.Member;
+import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.MemberException;
 
 @Service
 @RequiredArgsConstructor
