@@ -5,8 +5,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.global.common.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name="post")
 @Entity
@@ -28,6 +32,9 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Application> applicationList = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, Member member) {

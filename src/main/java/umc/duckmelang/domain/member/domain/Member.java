@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.member.domain.type.Role;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.global.common.BaseEntity;
@@ -36,7 +37,10 @@ public class Member extends BaseEntity {
     private Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> postList = new ArrayList<Post>();
+    private List<Post> postList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Application> applicationList = new ArrayList<>();
 
     @Builder
     public Member(String loginId, String password, String nickname, Role role) {
