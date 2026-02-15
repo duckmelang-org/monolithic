@@ -29,27 +29,22 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
-    @Profile({"dev", "local"})
-    public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         configureCommonSecurity(http);
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll());// 개발 환경에서는 모든 요청 허용
-        return http.build();
-    }
 
-    @Bean
-    @Profile("prod")
-    public SecurityFilterChain prodSecurityFilterChain(HttpSecurity http) throws Exception {
-        configureCommonSecurity(http);
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/webjars/**",
-                        "/login", "/members/**", "/token/refresh", "/logout",
-                        "/oauth2/**", "/login/oauth2/**").permitAll()
-                .anyRequest().authenticated()
+
+                // 누구나 접근 가능
+                .requestMatchers(
+                        "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**",
+                        "/api/v1/auth", "/api/v1/member/**"
+                ).permitAll()
+
+                // 인증이 반드시 필요한 경로
+                .requestMatchers("/api/v1/application/**").authenticated()
+
+                // 그 외 나머지 요청은 일단 허용
+                .anyRequest().permitAll()
         );
         return http.build();
     }
