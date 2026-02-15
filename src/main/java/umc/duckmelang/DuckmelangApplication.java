@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"umc.duckmelang.domain"})
-@EnableMongoRepositories(basePackages = {"umc.duckmelang.mongo"})
-
 public class DuckmelangApplication {
 
 	public static void main(String[] args) {
