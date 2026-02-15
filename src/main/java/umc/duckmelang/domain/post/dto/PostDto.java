@@ -15,6 +15,7 @@ public class PostDto {
     public static class PostAddDto{
         private String title;
         private String content;
+        private Integer maxParticipants;
     }
 
     @Getter
@@ -59,6 +60,8 @@ public class PostDto {
         private String title;
         private String content;
         private String nickname;
+        private Integer maxParticipants;
+        private Integer currentParticipants;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }

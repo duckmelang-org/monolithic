@@ -17,6 +17,8 @@ public class PostConverter {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .member(member)
+                .maxParticipants(request.getMaxParticipants())
+                .currentParticipants(0)
                 .build();
     }
 
@@ -34,6 +36,8 @@ public class PostConverter {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(post.getMember().getNickname())
+                .maxParticipants(post.getMaxParticipants())
+                .currentParticipants(post.getCurrentParticipants())
                 .createdAt(post.getCreatedAt())
                 .build();
     }
