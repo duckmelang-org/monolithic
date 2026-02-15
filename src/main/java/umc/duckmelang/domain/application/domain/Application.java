@@ -1,9 +1,7 @@
 package umc.duckmelang.domain.application.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import umc.duckmelang.domain.application.domain.type.Status;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.post.domain.Post;
@@ -12,6 +10,8 @@ import umc.duckmelang.global.common.BaseEntity;
 @Entity
 @Table(name = "application")
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Application extends BaseEntity {
 
