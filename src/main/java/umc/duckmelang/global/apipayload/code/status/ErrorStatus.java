@@ -30,6 +30,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 동행 관련 에러
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLICATION4001", "해당하는 동행요청이 없습니다."),
+    POST_SELF_APPLICATION(HttpStatus.NOT_FOUND, "APPLICATION4003", "본인 게시글을 동행 요청을 할 수 없습니다."),
+    POST_FULL(HttpStatus.BAD_REQUEST, "APPLICATION4004", "게시글 신청이 마감되었습니다."),
     APPLICATION_NOT_MATCH(HttpStatus.BAD_REQUEST, "APPLICATION4002", "해당 동행요청은 본인의 요청이 아닙니다.");
 
     private final HttpStatus httpStatus;

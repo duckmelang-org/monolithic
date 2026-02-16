@@ -16,7 +16,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import umc.duckmelang.global.apipayload.code.ErrorReasonDTO;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.ApplicationException;
 import umc.duckmelang.global.apipayload.exception.GeneralException;
+import umc.duckmelang.global.apipayload.exception.PostException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -62,6 +64,18 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
         ErrorReasonDTO errorReasonHttpStatus = generalException.getReasonHttpStatus();
         return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
+    }
+
+    @ExceptionHandler(value = ApplicationException.class)
+    public ResponseEntity onThrowApplicationException(ApplicationException applicationException, HttpServletRequest request) {
+        ErrorReasonDTO errorReasonHttpStatus = applicationException.getReasonHttpStatus();
+        return handleExceptionInternal(applicationException, errorReasonHttpStatus, null, request);
+    }
+
+    @ExceptionHandler(value = PostException.class)
+    public ResponseEntity onThrowPostException(PostException postException, HttpServletRequest request) {
+        ErrorReasonDTO errorReasonHttpStatus = postException.getReasonHttpStatus();
+        return handleExceptionInternal(postException, errorReasonHttpStatus, null, request);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
