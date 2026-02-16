@@ -3,7 +3,7 @@ package umc.duckmelang.domain.application.domain.type;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum Status {
+public enum ApplicationStatus {
     PENDING("대기"),
     ACCEPTED("수락"),
     REJECTED("거절");
