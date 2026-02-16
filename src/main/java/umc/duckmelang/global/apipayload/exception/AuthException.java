@@ -1,8 +1,19 @@
 package umc.duckmelang.global.apipayload.exception;
 
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import umc.duckmelang.global.apipayload.code.BaseErrorCode;
+import umc.duckmelang.global.apipayload.code.ErrorReasonDTO;
 
-public class AuthException extends GeneralException {
-    public AuthException(BaseErrorCode errorCode){ super(errorCode); }
+@Getter
+@AllArgsConstructor
+public class AuthException extends RuntimeException {
+    private BaseErrorCode errorCode;
+
+    public ErrorReasonDTO getReason() {
+        return this.errorCode.getReason();
+    }
+    public ErrorReasonDTO getReasonHttpStatus(){
+        return this.errorCode.getReasonHttpStatus();
+    }
 }

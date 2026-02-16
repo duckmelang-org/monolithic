@@ -7,7 +7,7 @@ import umc.duckmelang.global.apipayload.code.ErrorReasonDTO;
 
 @Getter
 @AllArgsConstructor
-public class PostException extends RuntimeException {
+public class ApplicationException extends RuntimeException {
     private BaseErrorCode errorCode;
 
     public ErrorReasonDTO getReason() {

@@ -26,7 +26,11 @@ public enum ErrorStatus implements BaseErrorCode {
     AUTH_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH4004", "로그인아이디와 일치하는 사용자가 없습니다."),
 
     // 게시글 관련 에러
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST4001", "해당하는 게시글이 없습니다");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST4001", "해당하는 게시글이 없습니다"),
+
+    // 동행 관련 에러
+    APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLICATION4001", "해당하는 동행요청이 없습니다."),
+    APPLICATION_NOT_MATCH(HttpStatus.BAD_REQUEST, "APPLICATION4002", "해당 동행요청은 본인의 요청이 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
