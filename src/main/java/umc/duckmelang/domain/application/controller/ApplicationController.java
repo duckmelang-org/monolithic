@@ -36,4 +36,12 @@ public class ApplicationController {
         Application application = applicationService.acceptApplication(applicationId, userDetails.getMemberId());
         return ApiResponse.onSuccess(ApplicationConverter.toUpdateResultDto(application));
     }
+
+    @Operation(summary = "동행 신청 거절 API", description = "동행 요청을 거절합니다.")
+    @PatchMapping("/{applicationId}/refuse")
+    public ApiResponse<ApplicationResponseDto.UpdateResultDto> refuseApplication(@PathVariable(name = "applicationId") Long applicationId,
+                                                                                 @AuthenticationPrincipal CustomUserDetails userDetails){
+        Application application = applicationService.refuseApplication(applicationId, userDetails.getMemberId());
+        return ApiResponse.onSuccess(ApplicationConverter.toUpdateResultDto(application));
+    }
 }

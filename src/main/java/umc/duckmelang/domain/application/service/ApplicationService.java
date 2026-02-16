@@ -43,7 +43,18 @@ public class ApplicationService {
         }
 
         application.updateStatus(Status.ACCEPTED);
+        return application;
+    }
 
+    @Transactional
+    public Application refuseApplication(Long applicationId, Long memberId){
+        Application application = applicationRepository.findById(applicationId).orElseThrow(()-> new ApplicationException(ErrorStatus.APPLICATION_NOT_FOUND));
+
+        if(!application.getPost().getMember().getId().equals(memberId)){
+            throw new ApplicationException(ErrorStatus.APPLICATION_NOT_MATCH);
+        }
+
+        application.updateStatus(Status.REJECTED);
         return application;
     }
 }
