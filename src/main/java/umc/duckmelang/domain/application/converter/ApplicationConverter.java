@@ -21,4 +21,11 @@ public class ApplicationConverter {
                 .applicationId(application.getId())
                 .build();
     }
+
+    public static ApplicationResponseDto.UpdateResultDto toUpdateResultDto(Application application){
+        return ApplicationResponseDto.UpdateResultDto.builder()
+                .applicationId(application.getId())
+                .status(application.getStatus().getLabel())
+                .build();
+    }
 }

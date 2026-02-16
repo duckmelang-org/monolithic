@@ -32,4 +32,7 @@ public class Application extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public void updateStatus(Status status){
+        this.status = status;
+    }
 }

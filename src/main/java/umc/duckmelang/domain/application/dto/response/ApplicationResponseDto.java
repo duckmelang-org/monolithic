@@ -14,4 +14,13 @@ public class ApplicationResponseDto {
     public static class CreateResultDto{
         private Long applicationId;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateResultDto{
+        private Long applicationId;
+        private String status;
+    }
 }

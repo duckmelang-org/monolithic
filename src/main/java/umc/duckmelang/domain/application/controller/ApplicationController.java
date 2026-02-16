@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.application.converter.ApplicationConverter;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.dto.request.ApplicationRequestDto;
@@ -30,5 +27,13 @@ public class ApplicationController {
                                                                                  @AuthenticationPrincipal CustomUserDetails userDetails){
         Application application = applicationService.createApplication(request, userDetails.getMemberId());
         return ApiResponse.onSuccess(ApplicationConverter.toApplicationResponseDto(application));
+    }
+
+    @Operation(summary = "동행 신청 수락 API", description = "동행 요청을 수락합니다.")
+    @PatchMapping("/{applicationId}/accept")
+    public ApiResponse<ApplicationResponseDto.UpdateResultDto> acceptApplication(@PathVariable(name = "applicationId") Long applicationId,
+                                                                                 @AuthenticationPrincipal CustomUserDetails userDetails){
+        Application application = applicationService.acceptApplication(applicationId, userDetails.getMemberId());
+        return ApiResponse.onSuccess(ApplicationConverter.toUpdateResultDto(application));
     }
 }
