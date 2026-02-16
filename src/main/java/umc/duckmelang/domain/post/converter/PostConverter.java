@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.post.domain.Post;
+import umc.duckmelang.domain.post.domain.type.PostStatus;
 import umc.duckmelang.domain.post.dto.PostDto;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PostConverter {
                 .member(member)
                 .maxParticipants(request.getMaxParticipants())
                 .currentParticipants(0)
+                .postStatus(PostStatus.RECRUITING)
                 .build();
     }
 

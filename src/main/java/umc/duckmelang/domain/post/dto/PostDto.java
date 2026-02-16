@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.duckmelang.domain.post.domain.type.PostStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ public class PostDto {
         private String title;
         private String content;
         private Integer maxParticipants;
+        private PostStatus status;
     }
 
     @Getter

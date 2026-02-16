@@ -1,7 +1,7 @@
 package umc.duckmelang.domain.application.converter;
 
 import umc.duckmelang.domain.application.domain.Application;
-import umc.duckmelang.domain.application.domain.type.Status;
+import umc.duckmelang.domain.application.domain.type.ApplicationStatus;
 import umc.duckmelang.domain.application.dto.response.ApplicationResponseDto;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.post.domain.Post;
@@ -10,7 +10,7 @@ public class ApplicationConverter {
 
     public static Application toApplication(Post post, Member member){
         return Application.builder()
-                .status(Status.PENDING)
+                .applicationStatus(ApplicationStatus.PENDING)
                 .post(post)
                 .member(member)
                 .build();
@@ -25,7 +25,7 @@ public class ApplicationConverter {
     public static ApplicationResponseDto.UpdateResultDto toUpdateResultDto(Application application){
         return ApplicationResponseDto.UpdateResultDto.builder()
                 .applicationId(application.getId())
-                .status(application.getStatus().getLabel())
+                .status(application.getApplicationStatus().getLabel())
                 .build();
     }
 }

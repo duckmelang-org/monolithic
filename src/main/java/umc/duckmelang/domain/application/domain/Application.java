@@ -2,7 +2,7 @@ package umc.duckmelang.domain.application.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.duckmelang.domain.application.domain.type.Status;
+import umc.duckmelang.domain.application.domain.type.ApplicationStatus;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.global.common.BaseEntity;
@@ -22,7 +22,7 @@ public class Application extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private ApplicationStatus applicationStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -32,7 +32,7 @@ public class Application extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public void updateStatus(Status status){
-        this.status = status;
+    public void updateStatus(ApplicationStatus applicationStatus){
+        this.applicationStatus = applicationStatus;
     }
 }

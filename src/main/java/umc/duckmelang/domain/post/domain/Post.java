@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.member.domain.Member;
-import umc.duckmelang.domain.post.domain.type.Status;
+import umc.duckmelang.domain.post.domain.type.PostStatus;
 import umc.duckmelang.global.common.BaseEntity;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class Post extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private PostStatus postStatus;
 
     @Column(name = "max_participants")
     private Integer maxParticipants;
@@ -48,11 +48,24 @@ public class Post extends BaseEntity {
     private List<Application> applicationList = new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, Member member, Integer maxParticipants, Integer currentParticipants) {
+    public Post(String title, String content, Member member, Integer maxParticipants, Integer currentParticipants, PostStatus postStatus) {
         this.title = title;
         this.content = content;
         this.member = member;
         this.maxParticipants = maxParticipants;
         this.currentParticipants = currentParticipants;
+        this.postStatus = postStatus;
+    }
+
+    public void incrementParticipants(){
+        this.currentParticipants++;
+    }
+
+    public void decrementParticipants(){
+        this.currentParticipants--;
+    }
+
+    public void updateStatus(PostStatus postStatus){
+        this.postStatus = postStatus;
     }
 }
