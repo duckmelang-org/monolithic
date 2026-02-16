@@ -27,9 +27,10 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public synchronized Application createApplication(ApplicationRequestDto.CreateRequestDto request, Long memberId){
+    public Application createApplication(ApplicationRequestDto.CreateRequestDto request, Long memberId){
         Member member = findMemberById(memberId);
-        Post post = findPostById(request.getPostId());
+        // Post post = findPostById(request.getPostId());
+        Post post = findPostByPessimisticLock(request.getPostId());
         validateApplicationRequest(post, memberId);
 
         // 인원 증가 및 상태 업데이트
@@ -75,6 +76,11 @@ public class ApplicationService {
 
     private Post findPostById(Long postId){
         return postRepository.findById(postId).orElseThrow(()-> new PostException(ErrorStatus.POST_NOT_FOUND));
+    }
+
+    // 비관적 락을 사용하여 포스트 조회
+    private Post findPostByPessimisticLock(Long postId){
+        return postRepository.findByIdWithPessimisticLock(postId).orElseThrow(()-> new PostException(ErrorStatus.POST_NOT_FOUND));
     }
 
     private Application findApplicationById(Long applicationId){
