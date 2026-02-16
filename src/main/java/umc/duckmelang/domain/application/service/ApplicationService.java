@@ -27,7 +27,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public Application createApplication(ApplicationRequestDto.CreateRequestDto request, Long memberId){
+    public synchronized Application createApplication(ApplicationRequestDto.CreateRequestDto request, Long memberId){
         Member member = findMemberById(memberId);
         Post post = findPostById(request.getPostId());
         validateApplicationRequest(post, memberId);
