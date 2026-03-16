@@ -1,4 +1,4 @@
-package umc.duckmelang.global.concurrency;
+package umc.duckmelang.domain.application.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

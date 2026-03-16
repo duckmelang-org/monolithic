@@ -1,4 +1,4 @@
-package umc.duckmelang.global.concurrency;
+package umc.duckmelang.domain.application.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
@@ -27,22 +27,24 @@ public class RedissonLockApplicationFacade {
      *   - waitTime  : 락 획득을 최대 10초 대기 (초과 시 false 반환 → 예외)
      *   - leaseTime : 락 자동 만료 시간 3초 (데드락 방지)
      *
-     * - Lettuce 스핀 락과 달리 Redis Pub/Sub 채널을 구독하여
-     *   락 해제 이벤트를 받을 때까지 블로킹 → CPU 부하 낮음
+     * - Redis Pub/Sub 채널을 구독하여 락 해제 이벤트를 받을 때까지 블로킹
+     *   → CPU 부하 낮음, 스핀 락 대비 빠른 처리
      */
-    public Application createApplicationWithRedisson(
-            ApplicationRequestDto.CreateRequestDto request, Long memberId) throws InterruptedException {
+    public Application createApplication(
+            ApplicationRequestDto.CreateRequestDto request, Long memberId) {
 
         String lockKey = "redisson:lock:post:" + request.getPostId();
         RLock lock = redissonClient.getLock(lockKey);
 
-        boolean acquired = lock.tryLock(WAIT_TIME_SECONDS, LEASE_TIME_SECONDS, TimeUnit.SECONDS);
-        if (!acquired) {
-            throw new RuntimeException("Redisson 락 획득 실패 (대기 시간 초과, key=" + lockKey + ")");
-        }
-
         try {
+            boolean acquired = lock.tryLock(WAIT_TIME_SECONDS, LEASE_TIME_SECONDS, TimeUnit.SECONDS);
+            if (!acquired) {
+                throw new RuntimeException("락 획득 실패 (대기 시간 초과, key=" + lockKey + ")");
+            }
             return applicationService.createApplication(request, memberId);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("락 대기 중 인터럽트 발생", e);
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
