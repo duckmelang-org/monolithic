@@ -8,6 +8,8 @@ import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.domain.type.ApplicationStatus;
 import umc.duckmelang.domain.application.dto.request.ApplicationRequestDto;
 import umc.duckmelang.domain.application.repository.ApplicationRepository;
+import umc.duckmelang.domain.chat.domain.ChatRoom;
+import umc.duckmelang.domain.chat.repository.ChatRoomRepository;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.post.domain.Post;
@@ -25,6 +27,7 @@ public class ApplicationService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final ApplicationRepository applicationRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     // 비관적 락
     @Transactional
@@ -71,8 +74,11 @@ public class ApplicationService {
             post.updateStatus(PostStatus.CLOSED);
         }
 
-        Application application = ApplicationConverter.toApplication(post, member);
-        return applicationRepository.save(application);
+        Application application = applicationRepository.save(ApplicationConverter.toApplication(post, member));
+
+        // 채팅 방 생성
+        createChatRoom(application);
+        return application;
     }
 
     @Transactional
@@ -100,6 +106,12 @@ public class ApplicationService {
         }
 
         return application;
+    }
+
+    private void createChatRoom(Application application) {
+        chatRoomRepository.save(ChatRoom.builder()
+                .application(application)
+                .build());
     }
 
     private Member findMemberById(Long memberId){
