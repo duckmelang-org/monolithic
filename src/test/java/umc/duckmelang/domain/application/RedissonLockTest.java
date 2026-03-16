@@ -14,7 +14,7 @@ import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.domain.type.PostStatus;
 import umc.duckmelang.domain.post.repository.PostRepository;
-import umc.duckmelang.global.concurrency.RedissonLockApplicationFacade;
+import umc.duckmelang.domain.application.facade.RedissonLockApplicationFacade;
 
 import java.lang.management.ManagementFactory;
 import java.util.List;
@@ -96,7 +96,7 @@ public class RedissonLockTest {
             Long applicantId = members.get(i + 1).getId();
             executorService.submit(() -> {
                 try {
-                    redissonLockFacade.createApplicationWithRedisson(
+                    redissonLockFacade.createApplication(
                             new ApplicationRequestDto.CreateRequestDto(savedPostId), applicantId);
                     successCount.incrementAndGet();
                 } catch (Exception e) {

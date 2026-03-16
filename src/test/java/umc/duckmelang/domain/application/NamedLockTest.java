@@ -15,7 +15,7 @@ import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.domain.type.PostStatus;
 import umc.duckmelang.domain.post.repository.PostRepository;
-import umc.duckmelang.global.concurrency.NamedLockApplicationFacade;
+import umc.duckmelang.domain.application.facade.NamedLockApplicationFacade;
 
 import java.lang.management.ManagementFactory;
 import java.util.List;
