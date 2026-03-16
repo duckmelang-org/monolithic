@@ -9,6 +9,7 @@ import umc.duckmelang.domain.application.converter.ApplicationConverter;
 import umc.duckmelang.domain.application.domain.Application;
 import umc.duckmelang.domain.application.dto.request.ApplicationRequestDto;
 import umc.duckmelang.domain.application.dto.response.ApplicationResponseDto;
+import umc.duckmelang.domain.application.facade.RedissonLockApplicationFacade;
 import umc.duckmelang.domain.application.service.ApplicationService;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.global.apipayload.ApiResponse;
@@ -19,13 +20,14 @@ import umc.duckmelang.global.apipayload.ApiResponse;
 @RequiredArgsConstructor
 public class ApplicationController {
 
+    private final RedissonLockApplicationFacade redissonLockFacade;
     private final ApplicationService applicationService;
 
     @Operation(summary = "동행 요청 API", description = "동행 요청을 하는 API입니다.")
     @PostMapping("/request")
     public ApiResponse<ApplicationResponseDto.CreateResultDto> createApplication(@RequestBody ApplicationRequestDto.CreateRequestDto request,
                                                                                  @AuthenticationPrincipal CustomUserDetails userDetails){
-        Application application = applicationService.createApplication(request, userDetails.getMemberId());
+        Application application = redissonLockFacade.createApplication(request, userDetails.getMemberId());
         return ApiResponse.onSuccess(ApplicationConverter.toApplicationResponseDto(application));
     }
 
