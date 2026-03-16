@@ -40,6 +40,9 @@ public class Post extends BaseEntity {
     @Column(name = "current_participants")
     private Integer currentParticipants;
 
+    @Version
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
