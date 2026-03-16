@@ -11,8 +11,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    // 데이터베이스 수준에서 쓰기 락(Exclusive Lock)을 건다
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select p from Post p where p.id = :id")
-    Optional<Post> findByIdWithPessimisticLock(@Param("id") Long id);
+    @Query("SELECT p FROM Post p WHERE p.id = :id")
+    Optional<Post> findByIdWithLock(@Param("id") Long id);
 }
