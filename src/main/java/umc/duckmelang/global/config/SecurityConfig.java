@@ -37,7 +37,8 @@ public class SecurityConfig {
                 // 누구나 접근 가능
                 .requestMatchers(
                         "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**",
-                        "/api/v1/auth", "/api/v1/member/**"
+                        "/api/v1/auth", "/api/v1/member/**",
+                        "/ws/**"
                 ).permitAll()
 
                 // 인증이 반드시 필요한 경로
