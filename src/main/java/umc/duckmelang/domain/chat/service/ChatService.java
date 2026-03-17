@@ -3,7 +3,6 @@ package umc.duckmelang.domain.chat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.chat.domain.ChatMessage;
@@ -11,6 +10,7 @@ import umc.duckmelang.domain.chat.domain.ChatRoom;
 import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
 import umc.duckmelang.domain.chat.repository.ChatMessageRepository;
 import umc.duckmelang.domain.chat.repository.ChatRoomRepository;
+import umc.duckmelang.domain.chat.util.RedisPublisher;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ChatException;
 
@@ -25,7 +25,7 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final RedisPublisher redisPublisher;
 
     // 메시지 전송
     @Transactional
@@ -73,7 +73,7 @@ public class ChatService {
     }
 
     private void broadcast(Long roomId, ChatMessageResponseDto response) {
-        messagingTemplate.convertAndSend("/sub/chat/" + roomId, response);
+        redisPublisher.publish(roomId, response);
     }
 
     // 마지막 메시지 조회
