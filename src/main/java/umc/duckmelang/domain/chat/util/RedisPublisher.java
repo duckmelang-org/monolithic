@@ -1,6 +1,7 @@
 package umc.duckmelang.domain.chat.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -11,6 +12,7 @@ import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RedisPublisher {
@@ -30,11 +32,13 @@ public class RedisPublisher {
         String channel = toChannel(roomId);
         subscribeIfAbsent(channel);
         chatRedisTemplate.convertAndSend(channel, message);
+        log.info("[Redis] 발행 완료 | channel: {} | senderId: {}", channel, message.getSenderId());
     }
 
     private void subscribeIfAbsent(String channel) {
         if (subscribedChannels.add(channel)) {
             redisMessageListenerContainer.addMessageListener(messageListenerAdapter, new ChannelTopic(channel));
+            log.info("[Redis] 채널 구독 등록 | channel: {}", channel);
         }
     }
 
