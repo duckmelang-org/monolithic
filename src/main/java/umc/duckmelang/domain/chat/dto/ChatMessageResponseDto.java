@@ -1,13 +1,17 @@
 package umc.duckmelang.domain.chat.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import umc.duckmelang.domain.chat.domain.ChatMessage;
 
 import java.time.ZonedDateTime;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessageResponseDto {
 
     private String messageId;
