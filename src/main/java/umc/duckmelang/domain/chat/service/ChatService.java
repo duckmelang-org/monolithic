@@ -1,0 +1,92 @@
+package umc.duckmelang.domain.chat.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import umc.duckmelang.domain.chat.domain.ChatMessage;
+import umc.duckmelang.domain.chat.domain.ChatRoom;
+import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
+import umc.duckmelang.domain.chat.repository.ChatMessageRepository;
+import umc.duckmelang.domain.chat.repository.ChatRoomRepository;
+import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
+import umc.duckmelang.global.apipayload.exception.ChatException;
+
+import umc.duckmelang.domain.chat.dto.ChatRoomListResponseDto;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ChatService {
+
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    // 메시지 전송
+    @Transactional
+    public ChatMessageResponseDto sendMessage(Long roomId, String content, Long senderId) {
+        ChatRoom chatRoom = getChatRoom(roomId);
+        validateParticipant(chatRoom, senderId);
+        ChatMessage message = saveMessage(roomId, senderId, content);
+        ChatMessageResponseDto response = ChatMessageResponseDto.from(message);
+        broadcast(roomId, response);
+        return response;
+    }
+
+    // 내 채팅방 목록 조회
+    @Transactional(readOnly = true)
+    public List<ChatRoomListResponseDto> getChatRooms(Long memberId) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllByMemberId(memberId);
+        return chatRooms.stream()
+                .map(room -> ChatRoomListResponseDto.of(room, memberId, getLatestMessage(room.getId())))
+                .toList();
+    }
+
+    // 이전 메시지 조회
+    @Transactional(readOnly = true)
+    public Slice<ChatMessageResponseDto> getMessages(Long roomId, int page, int size) {
+        getChatRoom(roomId);
+        return chatMessageRepository
+                .findByRoomIdOrderByCreatedAtDesc(roomId, PageRequest.of(page, size))
+                .map(ChatMessageResponseDto::from);
+    }
+
+    // 채팅방 찾기
+    private ChatRoom getChatRoom(Long roomId) {
+        return chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new ChatException(ErrorStatus.CHAT_ROOM_NOT_FOUND));
+    }
+
+    // 메시지 저장
+    private ChatMessage saveMessage(Long roomId, Long senderId, String content) {
+        return chatMessageRepository.save(ChatMessage.builder()
+                .roomId(roomId)
+                .senderId(senderId)
+                .content(content)
+                .createdAt(ZonedDateTime.now())
+                .build());
+    }
+
+    private void broadcast(Long roomId, ChatMessageResponseDto response) {
+        messagingTemplate.convertAndSend("/sub/chat/" + roomId, response);
+    }
+
+    // 마지막 메시지 조회
+    private ChatMessage getLatestMessage(Long roomId) {
+        return chatMessageRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId).orElse(null);
+    }
+
+    // 참여자 검증
+    private void validateParticipant(ChatRoom chatRoom, Long senderId) {
+        Long applicantId = chatRoom.getApplication().getMember().getId();
+        Long hostId = chatRoom.getApplication().getPost().getMember().getId();
+        if (!senderId.equals(applicantId) && !senderId.equals(hostId)) {
+            throw new ChatException(ErrorStatus.CHAT_NOT_PARTICIPANT);
+        }
+    }
+}

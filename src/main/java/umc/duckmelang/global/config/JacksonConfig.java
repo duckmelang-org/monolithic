@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import umc.duckmelang.global.common.serializer.LocalDateSerializer;
 import umc.duckmelang.global.common.serializer.LocalDateTimeSerializer;
+import umc.duckmelang.global.common.serializer.ZonedDateTimeSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Configuration
 public class JacksonConfig {
@@ -22,6 +24,7 @@ public class JacksonConfig {
         // 내가 커스텀한 직렬화기를 추가한다.
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
         module.addSerializer(LocalDate.class, new LocalDateSerializer());
+        module.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer());
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule()); // JavaTimeModule 등록
