@@ -61,6 +61,9 @@ dependencies {
 	// websocket (채팅 통신용)
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	// RabbitMQ (메시지 브로커)
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 	// WebClient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
