@@ -43,6 +43,9 @@ public class Post extends BaseEntity {
     @Version
     private Long version;
 
+    @Column(name = "view_count", nullable = false)
+    private Long viewCount = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -70,5 +73,9 @@ public class Post extends BaseEntity {
 
     public void updateStatus(PostStatus postStatus){
         this.postStatus = postStatus;
+    }
+
+    public void incrementViewCount(){
+        this.viewCount++;
     }
 }
