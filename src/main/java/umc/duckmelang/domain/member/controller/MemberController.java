@@ -4,15 +4,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
+import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.member.converter.MemberConverter;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.MemberSignUpDto;
 import umc.duckmelang.domain.member.service.MemberCommandService;
 import umc.duckmelang.global.apipayload.ApiResponse;
+
+import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -27,5 +29,14 @@ public class MemberController {
     public ApiResponse<MemberSignUpDto.SignupResultDto> signup(@RequestBody @Valid MemberSignUpDto.SignupDto request){
         Member member = memberCommandService.signupMember(request);
         return ApiResponse.onSuccess(MemberConverter.toSignupResultDto(member));
+    }
+
+    @Operation(summary = "FCM 토큰 저장 API", description = "앱 실행 시 발급된 FCM 토큰을 저장합니다.")
+    @PostMapping("/fcm-token")
+    public ApiResponse<Void> updateFcmToken(@RequestBody Map<String, String> body, Principal principal) {
+        CustomUserDetails userDetails =
+                (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        memberCommandService.updateFcmToken(userDetails.getMemberId(), body.get("fcmToken"));
+        return ApiResponse.onSuccess(null);
     }
 }

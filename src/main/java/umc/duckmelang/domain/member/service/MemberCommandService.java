@@ -5,4 +5,5 @@ import umc.duckmelang.domain.member.dto.MemberSignUpDto;
 
 public interface MemberCommandService {
     Member signupMember(MemberSignUpDto.SignupDto request);
+    void updateFcmToken(Long memberId, String fcmToken);
 }
