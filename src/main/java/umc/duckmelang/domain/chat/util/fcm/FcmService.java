@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.chat.util;
+package umc.duckmelang.domain.chat.util.fcm;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;

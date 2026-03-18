@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.chat.util;
+package umc.duckmelang.domain.chat.util.rabbitmq;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

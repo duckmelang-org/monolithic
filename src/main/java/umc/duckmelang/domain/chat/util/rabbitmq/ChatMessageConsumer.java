@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.chat.util;
+package umc.duckmelang.domain.chat.util.rabbitmq;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,8 @@ import umc.duckmelang.domain.chat.domain.ChatMessage;
 import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
 import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
 import umc.duckmelang.domain.chat.service.ChatService;
+import umc.duckmelang.domain.chat.util.fcm.FcmService;
+import umc.duckmelang.domain.chat.util.redis.RedisPublisher;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.global.config.RabbitMQConfig;
 

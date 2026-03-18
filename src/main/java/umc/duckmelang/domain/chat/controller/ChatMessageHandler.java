@@ -9,7 +9,7 @@ import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
 import umc.duckmelang.domain.chat.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chat.service.ChatService;
-import umc.duckmelang.domain.chat.util.ChatMessagePublisher;
+import umc.duckmelang.domain.chat.util.rabbitmq.ChatMessagePublisher;
 
 import java.security.Principal;
 

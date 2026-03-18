@@ -1,7 +1,6 @@
-package umc.duckmelang.domain.chat.util;
+package umc.duckmelang.domain.chat.util.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;

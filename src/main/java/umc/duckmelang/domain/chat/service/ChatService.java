@@ -10,7 +10,7 @@ import umc.duckmelang.domain.chat.domain.ChatRoom;
 import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
 import umc.duckmelang.domain.chat.repository.ChatMessageRepository;
 import umc.duckmelang.domain.chat.repository.ChatRoomRepository;
-import umc.duckmelang.domain.chat.util.RedisPublisher;
+import umc.duckmelang.domain.chat.util.redis.RedisPublisher;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ChatException;
 
