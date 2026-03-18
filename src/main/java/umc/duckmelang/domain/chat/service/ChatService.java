@@ -57,13 +57,13 @@ public class ChatService {
     }
 
     // 채팅방 찾기
-    private ChatRoom getChatRoom(Long roomId) {
+    public ChatRoom getChatRoom(Long roomId) {
         return chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new ChatException(ErrorStatus.CHAT_ROOM_NOT_FOUND));
     }
 
     // 메시지 저장
-    private ChatMessage saveMessage(Long roomId, Long senderId, String content) {
+    public ChatMessage saveMessage(Long roomId, Long senderId, String content) {
         return chatMessageRepository.save(ChatMessage.builder()
                 .roomId(roomId)
                 .senderId(senderId)
@@ -82,7 +82,7 @@ public class ChatService {
     }
 
     // 참여자 검증
-    private void validateParticipant(ChatRoom chatRoom, Long senderId) {
+    public void validateParticipant(ChatRoom chatRoom, Long senderId) {
         Long applicantId = chatRoom.getApplication().getMember().getId();
         Long hostId = chatRoom.getApplication().getPost().getMember().getId();
         if (!senderId.equals(applicantId) && !senderId.equals(hostId)) {

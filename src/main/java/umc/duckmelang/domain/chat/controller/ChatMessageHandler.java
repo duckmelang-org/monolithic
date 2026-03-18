@@ -3,11 +3,14 @@ package umc.duckmelang.domain.chat.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
+import umc.duckmelang.domain.chat.domain.ChatRoom;
+import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
 import umc.duckmelang.domain.chat.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chat.service.ChatService;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import umc.duckmelang.domain.chat.util.ChatMessagePublisher;
 
 import java.security.Principal;
 
@@ -16,10 +19,13 @@ import java.security.Principal;
 public class ChatMessageHandler {
 
     private final ChatService chatService;
+    private final ChatMessagePublisher chatMessagePublisher;
 
     /**
      * 클라이언트가 /pub/chat/{roomId} 로 메시지를 전송하면 호출됨
      * senderId는 STOMP CONNECT 시 검증된 JWT의 Principal에서 추출 (body에서 받지 않음)
+     * 참여자 검증 후 RabbitMQ Queue에 이벤트 발행 → 즉시 응답
+     * 나머지 처리(MongoDB 저장, 브로드캐스트)는 Consumer가 비동기로 처리
      */
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@DestinationVariable Long roomId,
@@ -27,6 +33,15 @@ public class ChatMessageHandler {
                             Principal principal) {
         CustomUserDetails userDetails =
                 (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        chatService.sendMessage(roomId, request.getContent(), userDetails.getMemberId());
+        Long senderId = userDetails.getMemberId();
+
+        ChatRoom chatRoom = chatService.getChatRoom(roomId);
+        chatService.validateParticipant(chatRoom, senderId);
+
+        chatMessagePublisher.publish(ChatMessageEvent.builder()
+                .roomId(roomId)
+                .senderId(senderId)
+                .content(request.getContent())
+                .build());
     }
 }
