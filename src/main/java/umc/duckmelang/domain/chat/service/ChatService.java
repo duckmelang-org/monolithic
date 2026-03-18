@@ -16,6 +16,8 @@ import umc.duckmelang.global.apipayload.exception.ChatException;
 
 import umc.duckmelang.domain.chat.dto.ChatRoomListResponseDto;
 
+import org.hibernate.Hibernate;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -89,9 +91,11 @@ public class ChatService {
     public umc.duckmelang.domain.member.domain.Member getOpponent(Long roomId, Long myMemberId) {
         ChatRoom chatRoom = getChatRoom(roomId);
         Long applicantId = chatRoom.getApplication().getMember().getId();
-        return myMemberId.equals(applicantId)
+        umc.duckmelang.domain.member.domain.Member opponent = myMemberId.equals(applicantId)
                 ? chatRoom.getApplication().getPost().getMember()
                 : chatRoom.getApplication().getMember();
+        Hibernate.initialize(opponent); // 트랜잭션 내에서 프록시 강제 초기화
+        return opponent;
     }
 
     // 마지막 메시지 조회

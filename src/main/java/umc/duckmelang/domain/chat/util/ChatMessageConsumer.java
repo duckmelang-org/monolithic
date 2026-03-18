@@ -32,11 +32,11 @@ public class ChatMessageConsumer {
         Member receiver = chatService.getOpponent(event.getRoomId(), event.getSenderId());
         Member sender = chatService.getOpponent(event.getRoomId(), receiver.getId());
 
-        if (fcmService.isOnline(receiver.getId())) {
-            // 수신자 온라인 → Redis pub/sub 브로드캐스트
-            redisPublisher.publish(event.getRoomId(), response);
-        } else {
-            // 수신자 오프라인 → FCM 푸시 알림
+        // 항상 Redis pub/sub 브로드캐스트 (온라인 사용자에게 실시간 전달)
+        redisPublisher.publish(event.getRoomId(), response);
+
+        // 수신자 오프라인이면 FCM 푸시 알림 추가 발송
+        if (!fcmService.isOnline(receiver.getId())) {
             fcmService.sendPushNotification(
                     receiver.getFcmToken(),
                     sender.getNickname(),
