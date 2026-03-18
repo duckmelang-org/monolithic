@@ -84,6 +84,16 @@ public class ChatService {
         redisPublisher.publish(roomId, response);
     }
 
+    // 상대방 Member 조회 (senderId 기준으로 반대편 유저 반환)
+    @Transactional(readOnly = true)
+    public umc.duckmelang.domain.member.domain.Member getOpponent(Long roomId, Long myMemberId) {
+        ChatRoom chatRoom = getChatRoom(roomId);
+        Long applicantId = chatRoom.getApplication().getMember().getId();
+        return myMemberId.equals(applicantId)
+                ? chatRoom.getApplication().getPost().getMember()
+                : chatRoom.getApplication().getMember();
+    }
+
     // 마지막 메시지 조회
     private ChatMessage getLatestMessage(Long roomId) {
         return chatMessageRepository.findTopByRoomIdOrderByCreatedAtDesc(roomId).orElse(null);

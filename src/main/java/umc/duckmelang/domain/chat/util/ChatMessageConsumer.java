@@ -8,6 +8,7 @@ import umc.duckmelang.domain.chat.domain.ChatMessage;
 import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
 import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
 import umc.duckmelang.domain.chat.service.ChatService;
+import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.global.config.RabbitMQConfig;
 
 @Slf4j
@@ -17,6 +18,7 @@ public class ChatMessageConsumer {
 
     private final ChatService chatService;
     private final RedisPublisher redisPublisher;
+    private final FcmService fcmService;
 
     @RabbitListener(queues = RabbitMQConfig.CHAT_QUEUE)
     public void consume(ChatMessageEvent event) {
@@ -24,9 +26,23 @@ public class ChatMessageConsumer {
 
         // MongoDB 저장
         ChatMessage message = chatService.saveMessage(event.getRoomId(), event.getSenderId(), event.getContent());
-
-        // Redis pub/sub 브로드캐스트
         ChatMessageResponseDto response = ChatMessageResponseDto.from(message);
-        redisPublisher.publish(event.getRoomId(), response);
+
+        // 수신자, 발신자 조회
+        Member receiver = chatService.getOpponent(event.getRoomId(), event.getSenderId());
+        Member sender = chatService.getOpponent(event.getRoomId(), receiver.getId());
+
+        if (fcmService.isOnline(receiver.getId())) {
+            // 수신자 온라인 → Redis pub/sub 브로드캐스트
+            redisPublisher.publish(event.getRoomId(), response);
+        } else {
+            // 수신자 오프라인 → FCM 푸시 알림
+            fcmService.sendPushNotification(
+                    receiver.getFcmToken(),
+                    sender.getNickname(),
+                    event.getContent(),
+                    event.getRoomId()
+            );
+        }
     }
 }
