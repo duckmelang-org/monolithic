@@ -40,7 +40,35 @@ public class PostConverter {
                 .nickname(post.getMember().getNickname())
                 .maxParticipants(post.getMaxParticipants())
                 .currentParticipants(post.getCurrentParticipants())
+                .viewCount(post.getViewCount())
                 .createdAt(post.getCreatedAt())
+                .build();
+    }
+
+    // 인기글 아이템
+    public static PostDto.PostPopularItemDto toPostPopularItemDto(Post post){
+        return PostDto.PostPopularItemDto.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .nickname(post.getMember().getNickname())
+                .viewCount(post.getViewCount())
+                .createdAt(post.getCreatedAt())
+                .build();
+    }
+
+    // 인기글 리스트
+    public static PostDto.PostPopularListDto toPostPopularListDto(Page<Post> postPage){
+        List<PostDto.PostPopularItemDto> posts = postPage.getContent().stream()
+                .map(PostConverter::toPostPopularItemDto)
+                .collect(Collectors.toList());
+
+        return PostDto.PostPopularListDto.builder()
+                .posts(posts)
+                .listSize(posts.size())
+                .totalPage(postPage.getTotalPages())
+                .totalElements(postPage.getTotalElements())
+                .isFirst(postPage.isFirst())
+                .isLast(postPage.isLast())
                 .build();
     }
 

@@ -64,7 +64,33 @@ public class PostDto {
         private String nickname;
         private Integer maxParticipants;
         private Integer currentParticipants;
+        private Long viewCount;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostPopularListDto{
+        private List<PostPopularItemDto> posts;
+        private Integer listSize;
+        private Integer totalPage;
+        private Long totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostPopularItemDto{
+        private Long postId;
+        private String nickname;
+        private String title;
+        private Long viewCount;
+        private LocalDateTime createdAt;
     }
 }

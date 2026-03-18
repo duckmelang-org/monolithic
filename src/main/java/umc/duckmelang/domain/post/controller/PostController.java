@@ -38,10 +38,17 @@ public class PostController {
         return ApiResponse.onSuccess(PostConverter.toPostListDto(postList));
     }
 
-    @Operation(summary = "게시글 단 건 조회 API", description = "게시글 하나를 조회하는 API입니다.")
+    @Operation(summary = "게시글 단 건 조회 API", description = "게시글 하나를 조회하는 API입니다. 조회 시 조회수가 1 증가합니다.")
     @GetMapping("/{postId}")
     public ApiResponse<PostDto.PostDetailDto> getPostItem(@PathVariable(name = "postId") Long postId){
         Post post = postService.getPost(postId);
         return ApiResponse.onSuccess(PostConverter.toPostDetailDto(post));
+    }
+
+    @Operation(summary = "인기 게시글 조회 API", description = "조회수 기준 인기 게시글을 조회하는 API입니다.")
+    @GetMapping("/popular")
+    public ApiResponse<PostDto.PostPopularListDto> getPopularPosts(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                                    @RequestParam(name = "size", defaultValue = "10") int size){
+        return ApiResponse.onSuccess(PostConverter.toPostPopularListDto(postService.getPopularPosts(page, size)));
     }
 }

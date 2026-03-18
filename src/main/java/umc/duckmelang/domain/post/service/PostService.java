@@ -38,8 +38,20 @@ public class PostService{
     return postRepository.findAll(pageable);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Post getPost(Long postId){
+        Post post = getPostOrThrow(postId);
+        post.incrementViewCount();
+        return post;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Post> getPopularPosts(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAllOrderByViewCountDesc(pageable);
+    }
+
+    private Post getPostOrThrow(Long postId){
         return postRepository.findById(postId)
                 .orElseThrow(()-> new MemberException(ErrorStatus.POST_NOT_FOUND));
     }
