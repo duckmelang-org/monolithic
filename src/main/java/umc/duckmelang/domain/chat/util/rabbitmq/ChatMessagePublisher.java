@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
+import umc.duckmelang.domain.chat.dto.event.ChatMessageEvent;
 import umc.duckmelang.global.config.RabbitMQConfig;
 
 @Slf4j

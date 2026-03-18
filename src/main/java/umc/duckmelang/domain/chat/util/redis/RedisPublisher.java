@@ -7,7 +7,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
-import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatMessageResponseDto;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

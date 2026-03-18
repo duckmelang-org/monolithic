@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.duckmelang.domain.chat.domain.ChatMessage;
 import umc.duckmelang.domain.chat.domain.ChatRoom;
-import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatMessageResponseDto;
 import umc.duckmelang.domain.chat.repository.ChatMessageRepository;
 import umc.duckmelang.domain.chat.repository.ChatRoomRepository;
 import umc.duckmelang.domain.chat.util.redis.RedisPublisher;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.ChatException;
 
-import umc.duckmelang.domain.chat.dto.ChatRoomListResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatRoomListResponseDto;
 
 import org.hibernate.Hibernate;
 

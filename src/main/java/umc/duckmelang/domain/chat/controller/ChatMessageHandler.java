@@ -6,8 +6,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
-import umc.duckmelang.domain.chat.dto.ChatMessageRequestDto;
+import umc.duckmelang.domain.chat.dto.event.ChatMessageEvent;
+import umc.duckmelang.domain.chat.dto.request.ChatMessageRequestDto;
 import umc.duckmelang.domain.chat.service.ChatService;
 import umc.duckmelang.domain.chat.util.rabbitmq.ChatMessagePublisher;
 

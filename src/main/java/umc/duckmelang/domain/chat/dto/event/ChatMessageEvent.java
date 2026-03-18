@@ -1,4 +1,4 @@
-package umc.duckmelang.domain.chat.dto;
+package umc.duckmelang.domain.chat.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

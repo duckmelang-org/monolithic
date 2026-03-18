@@ -7,8 +7,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
-import umc.duckmelang.domain.chat.dto.ChatRoomListResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatMessageResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatRoomListResponseDto;
 import umc.duckmelang.domain.chat.service.ChatService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 

@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import umc.duckmelang.domain.chat.dto.ChatMessageResponseDto;
+import umc.duckmelang.domain.chat.dto.response.ChatMessageResponseDto;
 
 @Slf4j
 @Service
