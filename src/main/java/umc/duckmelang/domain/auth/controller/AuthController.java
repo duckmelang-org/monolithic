@@ -23,6 +23,6 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "로그인 후 AccessToken을 발급합니다.")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ApiResponse.onSuccess(authService.login(request.loginId(), request.password()));
+        return ApiResponse.onSuccess(authService.login(request.loginId(), request.password(), request.fcmToken()));
     }
 }

@@ -23,12 +23,16 @@ public class AuthService {
 
     // 자체 로그인
     @Transactional
-    public LoginResponse login(String loginId, String password){
+    public LoginResponse login(String loginId, String password, String fcmToken){
         Authentication authentication = authenticate(loginId, password);
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Long memberId = userDetails.getMemberId();
         Member member = findMemberOrThrow(memberId);
+
+        if (fcmToken != null && !fcmToken.isBlank()) {
+            member.updateFcmToken(fcmToken);
+        }
 
         String accessToken = jwtTokenProvider.generateAccessToken(memberId, member.getRole().name());
 
