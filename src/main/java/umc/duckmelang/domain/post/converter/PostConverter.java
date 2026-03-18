@@ -33,6 +33,11 @@ public class PostConverter {
 
     // 상세 조회
     public static PostDto.PostDetailDto toPostDetailDto(Post post){
+        return toPostDetailDto(post, 0L);
+    }
+
+    // 상세 조회 (DB viewCount + Redis viewCount 합산)
+    public static PostDto.PostDetailDto toPostDetailDto(Post post, Long redisViewCount){
         return PostDto.PostDetailDto.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
@@ -40,7 +45,7 @@ public class PostConverter {
                 .nickname(post.getMember().getNickname())
                 .maxParticipants(post.getMaxParticipants())
                 .currentParticipants(post.getCurrentParticipants())
-                .viewCount(post.getViewCount())
+                .viewCount(post.getViewCount() + redisViewCount)
                 .createdAt(post.getCreatedAt())
                 .build();
     }

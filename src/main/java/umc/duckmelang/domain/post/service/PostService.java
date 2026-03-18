@@ -13,6 +13,7 @@ import umc.duckmelang.domain.post.converter.PostConverter;
 import umc.duckmelang.domain.post.domain.Post;
 import umc.duckmelang.domain.post.dto.PostDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
+import umc.duckmelang.domain.post.service.PostViewCountService;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 
@@ -22,6 +23,7 @@ public class PostService{
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final PostViewCountService postViewCountService;
 
     public Post addPost(PostDto.PostAddDto request, Long memberId){
         Member member = memberRepository.findById(memberId)
@@ -38,11 +40,12 @@ public class PostService{
     return postRepository.findAll(pageable);
     }
 
-    @Transactional
-    public Post getPost(Long postId){
+    @Transactional(readOnly = true)
+    public PostDto.PostDetailDto getPost(Long postId){
         Post post = getPostOrThrow(postId);
-        post.incrementViewCount();
-        return post;
+        postViewCountService.increment(postId);
+        long redisViewCount = postViewCountService.getViewCount(postId);
+        return PostConverter.toPostDetailDto(post, redisViewCount);
     }
 
     @Transactional(readOnly = true)
