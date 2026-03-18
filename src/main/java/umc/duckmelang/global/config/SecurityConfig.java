@@ -42,7 +42,7 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // 인증이 반드시 필요한 경로
-                .requestMatchers("/api/v1/application/**").authenticated()
+                .requestMatchers("/api/v1/application/**", "/api/v1/chat/**").authenticated()
 
                 // 그 외 나머지 요청은 일단 허용
                 .anyRequest().permitAll()
