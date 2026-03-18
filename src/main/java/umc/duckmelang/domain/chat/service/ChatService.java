@@ -56,7 +56,15 @@ public class ChatService {
                 .map(ChatMessageResponseDto::from);
     }
 
+    // 채팅방 찾기 + 참여자 검증 (Handler에서 단일 트랜잭션으로 처리)
+    @Transactional(readOnly = true)
+    public void validateChatRoomParticipant(Long roomId, Long senderId) {
+        ChatRoom chatRoom = getChatRoom(roomId);
+        validateParticipant(chatRoom, senderId);
+    }
+
     // 채팅방 찾기
+    @Transactional(readOnly = true)
     public ChatRoom getChatRoom(Long roomId) {
         return chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new ChatException(ErrorStatus.CHAT_ROOM_NOT_FOUND));
@@ -82,6 +90,7 @@ public class ChatService {
     }
 
     // 참여자 검증
+    @Transactional(readOnly = true)
     public void validateParticipant(ChatRoom chatRoom, Long senderId) {
         Long applicantId = chatRoom.getApplication().getMember().getId();
         Long hostId = chatRoom.getApplication().getPost().getMember().getId();

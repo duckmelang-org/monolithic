@@ -6,7 +6,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
-import umc.duckmelang.domain.chat.domain.ChatRoom;
 import umc.duckmelang.domain.chat.dto.ChatMessageEvent;
 import umc.duckmelang.domain.chat.dto.ChatMessageRequestDto;
 import umc.duckmelang.domain.chat.service.ChatService;
@@ -35,8 +34,7 @@ public class ChatMessageHandler {
                 (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Long senderId = userDetails.getMemberId();
 
-        ChatRoom chatRoom = chatService.getChatRoom(roomId);
-        chatService.validateParticipant(chatRoom, senderId);
+        chatService.validateChatRoomParticipant(roomId, senderId);
 
         chatMessagePublisher.publish(ChatMessageEvent.builder()
                 .roomId(roomId)
