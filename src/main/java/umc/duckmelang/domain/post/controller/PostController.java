@@ -48,6 +48,6 @@ public class PostController {
     @GetMapping("/popular")
     public ApiResponse<PostDto.PostPopularListDto> getPopularPosts(@RequestParam(name = "page", defaultValue = "0") int page,
                                                                     @RequestParam(name = "size", defaultValue = "10") int size){
-        return ApiResponse.onSuccess(PostConverter.toPostPopularListDto(postService.getPopularPosts(page, size)));
+        return ApiResponse.onSuccess(postService.getPopularPosts(page, size));
     }
 }

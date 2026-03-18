@@ -47,9 +47,10 @@ public class PostService{
 
     @Cacheable(value = "popularPosts", key = "#page + '_' + #size")
     @Transactional(readOnly = true)
-    public Page<Post> getPopularPosts(int page, int size){
+    public PostDto.PostPopularListDto getPopularPosts(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findAllOrderByViewCountDesc(pageable);
+        Page<Post> postPage = postRepository.findAllOrderByViewCountDesc(pageable);
+        return PostConverter.toPostPopularListDto(postPage);
     }
 
     private Post getPostOrThrow(Long postId){
