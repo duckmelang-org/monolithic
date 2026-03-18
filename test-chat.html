@@ -64,7 +64,7 @@
 <script>
   const ROOM_ID = 1;
   const MY_ID = null; // senderId 비교용, 서버 응답에서 자동 감지
-  const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MDA1NyIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzczNzM1Mjg1LCJleHAiOjE3NzM3Mzg4ODV9.DGYNxMQ7XFsn-e0rJYOt2x_yL776PsxU8iWvgGtGwYw";
+  const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MDA1NiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzczODAxMjE5LCJleHAiOjE3NzM4MDQ4MTl9.nyd6-P9NBZ5a8dVs4L9eEXQAag632fKKLvr47ygV5EY";
   // JWT에서 sub(memberId) 파싱
   const MY_MEMBER_ID = JSON.parse(atob(TOKEN.split('.')[1])).sub;
 
