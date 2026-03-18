@@ -9,20 +9,18 @@ import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.MemberSignUpDto;
 import umc.duckmelang.domain.member.repository.MemberRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
-import umc.duckmelang.global.apipayload.exception.GeneralException;
 import umc.duckmelang.global.apipayload.exception.MemberException;
 
 @Service
 @RequiredArgsConstructor
-public class MemberCommandServiceImpl implements MemberCommandService {
+public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
     @Transactional
-    public Member signupMember(MemberSignUpDto.SignupDto request){
-        if(memberRepository.existsByLoginId(request.getLoginId())){
+    public Member signupMember(MemberSignUpDto.SignupDto request) {
+        if (memberRepository.existsByLoginId(request.getLoginId())) {
             throw new MemberException(ErrorStatus.DUPLICATE_LOGINID);
         }
 
@@ -32,7 +30,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         return memberRepository.save(newMember);
     }
 
-    @Override
     @Transactional
     public void updateFcmToken(Long memberId, String fcmToken) {
         Member member = memberRepository.findById(memberId)
