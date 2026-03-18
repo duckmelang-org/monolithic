@@ -10,7 +10,7 @@ import umc.duckmelang.domain.auth.user.CustomUserDetails;
 import umc.duckmelang.domain.member.converter.MemberConverter;
 import umc.duckmelang.domain.member.domain.Member;
 import umc.duckmelang.domain.member.dto.MemberSignUpDto;
-import umc.duckmelang.domain.member.service.MemberCommandService;
+import umc.duckmelang.domain.member.service.MemberService;
 import umc.duckmelang.global.apipayload.ApiResponse;
 
 import java.security.Principal;
@@ -22,12 +22,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberCommandService memberCommandService;
+    private final MemberService memberService;
 
     @Operation(summary = "회원가입 API", description = "사용자 정보를 받아 회원가입을 처리하는 API입니다.")
     @PostMapping("/signup")
     public ApiResponse<MemberSignUpDto.SignupResultDto> signup(@RequestBody @Valid MemberSignUpDto.SignupDto request){
-        Member member = memberCommandService.signupMember(request);
+        Member member = memberService.signupMember(request);
         return ApiResponse.onSuccess(MemberConverter.toSignupResultDto(member));
     }
 
@@ -36,7 +36,7 @@ public class MemberController {
     public ApiResponse<Void> updateFcmToken(@RequestBody Map<String, String> body, Principal principal) {
         CustomUserDetails userDetails =
                 (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        memberCommandService.updateFcmToken(userDetails.getMemberId(), body.get("fcmToken"));
+        memberService.updateFcmToken(userDetails.getMemberId(), body.get("fcmToken"));
         return ApiResponse.onSuccess(null);
     }
 }
