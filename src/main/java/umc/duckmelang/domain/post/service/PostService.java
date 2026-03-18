@@ -16,6 +16,7 @@ import umc.duckmelang.domain.post.dto.PostDto;
 import umc.duckmelang.domain.post.repository.PostRepository;
 import umc.duckmelang.global.apipayload.code.status.ErrorStatus;
 import umc.duckmelang.global.apipayload.exception.MemberException;
+import umc.duckmelang.global.apipayload.exception.PostException;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,7 @@ public class PostService{
 
     private Post getPostOrThrow(Long postId){
         return postRepository.findById(postId)
-                .orElseThrow(()-> new MemberException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(()-> new PostException(ErrorStatus.POST_NOT_FOUND));
     }
 
     private Member getMemberOrThrow(Long memberId){

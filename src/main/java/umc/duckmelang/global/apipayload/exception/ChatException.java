@@ -8,13 +8,11 @@ import umc.duckmelang.global.apipayload.code.ErrorReasonDTO;
 @Getter
 @AllArgsConstructor
 public class ChatException extends RuntimeException {
-
     private BaseErrorCode errorCode;
 
     public ErrorReasonDTO getReason() {
         return this.errorCode.getReason();
     }
-
     public ErrorReasonDTO getReasonHttpStatus() {
         return this.errorCode.getReasonHttpStatus();
     }
