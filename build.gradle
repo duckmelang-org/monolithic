@@ -52,6 +52,9 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 	// redisson (동시성)
 	implementation 'org.redisson:redisson:3.45.1'
 
