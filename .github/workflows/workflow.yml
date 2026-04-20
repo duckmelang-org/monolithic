@@ -26,7 +26,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: 🎡Update Kubeconfig
-        run: aws eks update-kubeconfig --name duckmelnag --region ap-northeast-2
+        run: aws eks update-kubeconfig --name duckmelnag-cluster --region ap-northeast-2
 
       - name: 🔑Login to ECR
         id: login-ecr
