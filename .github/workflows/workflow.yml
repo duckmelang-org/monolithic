@@ -38,10 +38,9 @@ jobs:
           REPOSITORY: duckmelang
           IMAGE_TAG: latest
         run: |
-          docker build \
-          -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
-          -f ./Dockerfile
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build --platform linux/amd64 \
+            -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
+            -f ./Dockerfile .
 
       - name: 🚀Eks Kubectl Apply
         run: |
