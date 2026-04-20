@@ -33,9 +33,10 @@ public class PostService{
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> getPostList(int page, int size){
-    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-    return postRepository.findAll(pageable);
+    public PostDto.PostListDto getPostList(int page, int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Post> postPage = postRepository.findAll(pageable);
+        return PostConverter.toPostListDto(postPage);
     }
 
     @Transactional(readOnly = true)

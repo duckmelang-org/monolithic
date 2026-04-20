@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import umc.duckmelang.domain.auth.user.CustomUserDetails;
@@ -34,8 +33,7 @@ public class PostController {
     @GetMapping("/list")
     public ApiResponse<PostDto.PostListDto> postList(@RequestParam(name = "page", defaultValue = "0") int page,
                                                      @RequestParam(name = "size", defaultValue = "10") int size){
-        Page<Post> postList = postService.getPostList(page, size);
-        return ApiResponse.onSuccess(PostConverter.toPostListDto(postList));
+        return ApiResponse.onSuccess(postService.getPostList(page, size));
     }
 
     @Operation(summary = "게시글 단 건 조회 API", description = "게시글 하나를 조회하는 API입니다. 조회 시 조회수가 1 증가합니다.")
