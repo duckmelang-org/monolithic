@@ -3,33 +3,3 @@ spring:
     import: optional:file:.env[.properties]
   profiles:
     active: local
-  data:
-    mongodb:
-      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:${MONGO_PORT}/duckmelang?authSource=admin
-    redis:
-      host: localhost
-      port: ${REDIS_PORT}
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-
-logging:
-  level:
-    root: WARN
-    org.springframework: INFO
-    umc.duckmelang: DEBUG
-
-jwt:
-  secret-key: ${SECRET_KEY}
-  access-expiration: ${ACCESS_EXPIRATION}
-  refresh-expiration: ${REFRESH_EXPIRATION}
