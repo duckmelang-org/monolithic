@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: duckmelang
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/duckmelang-org/monolithic.git
+    targetRevision: main
+    path: k8s/app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: duckmelang
+  ignoreDifferences:
+    - group: cert-manager.io
+      kind: Certificate
+      jsonPointers:
+        - /metadata/annotations
+        - /spec
+        - /status
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
