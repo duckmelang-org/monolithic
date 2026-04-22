@@ -13,6 +13,8 @@ spec:
       labels:
         app: mongodb
     spec:
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: duckmelang-app-nodes
       containers:
         - name: mongodb
           image: mongo
