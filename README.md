@@ -7,47 +7,14 @@
 
 ## Tech Stack
 
-**Backend**
-
-![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![Gradle](https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)
-![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)
-
-**Database**
-
-![MySQL](https://img.shields.io/badge/MySQL_8-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB_7-47A248?style=flat-square&logo=mongodb&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis_7-FF4438?style=flat-square&logo=redis&logoColor=white)
-
-**Messaging & Realtime**
-
-![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
-![WebSocket](https://img.shields.io/badge/WebSocket%2FSTOMP-010101?style=flat-square)
-![Firebase](https://img.shields.io/badge/Firebase_FCM-DD2C00?style=flat-square&logo=firebase&logoColor=white)
-
-**Infra**
-
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
-![AWS EKS](https://img.shields.io/badge/AWS_EKS-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-![Amazon ECR](https://img.shields.io/badge/Amazon_ECR-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
-
-**GitOps & Monitoring**
-
-![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
-![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
-![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
-
-**Networking**
-
-![ingress-nginx](https://img.shields.io/badge/ingress--nginx-009639?style=flat-square&logo=nginx&logoColor=white)
-![cert-manager](https://img.shields.io/badge/cert--manager-0070E0?style=flat-square)
-![Let's Encrypt](https://img.shields.io/badge/Let's_Encrypt-003A70?style=flat-square&logo=letsencrypt&logoColor=white)
-
-</div>
+| 분류 | 기술 |
+|------|------|
+| **Backend** | Java 17, Spring Boot 3, Gradle, JWT, Swagger |
+| **Database** | MySQL 8, MongoDB 7, Redis 7 |
+| **Messaging & Realtime** | RabbitMQ, WebSocket / STOMP, Firebase FCM |
+| **Infra** | Docker, Kubernetes, AWS EKS, Amazon ECR, GitHub Actions |
+| **GitOps & Monitoring** | ArgoCD, Prometheus, Grafana |
+| **Networking** | ingress-nginx, cert-manager, Let's Encrypt |
 
 ---
 
