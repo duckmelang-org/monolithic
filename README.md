@@ -1,32 +1,43 @@
-# 덕메랑 
-
-Spring Boot 기반 모놀리식 백엔드 서버. AWS EKS 위에서 동작하며 GitHub Actions → ECR → ArgoCD 파이프라인으로 자동 배포됩니다.
+# 덕메랑
+Spring Boot 기반 모놀리식 백엔드 서버로 AWS EKS 위에서 동작하며 GitHub Actions → ECR → ArgoCD 파이프라인으로 자동 배포됩니다.
 
 ---
 
-## 기술 스택
+## Tech Stack
 
-| 분류 | 기술 |
-|------|------|
-| Language | Java 17 |
-| Framework | Spring Boot 3.3.1 |
-| Build | Gradle 8 |
-| RDBMS | MySQL 8 |
-| NoSQL | MongoDB 7 |
-| Cache / Lock | Redis 7 + Redisson |
-| Message Broker | RabbitMQ 3 |
-| Real-time | WebSocket / STOMP |
-| Push 알림 | Firebase FCM |
-| Auth | JWT (Spring Security) |
-| API 문서 | Swagger (springdoc-openapi 2.2.0) |
-| Container | Docker (multi-stage build) |
-| Orchestration | Kubernetes (AWS EKS) |
-| GitOps | ArgoCD |
-| CI | GitHub Actions |
-| Image Registry | Amazon ECR |
-| Monitoring | Prometheus + Grafana + node-exporter |
-| Ingress | ingress-nginx |
-| TLS | cert-manager + Let's Encrypt |
+**Backend**
+![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)
+
+**Database**
+![MySQL](https://img.shields.io/badge/MySQL_8-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB_7-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis_7-FF4438?style=flat-square&logo=redis&logoColor=white)
+
+**Messaging & Realtime**
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
+![WebSocket](https://img.shields.io/badge/WebSocket%2FSTOMP-010101?style=flat-square)
+![Firebase](https://img.shields.io/badge/Firebase_FCM-DD2C00?style=flat-square&logo=firebase&logoColor=white)
+
+**Infra**
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
+![AWS EKS](https://img.shields.io/badge/AWS_EKS-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
+![Amazon ECR](https://img.shields.io/badge/Amazon_ECR-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
+
+**GitOps & Monitoring**
+![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
+
+**Networking**
+![ingress-nginx](https://img.shields.io/badge/ingress--nginx-009639?style=flat-square&logo=nginx&logoColor=white)
+![cert-manager](https://img.shields.io/badge/cert--manager-0070E0?style=flat-square)
+![Let's Encrypt](https://img.shields.io/badge/Let's_Encrypt-003A70?style=flat-square&logo=letsencrypt&logoColor=white)
 
 ---
 
@@ -58,21 +69,12 @@ monolithic/
 ## 로컬 개발 환경
 
 ```bash
-# 프로젝트 루트에 .env 파일 생성 후 인프라 실행
+# 인프라 실행
 docker-compose up -d
 
 # 애플리케이션 실행
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
-
-| 서비스 | 로컬 포트 |
-|--------|-----------|
-| 앱 서버 | 8080 |
-| MySQL | 13306 |
-| Redis | 16379 |
-| MongoDB | 37017 |
-| RabbitMQ AMQP | 5672 |
-| RabbitMQ 관리 콘솔 | 15672 |
 
 ---
 
