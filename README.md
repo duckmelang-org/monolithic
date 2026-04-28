@@ -1,4 +1,4 @@
-# 덕메랑
+# 덕메랑 - GitOps on AWS EKS
 
 > Spring Boot 기반 모놀리식 백엔드 서버로 AWS EKS 위에서 동작하며
 > GitHub Actions → ECR → ArgoCD 파이프라인으로 자동 배포됩니다.
